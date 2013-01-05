@@ -1,0 +1,8 @@
+<?php
+foreach ($this->vendors as $vendor) {
+    ?>
+<div>
+	<a
+		href="<?php echo $this->url(array('vendor_id' =>$vendor['MFA_ID']),'parts-vendor',true);?>"><?php echo $vendor['MFA_BRAND'];?></a></div>
+    
+<?}

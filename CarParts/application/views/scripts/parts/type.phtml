@@ -1,0 +1,22 @@
+<?php
+foreach ($this->searchTree as $searchTree) {
+   if($searchTree['DESCENDANTS']){ ?>
+<a href="<?php echo $this->url(array('action' => 'type',
+									'vendor_id' => $this->vendor_id, 
+        							'model_id'=>$this->model_id,
+        							'typ_id' => $this->typ_id,
+        							'str_id' => $searchTree['STR_ID'],
+        								),
+        							'parts-vendor-model-type-cat', true);?>"><?php echo $searchTree['STR_DES_TEXT'];?></a>
+        							<br />
+	<?php } else{?>
+	<a href="<?php echo $this->url(array('action' => 'type',
+									'vendor_id' => $this->vendor_id, 
+        							'model_id'=>$this->model_id,
+        							'typ_id' => $this->typ_id,
+        							'str_id' => $searchTree['STR_ID'],
+	        						'art' => true,
+        								),
+        							'parts-vendor-model-type-cat-art', true);?>"><?php echo $searchTree['STR_DES_TEXT'];?></a><br />
+<?PHP }
+}

@@ -1,0 +1,22 @@
+
+<table border="0">
+	<tr>
+		<th scope="col">Modelis</th>
+		<th scope="col">Ražoja no</th>
+		<th scope="col">Ražoja līdz</th>
+		<th scope="col">tips</th>
+	</tr>
+<?php
+foreach ($this->models as $model) {
+    ?>  <tr>
+		<td><a
+			href="<?php echo $this->url(array('model_id' => $model['MOD_ID'], 'vendor_id' =>$this->vendor_id), 'parts-vendor-model', true);?>">
+      <?php 	echo $model['MOD_CDS_TEXT'];?>
+    </a></td>
+		<td><?php echo $model['MOD_PCON_START'];?></td>
+		<td><?php echo $model['MOD_PCON_END'];?></td>
+		<td><?php echo ($model['MOD_PC'])?'vieglais':'smagais';?></td>
+	</tr><?php
+}
+?>
+</table>

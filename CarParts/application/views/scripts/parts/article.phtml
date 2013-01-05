@@ -1,0 +1,16 @@
+<h2><?php echo $this->article['ART_COMPLETE_DES_TEXT'];?> (<?php echo $this->article['SUP_BRAND'];?>)</h2>
+<div><?php echo $this->article['ART_DES_TEXT'];?></div>
+<div><?php echo $this->article['params']['AIN_TMO_TEXT'];?></div>
+
+
+<div><?php if($this->article['price']){?>
+	Cena: <?php echo $this->currency($this->article['price']['PRI_PRICE']/100, $this->article['price']['PRI_CURRENCY_CODE']). ' (' . 
+					 $this->article['price']['PRICE_UNIT_DES_TEXT'] . ' / ' .$this->article['price']['QUANTITY_UNIT_DES_TEXT'] .')' ;?> 
+<?php }?>
+</div>
+
+<?php if($this->article['image']){?>
+<div>
+	<img src="/<?php echo $this->article['image'];?>" />
+</div>
+<?php }?>

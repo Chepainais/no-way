@@ -1,0 +1,31 @@
+<table border="0">
+  <tr>
+    <th scope="col">id</th>
+    <th scope="col">Preces kods</th>
+    <th scope="col"> nosaukums</th>
+    <th scope="col">apraksts</th>
+    <th scope="col">ražotājs</th>
+    <th scope="col">pieejamība</th>
+  </tr>
+  <?php
+  foreach($this->searchTree2 as $article){
+	?>
+  <tr>
+    <td><a href="<?php echo $this->url(array('action' => 'type',
+									'vendor_id' => $this->vendor_id, 
+        							'model_id'=>$this->model_id,
+        							'typ_id' => $this->typ_id,
+        							'str_id' => $this->str_id,
+        							'art_id' => $article['LA_ART_ID'],
+        								),
+        							'parts-vendor-model-type-cat-article', true);?>"><?PHP echo $article['LA_ART_ID'];?></a></td>
+    <td><?php echo $article['params']['ART_ARTICLE_NR'];?></td>
+    <td><?php echo $article['params']['ART_COMPLETE_DES_TEXT'];?></td>
+    <td><?php echo $article['params']['ART_DES_TEXT'];?></td>
+    <td><?php echo $article['params']['SUP_BRAND'];?></td>
+    <td><?php echo $article['params']['ART_STATUS_TEXT'];?></td>
+  </tr>
+  <?php
+}
+?>
+</table>
