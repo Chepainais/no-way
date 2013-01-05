@@ -95,6 +95,7 @@ class PartsController extends Zend_Controller_Action
         $this->view->article['params'] = $parts->getArtAdditionalInfo($art_id);
         $this->view->article['price'] = $parts->getArtPrice($art_id);
         $this->view->article['image'] = $parts->getArtImageURL($art_id);
+        $this->view->article['criteria'] = $parts->getArtCriteria($art_id);
     }
 }
 

@@ -14,3 +14,15 @@
 	<img src="/<?php echo $this->article['image'];?>" />
 </div>
 <?php }?>
+
+<div id="article_criteria">
+	<table>
+	
+	<?php foreach($this->article['criteria'] as $criteria){?>
+	<tr>
+		<td><?php echo $criteria['CRITERIA_DES_TEXT'];?></td>
+		<td><?php echo $criteria['CRITERIA_VALUE_TEXT'];?></td>
+	</tr>
+	<?php }?>
+	</table>
+</div>
