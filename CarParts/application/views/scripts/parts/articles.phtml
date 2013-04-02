@@ -6,6 +6,10 @@
     <th scope="col">apraksts</th>
     <th scope="col">ražotājs</th>
     <th scope="col">pieejamība</th>
+    <th scope="col">Ape Cena</th>
+    <th scope="col">Ape Daudzums</th>
+    <th scope="col">Ape Description</th>
+    <th scope="col">Ape Supplier</th>
   </tr>
   <?php
   foreach($this->searchTree2 as $article){
@@ -16,7 +20,7 @@
         							'model_id'=>$this->model_id,
         							'typ_id' => $this->typ_id,
         							'str_id' => $this->str_id,
-        							'art_id' => $article['LA_ART_ID'],
+        							'art_id' => $article['params']['ART_ID'],
         								),
         							'parts-vendor-model-type-cat-article', true);?>"><?PHP echo $article['LA_ART_ID'];?></a></td>
     <td><?php echo $article['params']['ART_ARTICLE_NR'];?></td>
@@ -24,6 +28,10 @@
     <td><?php echo $article['params']['ART_DES_TEXT'];?></td>
     <td><?php echo $article['params']['SUP_BRAND'];?></td>
     <td><?php echo $article['params']['ART_STATUS_TEXT'];?></td>
+    <td><?php echo $article['ApePrice'];?></td>
+    <td><?php echo $article['ApeQuantity'];?></td>
+    <td><?php echo $article['ApeDescription'];?></td>
+    <td><?php echo $article['ApeSupplier'];?></td>
   </tr>
   <?php
 }

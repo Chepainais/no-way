@@ -1,22 +1,43 @@
 <?php
-
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
 
+    protected function _initApplication()
+    {
+        
+        
+    	$this->bootstrap('frontcontroller');
+    	$front = $this->getResource('frontcontroller');
+    	$front->addModuleDirectory(dirname(__FILE__) . '/modules');
+    }
+    
+    protected function _initConfig()
+    {
+        
+    	$config = new Zend_Config($this->getOptions(), true);
+    
+    	Zend_Registry::set('config', $config);
+    
+    	return $config;
+    }
     protected function _initDoctype ()
     {
         $this->bootstrap('view');
         $view = $this->getResource('view');
         $view->doctype('HTML5');
+        // @todo jāieliek pareiza valoda
+        $view->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')->appendHttpEquiv('Content-Language', 'en-US');
     }
+    
 
     protected function _initRoutes ()
     {
+
         $ctrl = Zend_Controller_Front::getInstance();
         $router = $ctrl->getRouter();
         $router->addRoute('parts-vendor', 
                 new Zend_Controller_Router_Route('parts/vendor/:vendor_id', 
-                        array(
+                        array(  
                                 'controller' => 'parts',
                                 'action' => 'vendor'
                         )));
@@ -52,5 +73,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         						'action' => 'article'
         				)));
     }
+
 }
 

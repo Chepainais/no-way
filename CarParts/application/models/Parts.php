@@ -5,27 +5,26 @@
  * @author Aleksis
  *
  */
-class Application_Model_Parts
-{
+class Application_Model_Parts {
 	public $language = 33;
 	/**
-	 * 
+	 *
 	 * @var Zend_Db
 	 */
-    private $db;
-
-    function __construct ()
-    {
-        $db = Zend_Registry::get('db');
-        $this->db = $db;
-    }
-
-    /**
-     * Retrieve Vehicle parts Vendors
-     */
-    public function retrieveVendors ()
-    {
-        $sql = "SELECT
+	private $db;
+	function __construct() {
+		$db = Zend_Registry::get ( 'db' );
+		$this->db = $db;
+	}
+	
+	/**
+	 * Retrieve Vehicle parts Vendors
+	 *
+	 * @param $asArray Return
+	 *        	as array vendor[id] = vendorName
+	 */
+	public function retrieveVendors($asArray = false) {
+		$sql = "SELECT
 					MFA_ID,
 					MFA_BRAND
 				FROM
@@ -35,19 +34,27 @@ class Application_Model_Parts
 #				LIMIT
 #					100
 				;";
-        $result = $this->db->query($sql);
-        return $result->fetchAll();
-    }
-
-    /**
-     * Returns vendor models list
-     *
-     * @param int $vendor_id            
-     */
-    public function retrieveVendorModels ($vendor_id)
-    {
-        if ((int) $vendor_id) {
-            $sql = "SELECT MOD_ID, TEX_TEXT AS MOD_CDS_TEXT, MOD_PCON_START,  MOD_PCON_END, MOD_PC, MOD_CV
+		$result = $this->db->query ( $sql );
+		if (! $asArray) {
+			return $result->fetchAll ();
+		} else {
+			$vendorList = array ();
+			foreach ( $result->fetchAll () as $vendor ) {
+				$vendorList [$vendor ['MFA_ID']] = $vendor ['MFA_BRAND'];
+			}
+			
+			return $vendorList;
+		}
+	}
+	
+	/**
+	 * Returns vendor models list
+	 *
+	 * @param int $vendor_id        	
+	 */
+	public function retrieveVendorModels($vendor_id, $asArray = false) {
+		if (( int ) $vendor_id) {
+			$sql = "SELECT MOD_ID, TEX_TEXT AS MOD_CDS_TEXT, MOD_PCON_START,  MOD_PCON_END, MOD_PC, MOD_CV
       	FROM
        		 MODELS
       	INNER JOIN COUNTRY_DESIGNATIONS ON CDS_ID = MOD_CDS_ID
@@ -57,23 +64,37 @@ class Application_Model_Parts
        		CDS_LNG_ID = $this->language
         ORDER BY
        		MOD_CDS_TEXT;";
-            $result = $this->db->query($sql);
-            
-            return $result->fetchAll();
-        } else {
-            throw new Zend_Exception('No vendor is set');
-        }
-    }
-
-    /**
-     * Returns Vendor model types
-     *
-     * @param int $model_id            
-     */
-    public function retrieveModelTypes ($model_id)
-    {
-        if ((int) $model_id) {
-            $sql = "SELECT
+			$result = $this->db->query ( $sql );
+			if (! $asArray) {
+				return $result->fetchAll ();
+			} else {
+				$modelList = array ();
+				foreach ( $result->fetchAll () as $model ) {
+					$modelList [$model ['MOD_ID']] = $model ['MOD_CDS_TEXT'];
+				}
+				return $modelList;
+			}
+		} else {
+			throw new Zend_Exception ( 'No vendor is set' );
+		}
+	}
+	
+	/**
+	 * Returns Vendor model types
+	 *
+	 * @param int $model_id        	
+	 */
+	public function retrieveModelTypes($model_id, $fuel = null, $year = null) {
+		if ($fuel) {
+			$fuel = "AND TYP_KV_FUEL_DES_ID = $fuel";
+		}
+		if ($year) {
+			$year = " AND $year >= SUBSTRING(TYP_PCON_START, 1, 4) AND $year <= IF(TYP_PCON_END > 0, TYP_PCON_END, YEAR(NOW())) ";
+			// (TYP_PCON_START BETWEEN " . $year . "00 AND ".$year."12 OR
+		// TYP_PCON_END BETWEEN " . $year . "00 AND ".$year."12)";
+		}
+		if (( int ) $model_id) {
+			$sql = "SELECT
 				TYP_ID,
 				MFA_BRAND,
 				DES_TEXTS7.TEX_TEXT AS MOD_CDS_TEXT,
@@ -114,6 +135,8 @@ class Application_Model_Parts
 				 LEFT JOIN DES_TEXTS AS DES_TEXTS6 ON DES_TEXTS6.TEX_ID = DESIGNATIONS5.DES_TEX_ID
 			WHERE
 				TYP_MOD_ID = $model_id
+				$fuel
+				$year
 			ORDER BY
 				MFA_BRAND,
 				MOD_CDS_TEXT,
@@ -122,23 +145,27 @@ class Application_Model_Parts
 				TYP_CCM
 			LIMIT
 				100;";
-            $result = $this->db->query($sql);
-            
-            return $result->fetchAll();
-        } else {
-            throw new Zend_Exception('No model set');
-        }
-    }
-    /**
-     * Auto detaļu kategoriju koks
-     * @param int $typ_id Auto type
-     * @param int $str_id Meklēšanas koka sakne (NULL by default)
-     */
-    public function searchTree($typ_id, $str_id = NULL){
-        if($str_id === NULL){
-        	$str_id = 'NULL';
-        }
-    	$sql = "SELECT
+			
+			$result = $this->db->query ( $sql );
+			
+			return $result->fetchAll ();
+		} else {
+			throw new Zend_Exception ( 'No model set' );
+		}
+	}
+	/**
+	 * Auto detaļu kategoriju koks
+	 *
+	 * @param int $typ_id
+	 *        	Auto type
+	 * @param int $str_id
+	 *        	Meklēšanas koka sakne (NULL by default)
+	 */
+	public function searchTree($typ_id, $str_id = NULL) {
+		if ($str_id === NULL) {
+			$str_id = 'NULL';
+		}
+		$sql = "SELECT
 					STR_ID,
 					TEX_TEXT AS STR_DES_TEXT,
 					IF(
@@ -169,15 +196,17 @@ class Application_Model_Parts
 						LIMIT
 							1
 					);";
-    	$result = $this->db->query($sql);
-    	return $result->fetchAll();
-    }
-    /**
-     * Preces apraksts un citi parametri
-     * @param int $article_id
-     */
-    public function retrieveArticle($article_id){
-    	 $sql = "SELECT
+		$result = $this->db->query ( $sql );
+		return $result->fetchAll ();
+	}
+	/**
+	 * Preces apraksts un citi parametri
+	 *
+	 * @param int $article_id        	
+	 */
+	public function retrieveArticle($article_id) {
+		$sql = "SELECT
+		            ART_ID,
 					ART_ARTICLE_NR,
 					SUP_BRAND,
 					DES_TEXTS.TEX_TEXT AS ART_COMPLETE_DES_TEXT,
@@ -199,17 +228,18 @@ class Application_Model_Parts
 				WHERE
 					ART_ID = $article_id
 				;";
-    	 $result = $this->db->query($sql);
-    	 $r = $result->fetchAll();
-    	 return $r[0];
-    }
-    /**
-     * Auto pieejamo detaļu ART_ID
-     * @param int $typ_id
-     * @param int $str_id
-     */
-    public function retrieveArticles($typ_id, $str_id){
-    	$sql = "SELECT
+		$result = $this->db->query ( $sql );
+		$r = $result->fetchAll ();
+		return $r [0];
+	}
+	/**
+	 * Auto pieejamo detaļu ART_ID
+	 *
+	 * @param int $typ_id        	
+	 * @param int $str_id        	
+	 */
+	public function retrieveArticles($typ_id, $str_id) {
+		$sql = "SELECT
 					LA_ART_ID
 				FROM
 					           LINK_GA_STR
@@ -223,37 +253,36 @@ class Application_Model_Parts
 				LIMIT
 					100
 				;";
-    	$result = $this->db->query($sql);
-    	return $result->fetchAll();    	
-    }
-    /**
-     * 
-     * @param int $MOD_ID
-     * @throws Zend_Exception
-     * @return string
-     */
-    public function getModelSTR_ID($MOD_ID){
-    	$sql = "SELECT MOD_PC, MOD_CV FROM MODELS WHERE MOD_ID = $MOD_ID LIMIT 1";
-    	$result = $this->db->query($sql);
-    	$result_array = $result->fetchAll();
-    	// Ja vieglie auto
-    	if($result_array[0]['MOD_PC']){
-    		return '10001';
-    	}
-    	// Ja smagie auto
-    	else if ($result_array[0]['MOD_CV']){
-    		return '20002';
-    	}
-    	else {
-    		throw new Zend_Exception('Unknown vehicle type');
-    	}
-    }
-    /**
-     * Iegūt preces attēla atrašanās vietu
-     * @param unknown_type $ART_ID
-     */
-    public function getArtImageURL($ART_ID){
-    	$sql = "SELECT
+		$result = $this->db->query ( $sql );
+		return $result->fetchAll ();
+	}
+	/**
+	 *
+	 * @param int $MOD_ID        	
+	 * @throws Zend_Exception
+	 * @return string
+	 */
+	public function getModelSTR_ID($MOD_ID) {
+		$sql = "SELECT MOD_PC, MOD_CV FROM MODELS WHERE MOD_ID = $MOD_ID LIMIT 1";
+		$result = $this->db->query ( $sql );
+		$result_array = $result->fetchAll ();
+		// Ja vieglie auto
+		if ($result_array [0] ['MOD_PC']) {
+			return '10001';
+		} 		// Ja smagie auto
+		else if ($result_array [0] ['MOD_CV']) {
+			return '20002';
+		} else {
+			throw new Zend_Exception ( 'Unknown vehicle type' );
+		}
+	}
+	/**
+	 * Iegūt preces attēla atrašanās vietu
+	 *
+	 * @param unknown_type $ART_ID        	
+	 */
+	public function getArtImageURL($ART_ID) {
+		$sql = "SELECT
 					CONCAT(
 						'images/',
 						GRA_TAB_NR, '/',
@@ -271,13 +300,16 @@ class Application_Model_Parts
 				ORDER BY
 					GRA_GRD_ID
 				;";
-    	$result = $this->db->query($sql);
-    	$r = $result->fetchAll();
-    	return $r[0]['PATH'];
-    }
-    
-    public function getArtPrice($ART_ID){
-    	$sql = "SELECT
+		$result = $this->db->query ( $sql );
+		$r = $result->fetchAll ();
+		if ($r) {
+			return $r [0] ['PATH'];
+		} else {
+			return false;
+		}
+	}
+	public function getArtPrice($ART_ID) {
+		$sql = "SELECT
 					PRI_PRICE,
 					DES_TEXTS.TEX_TEXT AS PRICE_UNIT_DES_TEXT,
 					DES_TEXTS2.TEX_TEXT AS QUANTITY_UNIT_DES_TEXT,
@@ -293,13 +325,16 @@ class Application_Model_Parts
 					DESIGNATIONS.DES_LNG_ID = $this->language AND
 					DESIGNATIONS2.DES_LNG_ID = $this->language
 				;";
-    	$result = $this->db->query($sql);
-    	$r = $result->fetchAll();
-    	return $r[0];
-    }
-    
-    public function getArtAdditionalInfo($ART_ID){
-    	$sql = "SELECT
+		$result = $this->db->query ( $sql );
+		$r = $result->fetchAll ();
+		if ($r) {
+			return $r [0];
+		} else {
+			return false;
+		}
+	}
+	public function getArtAdditionalInfo($ART_ID) {
+		$sql = "SELECT
 					TMT_TEXT AS AIN_TMO_TEXT
 				FROM
 					           ARTICLE_INFO
@@ -311,14 +346,17 @@ class Application_Model_Parts
 				ORDER BY
 					AIN_TMO_TEXT	
 				;";
-    	$result = $this->db->query($sql);
-    	
-    	$r = $result->fetchAll();
-    	return $r[0];
-    }
-    
-    public function getArtCriteria($ART_ID){
-    	$sql = "SELECT
+		$result = $this->db->query ( $sql );
+		
+		$r = $result->fetchAll ();
+		if ($r) {
+			return $r [0];
+		} else {
+			return false;
+		}
+	}
+	public function getArtCriteria($ART_ID) {
+		$sql = "SELECT
 					DES_TEXTS.TEX_TEXT AS CRITERIA_DES_TEXT,
 					IFNULL(DES_TEXTS2.TEX_TEXT, ACR_VALUE) AS CRITERIA_VALUE_TEXT
 				FROM
@@ -333,8 +371,63 @@ class Application_Model_Parts
 					(DESIGNATIONS.DES_LNG_ID IS NULL OR DESIGNATIONS.DES_LNG_ID = $this->language) AND
 					(DESIGNATIONS2.DES_LNG_ID IS NULL OR DESIGNATIONS2.DES_LNG_ID = $this->language)
 				;";
-    	$result = $this->db->query($sql);   	 
-    	return $result->fetchAll();
-    }
-    
+		$result = $this->db->query ( $sql );
+		return $result->fetchAll ();
+	}
+	public function getFuelTypes() {
+		$sql = "SELECT DES_ID , TEX_TEXT as fuel_name FROM designations 
+	LEFT JOIN des_texts
+			ON des_texts.TEX_ID = designations.DES_TEX_ID
+            WHERE DES_LNG_ID = $this->language AND DES_ID IN(
+            5971, #Udenradis
+            7668, #LPG
+            14638,# Dabasgaze
+            14665, #BiFuel
+            16039, #Benzins/Elektro
+            22924, #Dizelis
+            40007, #Benzins
+            40008, #Elektro
+            40009, #Maisijums
+            41639, #Flex-fuel
+            48938, #Gaze
+            67096, #Dabasgaze
+            67185 #Dizelis/Elektro
+            );";
+		$result = $this->db->query ( $sql );
+		$fuelList = array ();
+		foreach ( $result->fetchAll () as $fuel ) {
+			$fuelList [$fuel ['DES_ID']] = $fuel ['fuel_name'];
+		}
+		
+		return $fuelList;
+	}
+	public function getModelFuels($MOD_ID) {
+		$sql = "SELECT DISTINCT(TYP_KV_FUEL_DES_ID), DES_TEXTS.TEX_TEXT as fuel_name
+			FROM `types` 
+			INNER JOIN DESIGNATIONS ON DESIGNATIONS.DES_ID = TYP_KV_FUEL_DES_ID
+				                       AND DESIGNATIONS.DES_LNG_ID = $this->language
+			INNER JOIN DES_TEXTS ON DES_TEXTS.TEX_ID = DESIGNATIONS.DES_TEX_ID
+			WHERE TYP_MOD_ID = $MOD_ID";
+		$result = $this->db->query ( $sql );
+		$fuelList = array ();
+		foreach ( $result->fetchAll () as $fuel ) {
+			$fuelList [$fuel ['TYP_KV_FUEL_DES_ID']] = $fuel ['fuel_name'];
+		}
+		return $fuelList;
+	}
+	public function getModelYears($MOD_ID) {
+		$sql = "SELECT SUBSTRING(MIN(TYP_PCON_START), 1, 4) as year_from, SUBSTRING(MAX(TYP_PCON_END), 1, 4) as year_to
+				FROM types 
+				WHERE TYP_MOD_ID = $MOD_ID";
+		$result = $this->db->query ( $sql );
+		$years = $result->fetchAll ();
+		$y = array ();
+		if (empty ( $years [0] ['year_to'] )) {
+			$years [0] ['year_to'] = date('Y');
+		}
+		for($i = $years [0] ['year_from']; $i <= $years [0] ['year_to']; $i ++) {
+			$y [$i] = $i;
+		}
+		return $y;
+	}
 }
