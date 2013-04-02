@@ -1,0 +1,24 @@
+<?php echo $this->doctype()?>
+<html>
+<head>
+    <?php echo $this->headMeta(); ?>
+  <title>Car Parts ADMIN</title>
+  <?php echo $this->headLink()->appendStylesheet('/css/adminWithStyle.css')?>
+</head>
+<body>
+	<div id="header" style="background-color: #EEEEEE; height: 30px;">
+		<div id="header-logo" style="float: left">
+			<b><?php $this->layout()->menu; ?></b>
+		</div>
+		<div id="header-navigation" style="float: right">
+		<a href="<?php echo $this->url(array('module'=>'admin', 'controller' => 'orders'));?>">Orders</a>
+		<a href="<?php echo $this->url(array('module'=>'admin', 'controller' => 'articles'));?>">Articles</a>
+		<a href="<?php echo $this->url(array('module'=>'admin', 'controller' => 'menu'));?>">Menu</a>
+		<a href="<?php echo $this->url(array('module'=>'admin', 'controller' => 'system'));?>">System</a>
+		</div>
+	</div>
+<div id="content">
+    <?php echo $this->layout()->content?>
+</div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<?php echo $this->doctype('HTML5')?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Car Parts</title>
+<?php echo $this->headLink()->appendStylesheet('/css/global.css') ?>
+<?php echo $this->headScript()->prependFile('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js');?>
+</head>
+<body>
+<div id="header">
+  <div id="language_bar"> 
+  <a href="#" id="SIGNIN">Sign in</a> <a href="#" id="JOIN">Join</a> <a href="/SW"><img src="/img/flag_SW.png" alt="SW" width="22" height="16" class="language"></a> <a href="/RU"><img src="/img/flag_RU.png" alt="RU" width="22" height="16" class="language"></a> <a href="/NL"><img src="/img/flag_NL.png" alt="NL" width="22" height="16" class="language"></a> <a href="/FI"><img src="/img/flag_FI.png" alt="FI" width="22" height="16" class="language"></a> <a href="/FI"><img src="/img/flag_DE.png" alt="DE" width="22" height="16" class="language"></a> </div>
+  <div id="top_menu">
+  <a href="#">home</a> <a href="#">about us</a> <a href="#">products</a> <a href="#">partners</a> <a href="#">services</a> <a href="#">contacts</a></div>
+  
+  
+  
+  <div id="header-logo"><a href="/"><img src="/img/logo_plus.png" width="544" height="134" alt="Logo"></a> </div>
+  <div id="model_panel">
+  	<?PHP echo $this->formModel; ?>
+  </div>
+  <div id="header-navigation" style="float: right"> </div>
+</div>
+<div id="content"> <?php echo $this->layout()->content ?> </div>
+</body>
+</html>
