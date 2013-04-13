@@ -19,10 +19,12 @@ class Application_Form_ModelSearch extends Zend_Form
     {
     	$this->setMethod('POST');
     	$this->setAction('/parts/search');
+    	$this->setDisableTranslator(true);
         $parts = new Application_Model_Parts();
         $this->setDecorators(array('FormElements','Form'));
         $vendor = new Zend_Form_Element_Select('vendor');
-        $vendor->setLabel('Vendor');
+        $vendor->setLabel('Vendor')
+               ->setDisableTranslator(true);
         $vendor->setDecorators($this->elementDecorators);
         $vendor->addMultiOption('', '...');
         $vendor->addMultiOptions($parts->retrieveVendors(true));
@@ -31,6 +33,7 @@ class Application_Form_ModelSearch extends Zend_Form
 
         $model = new Zend_Form_Element_Select('model');
         $model->addMultiOption('', '...')
+                ->setDisableTranslator(true)  
         		->setDecorators($this->elementDecorators)
         		->setLabel('Model')
 //         		->setAttrib('onChange', 'submit();');
@@ -38,12 +41,14 @@ class Application_Form_ModelSearch extends Zend_Form
         
         $fuelType = new Zend_Form_Element_Select('fuel');
         $fuelType->setDecorators($this->elementDecorators)
+                ->setDisableTranslator(true)
         		->addMultiOption('', '...')
         		->setAttrib('onChange', 'submit();')
         		->setLabel('Fuel');
         
         $year = new Zend_Form_Element_Select('year');
         $year->setDecorators($this->elementDecorators)
+                ->setDisableTranslator(true)
       		    ->addMultiOption('', '...')
       			->setAttrib('onChange', 'submit();')
         		->setLabel('Year');

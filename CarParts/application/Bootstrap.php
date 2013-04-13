@@ -111,9 +111,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     
     protected function _initTranslate(){
         $locale = 'lv_LV';
-        $translate = new Zend_Translate('array', APPLICATION_PATH . DIRECTORY_SEPARATOR .'languages', $locale,
-                        array('disableNotices' => true));
         Zend_Registry::set('Zend_Locale', new Zend_Locale($locale));
+        
+        $translate = new Zend_Translate('Custom_Translate_Adapter_Db', APPLICATION_PATH . DIRECTORY_SEPARATOR .'languages', $locale,
+                        array('disableNotices' => true, 'insertUntranslated' => true));
         Zend_Registry::set('Zend_Translate', $translate);
         
         //new Zend_Locale($locale);
