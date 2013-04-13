@@ -1,27 +1,14 @@
-<form action="" method="get">
-<label>Degviela: <select name="fuel_type">
-  <option>Benzīns</option>
-  <option>Dīzelis</option>
-  <option>Benzīns / Gāze</option>
-	
-</select>
-</label>
-<label>Gads: 
-<select name="year" id="year">
-	
-</select></label>
-<input type="submit" name="search" id="search" value="Atlasīt" />
-</form>
+
 <table border="1">
   <tr>
     <th scope="col">&nbsp;</th>
     <th scope="col">&nbsp;</th>
     <th scope="col">&nbsp;</th>
     <th scope="col">&nbsp;</th>
-    <th colspan="2" scope="col">ražošanas laiks</th>
+    <th colspan="2" scope="col"><?php echo $this->translate('production time');?></th>
     <th scope="col">&nbsp;</th>
-    <th colspan="2" scope="col">Jauda kW</th>
-    <th colspan="2" scope="col">Jauda Zs</th>
+    <th colspan="2" scope="col"><?php echo $this->translate('Power KW');?></th>
+    <th colspan="2" scope="col"><?php echo $this->translate('Power HP');?></th>
     <th scope="col">&nbsp;</th>
     <th scope="col">&nbsp;</th>
     <th scope="col">&nbsp;</th>
@@ -31,24 +18,24 @@
     <th scope="col">&nbsp;</th>
   </tr>
   <tr>
-    <th scope="col">typ id</th>
-    <th scope="col">Auto marka</th>
-    <th scope="col">modelis</th>
-    <th scope="col">nosaukums</th>
-    <th scope="col">no</th>
-    <th scope="col">līdz</th>
-    <th scope="col">motora tilpums ccm</th>
-    <th scope="col"> no</th>
-    <th scope="col"> līdz</th>
-    <th scope="col">no</th>
-    <th scope="col">līdz</th>
-    <th scope="col">cilindru skaits</th>
-    <th scope="col">motora kods</th>
-    <th scope="col">motora tips</th>
-    <th scope="col">degviela</th>
-    <th scope="col">uzbūve</th>
-    <th scope="col">ass konstrukcija</th>
-    <th scope="col">tonnāža</th>
+    <th scope="col"><?php echo $this->translate('id');?></th>
+    <th scope="col"><?php echo $this->translate('Vehicle brand');?></th>
+    <th scope="col"><?php echo $this->translate('Vehicle model');?></th>
+    <th scope="col"><?php echo $this->translate('Name');?></th>
+    <th scope="col"><?php echo $this->translate('from');?></th>
+    <th scope="col"><?php echo $this->translate('to');?></th>
+    <th scope="col"><?php echo $this->translate('Engine');?></th>
+    <th scope="col"><?php echo $this->translate('from');?></th>
+    <th scope="col"><?php echo $this->translate('to');?></th>
+    <th scope="col"><?php echo $this->translate('From');?></th>
+    <th scope="col"><?php echo $this->translate('To');?></th>
+    <th scope="col"><?php echo $this->translate('Cylinders');?></th>
+    <th scope="col"><?php echo $this->translate('Engine code');?></th>
+    <th scope="col"><?php echo $this->translate('Engine type');?></th>
+    <th scope="col"><?php echo $this->translate('Fuel');?></th>
+    <th scope="col"><?php echo $this->translate('Body');?></th>
+    <th scope="col"><?php echo $this->translate('Axle');?></th>
+    <th scope="col"><?php echo $this->translate('Max weight');?></th>
   </tr>
   <?php
  foreach($this->types as $type){

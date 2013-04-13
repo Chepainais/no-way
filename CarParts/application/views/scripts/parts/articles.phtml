@@ -1,15 +1,18 @@
 <table border="0">
   <tr>
-    <th scope="col">id</th>
-    <th scope="col">Preces kods</th>
-    <th scope="col"> nosaukums</th>
-    <th scope="col">apraksts</th>
-    <th scope="col">ražotājs</th>
-    <th scope="col">pieejamība</th>
+    <th scope="col"><?php echo $this->translate('id');?></th>
+    <th scope="col"><?php echo $this->translate('Product code');?></th>
+    <th scope="col"><?php echo $this->translate('Name');?></th>
+    <th scope="col"><?php echo $this->translate('Description');?></th>
+    <th scope="col"><?php echo $this->translate('Brand');?></th>
+    <th scope="col"><?php echo $this->translate('Availability');?></th>
+    <?php $ape = false;
+    if($ape){?>
     <th scope="col">Ape Cena</th>
     <th scope="col">Ape Daudzums</th>
     <th scope="col">Ape Description</th>
     <th scope="col">Ape Supplier</th>
+    <?php }?>
   </tr>
   <?php
   foreach($this->searchTree2 as $article){
@@ -28,10 +31,12 @@
     <td><?php echo $article['params']['ART_DES_TEXT'];?></td>
     <td><?php echo $article['params']['SUP_BRAND'];?></td>
     <td><?php echo $article['params']['ART_STATUS_TEXT'];?></td>
+     <?php if($ape){?>
     <td><?php echo $article['ApePrice'];?></td>
     <td><?php echo $article['ApeQuantity'];?></td>
     <td><?php echo $article['ApeDescription'];?></td>
     <td><?php echo $article['ApeSupplier'];?></td>
+    <?php }?>
   </tr>
   <?php
 }

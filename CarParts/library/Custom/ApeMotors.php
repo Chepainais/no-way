@@ -9,7 +9,20 @@ class Custom_Apemotors
     {
         $data['productCodes'] = $itemCode;
         $response = $this->request($data);
-        return $response;
+        
+        $xml = simplexml_load_string($response);
+        $items = array();
+        foreach ($xml->Product as $item) {
+            if ((string) $item->Found == 'True') {
+                $id = array_search((string) $item->SupplierProductCode, $itemCode);
+                $items[$id]['price'] = (string) $item->ProductDetails->Price;
+                $items[$id]['availableQuantity'] = (string) $item->ProductDetails->AvailableQuantity;
+                $items[$id]['description'] = (string) $item->ProductDetails->Description;
+                $items[$id]['supplierName'] = (string) $item->ProductDetails->SupplierName;
+            }
+        }
+        
+        return $items;
     }
 
     function getPrices (Array $itemCodes)

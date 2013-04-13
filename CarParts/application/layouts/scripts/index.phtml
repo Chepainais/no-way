@@ -2,22 +2,42 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Car Parts</title>
-<?php echo $this->headLink()->appendStylesheet('/css/global.css') ?>
-<?php echo $this->headScript()->prependFile('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js');?>
+<title>BilParts</title>
+
+<?php  $this->headLink()->appendStylesheet('/css/global.css') ?>
+<?php  $this->headLink()->appendStylesheet('http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.css') ?>
+<?php  $this->headScript()->prependFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js');?>
+<?php  $this->headScript()->prependFile('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js');?>
+
+<?php echo $this->headScript();?>
+<?php echo $this->headLink();?>
 </head>
 <body>
 <div id="header">
   <div id="language_bar"> 
-  <a href="#" id="SIGNIN">Sign in</a> <a href="#" id="JOIN">Join</a> <a href="/SW"><img src="/img/flag_SW.png" alt="SW" width="22" height="16" class="language"></a> <a href="/RU"><img src="/img/flag_RU.png" alt="RU" width="22" height="16" class="language"></a> <a href="/NL"><img src="/img/flag_NL.png" alt="NL" width="22" height="16" class="language"></a> <a href="/FI"><img src="/img/flag_FI.png" alt="FI" width="22" height="16" class="language"></a> <a href="/FI"><img src="/img/flag_DE.png" alt="DE" width="22" height="16" class="language"></a> </div>
+       <a href="#" id="SIGNIN"><?php echo $this->translate('Sign in'); ?></a> 
+       <a href="#" id="JOIN"><?php echo $this->translate('Join'); ?></a>
+       <a href="http://sv.bilparts.test.chepa.lv"><img src="/img/flag_SW.png" alt="SV" width="22" height="16" class="language"></a> 
+       <a href="http://ru.bilparts.test.chepa.lv"><img src="/img/flag_RU.png" alt="RU" width="22" height="16" class="language"></a> 
+       <a href="http://nl.bilparts.test.chepa.lv"><img src="/img/flag_NL.png" alt="NL" width="22" height="16" class="language"></a> 
+       <a href="http://fi.bilparts.test.chepa.lv"><img src="/img/flag_FI.png" alt="FI" width="22" height="16" class="language"></a> 
+       <a href="http://da.bilparts.test.chepa.lv"><img src="/img/flag_DE.png" alt="DA" width="22" height="16" class="language"></a> 
+   </div>
   <div id="top_menu">
-  <a href="#">home</a> <a href="#">about us</a> <a href="#">products</a> <a href="#">partners</a> <a href="#">services</a> <a href="#">contacts</a></div>
-  
+      <a href="/"><?php echo $this->translate('Home'); ?></a> 
+      <a href="<?php echo $this->url(array('controller' => 'article', 'action' => 'read', 'article_alias' => 'aboutUs'), 'article-read', true);?>"><?php echo $this->translate('About us'); ?></a>
+      <a href="<?php echo $this->url(array('controller' => 'parts'));?>"><?php echo $this->translate('Products'); ?></a>
+      <a href="#"><?php echo $this->translate('Partners'); ?></a>
+      <a href="#"><?php echo $this->translate('Services'); ?></a>
+      <a href="#"><?php echo $this->translate('Contacts'); ?></a>
+      
+  </div>
+  <div id="cart"><a href="/cart/"><img src="/img/cart.png" width="20" height="20" alt="Cart"><?php echo $this->translate('items in cart') . ': ' . $this->cart->getItemCount();?></a></div>
   
   
   <div id="header-logo"><a href="/"><img src="/img/logo_plus.png" width="544" height="134" alt="Logo"></a> </div>
   <div id="model_panel">
-  	<?PHP echo $this->formModel; ?>
+  	<div id="model_form"><?PHP echo $this->formModel; ?></div>
   </div>
   <div id="header-navigation" style="float: right"> </div>
 </div>

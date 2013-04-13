@@ -26,7 +26,7 @@ class Admin_LoginController extends Zend_Controller_Action
     public function indexAction ()
     {
         $authAdapter = new Zend_Auth_Adapter_DbTable($this->db, 
-                'application_users', 'username', 'password', 'MD5(?)');
+                'users', 'username', 'password', 'MD5(?)');
         if ($_POST) {
             // Pārbaudam autorizāciju
             $authAdapter->setIdentity($this->_request->getParam('username'));

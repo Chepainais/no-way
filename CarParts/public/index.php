@@ -28,22 +28,10 @@ require_once 'Zend/Application.php';
 require_once 'Zend/Registry.php';
 require_once 'Zend/Config/Ini.php';
 
-
-
 // Create application, bootstrap, and run
 $application = new Zend_Application(APPLICATION_ENV, 
         APPLICATION_PATH . '/configs/application.ini');
 
-// REGISTER DATABASE CONNECTION
-	$configFile = APPLICATION_PATH . '/configs/application.ini';
-	$config = new Zend_Config_Ini($configFile, 'general');
-	Zend_Registry::set('config', $config);
-	// set up database
-	//var_dump($config->db->params->toArray());
-
-	$db = Zend_Db::factory($config->db->adapter, $config->db->params->toArray());
-	Zend_Db_Table::setDefaultAdapter($db);
-	Zend_Registry::set('db', $db);
 
 
 $application->bootstrap()->run();

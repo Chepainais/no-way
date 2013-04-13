@@ -4,7 +4,9 @@ body {
 	font-size: 16px;
 	font-family: Tahoma, Geneva, sans-serif;
 	}
-
+a {
+	color:#666;
+	text-decoration:none;}
 #header {
 	position: relative;
 	height: 210px;
@@ -89,4 +91,25 @@ a#SIGNIN, a#JOIN {
 	float: left;
 	width: 300px;
 	position: relative;
+}
+#model_form {
+	width: 1000px;
+	margin-right: auto;
+	margin-left: auto;
+	padding-top: 12px;
+}
+#model_form label {
+	color:#FFF;}
+#cart {
+	position: absolute;
+	right: 0px;
+	bottom: 57px;
+}
+#cart a {
+	display:block;
+	text-decoration: none;
+	color: #FFF;
+	background-color: rgba(0,0,0,0.6);
+		padding:5px;
+
 }

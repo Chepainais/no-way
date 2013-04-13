@@ -6,6 +6,7 @@
  *
  */
 class Application_Model_Parts {
+    
 	public $language = 33;
 	/**
 	 *
@@ -13,7 +14,10 @@ class Application_Model_Parts {
 	 */
 	private $db;
 	function __construct() {
-		$db = Zend_Registry::get ( 'db' );
+	    $config = Zend_Registry::get ( 'config' );
+	    $language_code = Zend_Registry::get ( 'language' ) ;
+	    $this->language = $config->tecdocLanguageCodes->$language_code;
+		$db = Zend_Registry::get ( 'dbTecdoc' );
 		$this->db = $db;
 	}
 	

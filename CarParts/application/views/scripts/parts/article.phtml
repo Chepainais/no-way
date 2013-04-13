@@ -1,4 +1,4 @@
-<?php echo $this->article['ART_ARTICLE_NR'];?>
+<?php //echo $this->article['ART_ARTICLE_NR'];?>
 
 <h2><?php echo $this->article['ART_COMPLETE_DES_TEXT'];?> (<?php echo $this->article['SUP_BRAND'];?>)</h2>
 <div><?php echo $this->article['ART_DES_TEXT'];?></div>
@@ -15,6 +15,9 @@
 <div>
 	<img src="/<?php echo $this->article['image'];?>" />
 </div>
+
+<div><a class="add_to_cart_button" href="/cart/itemAdd/item_id/<?php echo $this->art_id?>"><?php echo $this->translate('Add to cart')?></a></div>
+
 <?php }?>
 
 <div id="article_criteria">
@@ -28,3 +31,23 @@
 	<?php }?>
 	</table>
 </div>
+<div id="add_to_cart_modal">Pievienot grozam</div>
+<?php $script = <<<EOF
+$(document).ready(function(){
+    modal = $('#add_to_cart_modal').dialog({autoOpen:false});
+    $("a.add_to_cart_button").click(function(){
+    url = $(this).attr('href');
+    modal.load(url);
+    modal.dialog('open');
+        return false;
+})
+})
+EOF;
+?>
+
+
+
+
+<?php 
+$this->headScript()->appendScript($script);
+?>

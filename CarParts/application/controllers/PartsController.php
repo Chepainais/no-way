@@ -124,6 +124,10 @@ EOF;
 		}
 		$this->view->searchTree2 = $searchTree;
 	}
+	
+	/**
+	 * Viena prece
+	 */
 	public function articleAction() {
 		$parts = new Application_Model_Parts ();
 		$ApeMotors = new Custom_Apemotors();
@@ -139,13 +143,15 @@ EOF;
 		$this->view->article ['params'] = $parts->getArtAdditionalInfo ( $art_id );
 		
 		$price = $ApeMotors->getPrice($article['ART_ARTICLE_NR']);
-		
-		var_dump($price);
+
 		
 		$this->view->article ['price'] = $price;
 		$this->view->article ['image'] = $parts->getArtImageURL ( $art_id );
 		$this->view->article ['criteria'] = $parts->getArtCriteria ( $art_id );
 	}
+	/**
+	 * Meklēšanas darbība
+	 */
 	public function searchAction() {
 		$this->_helper->layout->disableLayout();
 		$this->_helper->viewRenderer->setNoRender(true);

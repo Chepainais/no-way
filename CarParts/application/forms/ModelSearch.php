@@ -46,15 +46,14 @@ class Application_Form_ModelSearch extends Zend_Form
         $year->setDecorators($this->elementDecorators)
       		    ->addMultiOption('', '...')
       			->setAttrib('onChange', 'submit();')
-        		->setLabel('year');
+        		->setLabel('Year');
       		  
         
-        $submit = new Zend_Form_Element_Submit('search');
-        $submit->setDecorators($this->buttonDecorators)
-        		->setIgnore(true)
-        		->setLabel('Atlasīt');
+//         $submit = new Zend_Form_Element_Submit('search');
+//         $submit->setDecorators($this->buttonDecorators)
+//         		->setIgnore(true);
         
-        $this->addElements(array($vendor, $model, $fuelType, $year, $submit));
+        $this->addElements(array($vendor, $model, $fuelType, $year));
     }
 
 }
