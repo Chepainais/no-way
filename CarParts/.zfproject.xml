@@ -19,6 +19,14 @@
         <controllerFile controllerName="Parts">
           <actionMethod actionName="index"/>
         </controllerFile>
+        <controllerFile controllerName="Cart">
+          <actionMethod actionName="index"/>
+          <actionMethod actionName="itemAdd"/>
+        </controllerFile>
+        <controllerFile controllerName="Article">
+          <actionMethod actionName="index"/>
+          <actionMethod actionName="read"/>
+        </controllerFile>
       </controllersDirectory>
       <formsDirectory>
         <formFile formName="Guestbook"/>
@@ -31,6 +39,7 @@
         <modelFile modelName="Guestbook"/>
         <modelFile modelName="GuestbookMapper"/>
         <modelFile modelName="User"/>
+        <modelFile modelName="Cart"/>
       </modelsDirectory>
       <modulesDirectory enabled="false"/>
       <viewsDirectory>
@@ -49,6 +58,18 @@
           </viewControllerScriptsDirectory>
           <viewControllerScriptsDirectory forControllerName="Parts">
             <viewScriptFile forActionName="index"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Cart">
+            <viewScriptFile forActionName="index"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Cart">
+            <viewScriptFile forActionName="itemAdd"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Article">
+            <viewScriptFile forActionName="index"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Article">
+            <viewScriptFile forActionName="read"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>
