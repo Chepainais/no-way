@@ -15,7 +15,7 @@ class Application_Model_Parts {
 	private $db;
 	function __construct() {
 	    $config = Zend_Registry::get ( 'config' );
-	    $language_code = Zend_Registry::get ( 'language' ) ;
+	    $language_code = Zend_Registry::get ( 'Zend_Locale' ) ;
 	    $this->language = $config->tecdocLanguageCodes->$language_code;
 		$db = Zend_Registry::get ( 'dbTecdoc' );
 		$this->db = $db;
@@ -233,6 +233,7 @@ class Application_Model_Parts {
 					ART_ID = $article_id
 				;";
 		$result = $this->db->query ( $sql );
+		
 		$r = $result->fetchAll ();
 		return $r [0];
 	}

@@ -40,6 +40,7 @@
         <modelFile modelName="GuestbookMapper"/>
         <modelFile modelName="User"/>
         <modelFile modelName="Cart"/>
+        <modelFile modelName="Intercar"/>
       </modelsDirectory>
       <modulesDirectory enabled="false"/>
       <viewsDirectory>
