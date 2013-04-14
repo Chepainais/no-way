@@ -17,13 +17,13 @@
     
 foreach($this->items as $item){
     $totalCount += $item['count'];
-    $totalPrice += $item['price'];
+    $totalPrice += ($item['price'] * $item['count']);
     ?>
     <tr>
        <!--  <td><?php echo $item['id'];?></td>  -->
-        <td><?php echo $item['params']['ART_ARTICLE_NR']?></td>
-        <td><?php echo $item['params']['SUP_BRAND']?></td>
-        <td><?php echo $item['params']['ART_COMPLETE_DES_TEXT']?></td>
+        <td><?php echo $item['code']?></td>
+        <td><?php echo $item['brand']?></td>
+        <td><?php echo $item['name']?></td>
         <td><input type="text" size="1" name="count[<?php echo $item['id']?>]" value="<?php echo $item['count'];?>" /></td>
         <td align="center"><?php echo $item['price'];?></td>
     </tr>
@@ -40,7 +40,7 @@ foreach($this->items as $item){
     </tr>
    <tr>
 <!--        <td></td> -->
-       <td></td>
+       <td><a href="<?php echo $this->url(array('controller' => 'cart', 'action' => 'clear'));?>"><?php echo $this->translate('Clear cart');?></a></td>
        <td></td>
        <td></td>
        <td> <input type="submit" value="<?php echo $this->translate('Change');?>"></td>

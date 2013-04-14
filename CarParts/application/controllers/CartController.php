@@ -16,27 +16,38 @@ class CartController extends Zend_Controller_Action
 
     public function indexAction ()
     {
-        $parts = new Application_Model_Parts();
-        $intercar = new Application_Model_Intercar();
-        
-        $items = $this->cart->items;
-        foreach($items as $key => $item){
-            $params = $parts->retrieveArticle($item['id']);
-            $items[$key]['params'] = $params;
-            $items[$key]['price'] = $intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
+        $cart = new Application_Model_Cart();
+        if($this->_request->getPost()){
+            var_dump($this->_request->getPost());
+            foreach($this->getParam('count') as $item_id => $count){
+                $cart->changeItemCount($item_id, $count);
+            }
+            $this->redirect($this->view->url());
         }
-        
+        $items = $this->cart->items;      
         $this->view->items = $items;
         // action body
     }
 
     public function itemaddAction ()
     {
-        $cart = new Application_Model_Cart();
-        $cart->itemAdd($this->getParam('item_id'));
         $this->_helper->layout->disableLayout();
         
+        $parts = new Application_Model_Parts();
+        $cart = new Application_Model_Cart();
+        $intercar = new Application_Model_Intercar();
+        
+        $params = $parts->retrieveArticle($this->getParam('item_id'));
+        $price = $intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
+        $cart->itemAdd($this->getParam('item_id'), 1, $params['ART_COMPLETE_DES_TEXT'], $price, $params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
+        
+        
         $this->view->item_id = 'item:' . $this->getParam('item_id');
+    }
+    public function clearAction(){
+        $cart = new Application_Model_Cart();
+        $cart->clear();
+        $this->_redirect($this->view->url(array('controller' => 'cart', 'action' =>'index')));
     }
 }
 

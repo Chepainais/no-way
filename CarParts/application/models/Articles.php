@@ -1,100 +1,162 @@
-<?php
-class Application_Model_Articles {
-	protected $_name;
-	protected $_text;
-	protected $_order_id;
-	protected $_status;
-	
-	public function __construct(array $options = null)
-	{
-		if (is_array($options)) {
-			$this->setOptions($options);
-		}
-	}
-	
-	/**
-	 * @return the $_name
-	 */
-	public function getName() {
-		return $this->_name;
-	}
+<?PHP
+class Application_Model_Articles
+{
 
-	/**
-	 * @return the $_text
-	 */
-	public function getText() {
-		return $this->_text;
-	}
+    protected $_article_id = null;
 
-	/**
-	 * @return the $_order_id
-	 */
-	public function getOrder_id() {
-		return $this->_order_id;
-	}
+    protected $_name = null;
 
-	/**
-	 * @return the $_status
-	 */
-	public function getStatus() {
-		return $this->_status;
-	}
+    protected $_text = null;
 
-	/**
-	 * @param field_type $_name
-	 */
-	public function setName($_name) {
-		$this->_name = $_name;
-	}
+    protected $_order_id = null;
 
-	/**
-	 * @param field_type $_text
-	 */
-	public function setText($_text) {
-		$this->_text = $_text;
-	}
+    protected $_status = null;
 
-	/**
-	 * @param field_type $_order_id
-	 */
-	public function setOrder_id($_order_id) {
-		$this->_order_id = $_order_id;
-	}
+    protected $_time_created = null;
 
-	/**
-	 * @param field_type $_status
-	 */
-	public function setStatus($_status) {
-		$this->_status = $_status;
-	}
-	
-	public function setOptions(array $options)
-	{
-		$methods = get_class_methods($this);
-		foreach ($options as $key => $value) {
-			$method = 'set' . ucfirst($key);
-			if (in_array($method, $methods)) {
-				$this->$method($value);
-			}
-		}
-		return $this;
-	}
-	public function save(Application_Model_Articles $article)
-	{
-		$data = array(
-				'name'   => $article->getName(),
-				'text' => $article->getText(),
-				'time_created' => date('Y-m-d H:i:s'),
-		);
-	
-		if (null === ($id = $guestbook->getId())) {
-			unset($data['id']);
-			$this->getDbTable()->insert($data);
-		} else {
-			$this->getDbTable()->update($data, array('id = ?' => $id));
-		}
-	}
+    protected $_created_by = null;
+
+    protected $_time_edited = null;
+
+    protected $_edited_by = null;
+
+    public function setArticleId($article_id)
+    {
+        $this->_article_id = $article_id;
+        return $this;
+    }
+
+    public function getArticleId()
+    {
+        return $this->_article_id;
+    }
+
+    public function setName($name)
+    {
+        $this->_name = $name;
+        return $this;
+    }
+
+    public function getName()
+    {
+        return $this->_name;
+    }
+
+    public function setText($text)
+    {
+        $this->_text = $text;
+        return $this;
+    }
+
+    public function getText()
+    {
+        return $this->_text;
+    }
+
+    public function setOrderId($order_id)
+    {
+        $this->_order_id = $order_id;
+        return $this;
+    }
+
+    public function getOrderId()
+    {
+        return $this->_order_id;
+    }
+
+    public function setStatus($status)
+    {
+        $this->_status = $status;
+        return $this;
+    }
+
+    public function getStatus()
+    {
+        return $this->_status;
+    }
+
+    public function setTimeCreated($time_created)
+    {
+        $this->_time_created = $time_created;
+        return $this;
+    }
+
+    public function getTimeCreated()
+    {
+        return $this->_time_created;
+    }
+
+    public function setCreatedBy($created_by)
+    {
+        $this->_created_by = $created_by;
+        return $this;
+    }
+
+    public function getCreatedBy()
+    {
+        return $this->_created_by;
+    }
+
+    public function setTimeEdited($time_edited)
+    {
+        $this->_time_edited = $time_edited;
+        return $this;
+    }
+
+    public function getTimeEdited()
+    {
+        return $this->_time_edited;
+    }
+
+    public function setEditedBy($edited_by)
+    {
+        $this->_edited_by = $edited_by;
+        return $this;
+    }
+
+    public function getEditedBy()
+    {
+        return $this->_edited_by;
+    }
+
+    public function readByArticleId($article_id)
+    {
+        $query = "SELECT * FROM `$this->_table` WHERE `article_id` = '$article_id' LIMIT 1";
+                            $res = $this->db->execSQL($query);
+                            $data = $this->db->fetchAssoc($res);
+                            if ($data) {
+                                $this->setOptions($data);
+                            }
+    }
+
+    public function __set($name, $value)
+    {
+        $method = 'set' . $name;
+                if (('mapper' == $name) || !method_exists($this, $method)) {
+                    throw new Exception('Invalid articles property');
+                }
+                $this->$method($value);
+    }
+
+    public function __get($name)
+    {
+        $method = 'get' . $name;
+                if (('mapper' == $name) || !method_exists($this, $method)) {
+                    throw new Exception('Invalid articles property');
+                }
+                return $this->$method();
+    }
+
+    public function setOptions(array $options)
+    {
+        $methods = get_class_methods($this);
+                foreach ($options as $key => $value) {
+                    $method = 'set' . ucfirst(preg_replace('/(_|-)([a-z])/e', "strtoupper('\2')", $key));
+                    if (in_array($method, $methods)) {
+                        $this->$method($value);
+                    }
+                }
+                return $this;
+    }
 
 }
-
-?>

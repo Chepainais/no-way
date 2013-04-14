@@ -20,10 +20,15 @@ class Admin_ArticlesController extends Zend_Controller_Action {
 	
 	public function createAction(){
 		$form = new Admin_Form_ArticleCreate();
-		
+		var_dump($_POST);
 		if($this->getRequest()->getPost()){
 			if($form->isValid($this->getRequest()->getQuery())){
-				//$this->_redirect($this->view->url(array('action' => 'index')));
+			    $article = new Application_Model_Articles();
+			    $article->setName($this->getParam('name'))
+			            ->setText($this->getParam('text'));
+			    $mapper = new Application_Model_ArticlesMapper();
+			    $mapper->save($article);      
+// 				$this->_redirect($this->view->url(array('action' => 'index')));
 			}
 			else{
 				echo 'nav ievadīti dati';

@@ -10,7 +10,7 @@ class Application_Model_Cart
         $this->cart = new Zend_Session_Namespace('cart');
     }
 
-    public function itemAdd($item_id, $count = 1, $name= null, $price = null){
+    public function itemAdd($item_id, $count = 1, $name= null, $price = null, $code = null, $brand = null){
         
         if(isset($this->cart->items[$item_id])){
             $this->cart->items[$item_id]['count'] = $this->cart->items[$item_id]['count'] + $count;
@@ -20,8 +20,19 @@ class Application_Model_Cart
             $this->cart->items[$item_id]['id'] = $item_id;
             $this->cart->items[$item_id]['name'] = $name;
             $this->cart->items[$item_id]['price'] = $price;
+            $this->cart->items[$item_id]['brand'] = $brand;
+            $this->cart->items[$item_id]['code'] = $code;
             $this->cart->items[$item_id]['editCount'] = new Zend_Form_Element_Text($item_id);
         }
+        return true;
+    }
+    
+    public function changeItemCount($item_id, $count){
+        if((int) $count == 0){
+            unset($this->cart->items[$item_id]);
+            return true;
+        }
+        $this->cart->items[$item_id]['count'] = (int) $count;
         return true;
     }
     
