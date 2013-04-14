@@ -1,6 +1,6 @@
 
 <div id="view-content">
-	<form>
+	<form method="post">
 	<table>
 	    <tr>
     	<th><?php echo $this->translate('Item code');?></th>
@@ -38,6 +38,15 @@ foreach($this->items as $item){
     	<td><strong><?php echo $totalCount;?></strong></td>
     	<td><strong><?php echo $this->translate('CURRENCY_CODE') . ' '. $totalPrice  ;?></strong></td>
     </tr>
+   <tr>
+<!--        <td></td> -->
+       <td></td>
+       <td></td>
+       <td></td>
+       <td> <input type="submit" value="<?php echo $this->translate('Change');?>"></td>
+       <td></td>
+   </tr>
     </table>
+   
     </form>
 </div>
