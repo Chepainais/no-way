@@ -1,2 +1,19 @@
 <a href="<?php echo $this->url(array('controller' => 'articles', 'action' => 'create')); ?>">Create new</a>
+<table>
+<tr>
+    <th><?php echo $this->translate('id');?></th>
+    <th><?php echo $this->translate('Name');?></th>
+    <th><?php echo $this->translate('Alias');?></th>
+    <th><?php echo $this->translate('Language');?></th>
+</tr>
 <?php
+foreach($this->articles as $article){
+    ?>
+<tr>
+    <td><?php echo $article->getArticleId();?></td>
+    <td><?php echo $article->getName();?></td>
+    <td><?php echo $article->getAlias();?></td>
+    <td><?php echo $article->getLanguage();?></td>
+</tr>    
+    <?php
+}?></table>

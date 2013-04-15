@@ -38,7 +38,7 @@ class Custom_Translate_Adapter_Db extends Zend_Translate_Adapter
 
     private function _untranslated ($messageId)
     {
-        if($this->_options['insertUntranslated']){
+        if($this->_options['insertUntranslated'] && !empty($messageId) && $messageId){
         $locale = $this->getLocale();
         if (strlen($this->getLocale()) != 2) {
             $locale = substr($locale, 0, - strlen(strrchr($locale, '_')));
