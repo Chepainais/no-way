@@ -5,6 +5,8 @@
     <th><?php echo $this->translate('Name');?></th>
     <th><?php echo $this->translate('Alias');?></th>
     <th><?php echo $this->translate('Language');?></th>
+    <th><?php echo $this->translate('Edit');?></th>
+    <th><?php echo $this->translate('Delete');?></th>
 </tr>
 <?php
 foreach($this->articles as $article){
@@ -14,6 +16,8 @@ foreach($this->articles as $article){
     <td><?php echo $article->getName();?></td>
     <td><?php echo $article->getAlias();?></td>
     <td><?php echo $article->getLanguage();?></td>
+    <td><a href="<?php echo $this->url(array('action' => 'edit', 'article_id' => $article->getArticleId()));?>"><?php echo $this->translate('Edit');?></a></td>
+    <td><a href=""><?php echo $this->translate('Delete');?></a></td>
 </tr>    
     <?php
 }?></table>

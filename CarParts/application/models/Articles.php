@@ -28,7 +28,7 @@ class Application_Model_Articles
     protected $_edited_by = null;
 
     protected $_users_user_id = null;
-
+    
     public function setArticleId ($article_id)
     {
         $this->_article_id = $article_id;
@@ -161,16 +161,6 @@ class Application_Model_Articles
         return $this->_users_user_id;
     }
 
-    public function readByArticleId ($article_id)
-    {
-        $query = "SELECT * FROM `$this->_table` WHERE `article_id` = '$article_id' LIMIT 1";
-        $res = $this->db->execSQL($query);
-        $data = $this->db->fetchAssoc($res);
-        if ($data) {
-            $this->setOptions($data);
-        }
-    }
-
     public function __set ($name, $value)
     {
         $method = 'set' . $name;
@@ -184,7 +174,7 @@ class Application_Model_Articles
     {
         $method = 'get' . $name;
         if (('mapper' == $name) || ! method_exists($this, $method)) {
-            throw new Exception('Invalid articles property');
+            throw new Exception('Invalid articles property ' . $name);
         }
         return $this->$method();
     }

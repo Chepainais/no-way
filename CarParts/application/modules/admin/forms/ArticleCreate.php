@@ -19,7 +19,7 @@ class Admin_Form_ArticleCreate extends Zend_Form {
 // 			->setRequired(true)
 		;
 		
-		$submit = new Zend_Form_Element_Submit('Sumbit');
+		$submit = new Zend_Form_Element_Submit('submit');
 		$submit->setLabel('Create article');
 		
 		$elements = array($language, $name, $alias, $text, $submit);

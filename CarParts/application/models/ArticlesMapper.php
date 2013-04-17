@@ -57,18 +57,18 @@ class Application_Model_ArticlesMapper
             return;
         }
         $row = $result->current();
-        $Articles->setArticleId($row->article_id)
-            ->setName($row->name)
-            ->setAlias($row->alias)
-            ->setText($row->text)
-            ->setOrderId($row->order_id)
-            ->setLanguage($row->language)
-            ->setStatus($row->status)
-            ->setTimeCreated($row->time_created)
-            ->setCreatedBy($row->created_by)
-            ->setTimeEdited($row->time_edited)
-            ->setEditedBy($row->edited_by)
-            ->setUsersUserId($row->users_user_id);
+        $Articles->setArticleId($row['article_id'])
+            ->setName($row[name])
+            ->setAlias($row[alias])
+            ->setText($row['text'])
+            ->setOrderId($row[order_id])
+            ->setLanguage($row[language])
+            ->setStatus($row[status])
+            ->setTimeCreated($row[time_created])
+            ->setCreatedBy($row[created_by])
+            ->setTimeEdited($row[time_edited])
+            ->setEditedBy($row[edited_by])
+            ->setUsersUserId($row[users_user_id]);
     }
 
     public function fetchByLanguage ($language)
