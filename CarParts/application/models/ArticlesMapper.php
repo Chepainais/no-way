@@ -2,7 +2,8 @@
 
 class Application_Model_ArticlesMapper
 {
-
+    private $_dbTable = null;
+    
     public function setDbTable ($dbTable)
     {
         if (is_string($dbTable)) {
@@ -93,7 +94,26 @@ class Application_Model_ArticlesMapper
         }
         return $entries;
     }
-    
+    /**
+     * Get Article by Alias and language
+     * @param string $alias
+     * @param string $language
+     */
+    public function readByAliasAndLanguage ($alias, $language)
+    {
+        $resultSet = $this->getDbTable()->readByAliasAndLanguage($alias, $language);
+        $entries = array();
+        foreach ($resultSet as $row) {
+            $entry = new Application_Model_Articles();
+            $entry->setOptions($row);
+            $entries[] = $entry;
+        }
+        return $entries;
+    }    
+    /**
+     * 
+     * 
+     */
     public function fetchAll ()
     {
         $resultSet = $this->getDbTable()->fetchAll();

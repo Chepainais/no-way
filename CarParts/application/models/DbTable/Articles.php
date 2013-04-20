@@ -19,6 +19,14 @@ class Application_Model_DbTable_Articles extends Zend_Db_Table_Abstract
         ->where('article_id = ?', $article_id);
         return $this->_db->fetchAll($select);
     }
+    
+    public function readByAliasAndLanguage($alias, $language){
+        $select = $this->_db->select()
+        ->from($this->_name)
+        ->where('alias = ?', $alias)
+        ->where('language = ?', $language);
+        return $this->_db->fetchAll($select);
+    }
 }
 
 ?>

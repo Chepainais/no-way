@@ -1,4 +1,12 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>Article</b> and script/action name <b>read</b></p>
-</div>
+
+
+<?php 
+if(!empty($this->articles)){
+foreach ($this->articles as $article) {?>
+<h1><?php echo $article->getName(); ?></h1>
+    <?php echo $article->getText();?>
+<?php }
+} else {
+?>
+<?php echo $this->translate('Nothing found');?>
+<?php }?>
