@@ -38,24 +38,28 @@ class Custom_Translate_Adapter_Db extends Zend_Translate_Adapter
 
     private function _untranslated ($messageId)
     {
-        if($this->_options['insertUntranslated'] && !empty($messageId) && $messageId){
-        $locale = $this->getLocale();
-        if (strlen($this->getLocale()) != 2) {
-            $locale = substr($locale, 0, - strlen(strrchr($locale, '_')));
-        }
-        
-        $translation = new Application_Model_DbTable_Translations();
-        
-        if (! $translation->insertOrUpdate(
-                Array(
-                        'msgid' => $messageId,
-                        'msgstring' => '',
-                        'locale' => $locale
-                ))) {
-            throw new Exception('Bad translation db table insert');
+        if ($this->_options['insertUntranslated'] && ! empty($messageId) && $messageId) {
+            $locale = $this->getLocale();
+            if (strlen($this->getLocale()) != 2) {
+                $locale = substr($locale, 0, - strlen(strrchr($locale, '_')));
+            }
+            
+            $translation = new Application_Model_DbTable_Translations();
+            
+            if (! $translation->insertOrUpdate(
+                    array(
+                            'msgid' => $messageId,
+                            'msgstring' => '',
+                            'locale' => $locale,
+                            'time_created' => new Zend_Db_Expr('NOW()')
+                    ), 
+                    array(
+                            'time_edited' => new Zend_Db_Expr('NOW()')
+                    ))) {
+                throw new Exception('Bad translation db table insert');
+            }
         }
     }
-}
 
     /**
      * Translates the given string

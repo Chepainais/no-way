@@ -3,6 +3,11 @@
 <head>
 
     <?php echo $this->headMeta(); ?>
+    
+<?php  $this->headLink()->appendStylesheet('http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.css') ?>
+<?php  $this->headScript()->prependFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js');?>
+<?php  $this->headScript()->prependFile('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js');?>
+
     <?php echo $this->headScript();?>
 <?php echo $this->headLink();?>
   <title>Car Parts ADMIN</title>

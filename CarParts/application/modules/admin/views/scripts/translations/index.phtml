@@ -1,8 +1,44 @@
+<?php echo $this->form('translations');?>
+<table>
+<tr>
+    <th><?php echo $this->translate('code'); ?></th>
+    <?php foreach($this->languages as $language):?>
+    	<td><?php echo $this->translate($language);?></td>
+    <?php endforeach;?>	
+    </tr>
 <?php
-foreach($this->rows as $row):
-?>
-<?php echo $row['msgid'];?>
-<br>
+foreach ($this->rows as $row) :
+    ?>
+<tr>
 
-
+		<td><?php echo $row['msgid'];?></td>
+	<?php foreach($this->languages as $language):?>
+	<td><?php echo $this->formText('translation[' .$language. '][' . $row['msgid'].']',
+	                              (isset($this->translations[$language][$row['msgid']]) ? $this->translations[$language][$row['msgid']] : ''), 
+	                              array('placeholder' => $row['msgid'], 
+                                        'class' => 'translation'));
+        ?>
+    </td>
+	<?php endforeach;?>
+</tr>
 <?php endforeach;?>
+</table>
+</form>
+<?php $script = <<<EOF
+    $(document).ready(function(){
+        $('input.translation').change(function(){
+//             alert($(this).attr('name'))
+            var field = $(this);
+            $.post('/admin/translations/add/', {value : $(this).val(), 'field' : $(this).attr('name')}, function (data) {
+            if(data){
+                field.addClass('resultGood');
+            } else {
+                field.addClass('resultBad');
+            }})
+        })
+
+})
+
+EOF;
+$this->headScript()->appendScript($script);
+?>

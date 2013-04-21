@@ -18,7 +18,6 @@ class CartController extends Zend_Controller_Action
     {
         $cart = new Application_Model_Cart();
         if($this->_request->getPost()){
-            var_dump($this->_request->getPost());
             foreach($this->getParam('count') as $item_id => $count){
                 $cart->changeItemCount($item_id, $count);
             }

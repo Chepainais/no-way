@@ -6,3 +6,9 @@ body {
 	margin-right: auto;
 	margin-left: auto;
 }
+input.resultGood {
+	background-color: #3f9;
+}
+input.resultBad {
+	background-color: #fcc;
+}
