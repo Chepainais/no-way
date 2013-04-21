@@ -26,9 +26,9 @@
       <a href="/"><?php echo $this->translate('Home'); ?></a> 
       <a href="<?php echo $this->url(array('controller' => 'article', 'action' => 'read', 'article_alias' => 'aboutUs'), 'article-read', true);?>"><?php echo $this->translate('About us'); ?></a>
       <a href="<?php echo $this->url(array('controller' => 'parts'));?>"><?php echo $this->translate('Products'); ?></a>
-      <a href="#"><?php echo $this->translate('Partners'); ?></a>
-      <a href="#"><?php echo $this->translate('Services'); ?></a>
-      <a href="#"><?php echo $this->translate('Contacts'); ?></a>
+      <a href="<?php echo $this->url(array('controller' => 'article', 'action' => 'read', 'article_alias' => 'Partners'), 'article-read', true);?>"><?php echo $this->translate('Partners'); ?></a>
+      <a href="<?php echo $this->url(array('controller' => 'article', 'action' => 'read', 'article_alias' => 'Services'), 'article-read', true);?>"><?php echo $this->translate('Services'); ?></a>
+      <a href="<?php echo $this->url(array('controller' => 'article', 'action' => 'read', 'article_alias' => 'contacts'), 'article-read', true);?>"><?php echo $this->translate('Contacts'); ?></a>
       
   </div>
   <div id="cart"><a href="/cart/"><img src="/img/cart.png" width="20" height="20" alt="Cart"><?php echo $this->translate('items in cart') . ': ' . $this->cart->getItemCount();?></a></div>

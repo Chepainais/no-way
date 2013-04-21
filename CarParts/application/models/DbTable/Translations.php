@@ -19,6 +19,14 @@ class Application_Model_DbTable_Translations extends Zend_Db_Table
         return $this->_db->fetchAll($select);
     }
     
+    public function selectDistinctMsgid(){
+        
+        $select = $this->_db->select()
+        ->distinct()
+        ->from($this->_name, 'msgid');
+        
+        return $this->_db->fetchAll($select);
+    }
     /**
      * Updeito tabulu, jau ieraksts jau eksistē
      * 

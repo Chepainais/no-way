@@ -4,3 +4,8 @@ RewriteCond %{REQUEST_FILENAME} -l [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 RewriteRule ^.*$ index.php [NC,L]
+
+
+#SetEnvIf Host .bilparts.test.chepa.lv APPLICATION_ENV=production
+#SetEnvIf Host .bilparts.no APPLICATION_ENV=production
+#SetEnvIf Host .billigdeler.no APPLICATION_ENV=production

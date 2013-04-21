@@ -1,4 +1,6 @@
-<a href="<?php echo $this->url(array('controller' => 'articles', 'action' => 'create')); ?>">Create new</a>
+<?php echo $this->languageSelectForm; ?>
+
+<a href="<?php echo $this->url(array('controller' => 'articles', 'action' => 'create')); ?>"><?php echo $this->translate('Create new');?></a>
 <table>
 <tr>
     <th><?php echo $this->translate('id');?></th>
@@ -9,7 +11,7 @@
     <th><?php echo $this->translate('Delete');?></th>
 </tr>
 <?php
-foreach($this->articles as $article){
+foreach($this->articles as $article):
     ?>
 <tr>
     <td><?php echo $article->getArticleId();?></td>
@@ -19,5 +21,5 @@ foreach($this->articles as $article){
     <td><a href="<?php echo $this->url(array('action' => 'edit', 'article_id' => $article->getArticleId()));?>"><?php echo $this->translate('Edit');?></a></td>
     <td><a href=""><?php echo $this->translate('Delete');?></a></td>
 </tr>    
-    <?php
-}?></table>
+    <?php endforeach;?>
+    </table>
