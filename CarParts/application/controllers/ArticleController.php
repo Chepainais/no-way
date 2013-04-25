@@ -15,6 +15,7 @@ class ArticleController extends Zend_Controller_Action
 
     public function readAction ()
     {
+
         $locale = Zend_Registry::get('Zend_Locale')->toString();
         
         $article = new Application_Model_Articles();

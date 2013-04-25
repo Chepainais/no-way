@@ -79,17 +79,17 @@ class Application_Model_ArticlesMapper
         foreach ($resultSet as $row) {
             $entry = new Application_Model_Articles();
             $entry->setArticleId($row['article_id'])
-            ->setName($row[name])
-            ->setAlias($row[alias])
+            ->setName($row['name'])
+            ->setAlias($row['alias'])
             ->setText($row['text'])
-            ->setOrderId($row[order_id])
-            ->setLanguage($row[language])
-            ->setStatus($row[status])
-            ->setTimeCreated($row[time_created])
-            ->setCreatedBy($row[created_by])
-            ->setTimeEdited($row[time_edited])
-            ->setEditedBy($row[edited_by])
-            ->setUsersUserId($row[users_user_id]);
+            ->setOrderId($row['order_id'])
+            ->setLanguage($row['language'])
+            ->setStatus($row['status'])
+            ->setTimeCreated($row['time_created'])
+            ->setCreatedBy($row['created_by'])
+            ->setTimeEdited($row['time_edited'])
+            ->setEditedBy($row['edited_by'])
+            ->setUsersUserId($row['users_user_id']);
             $entries[] = $entry;
         }
         return $entries;

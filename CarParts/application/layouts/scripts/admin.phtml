@@ -4,7 +4,7 @@
 
     <?php echo $this->headMeta(); ?>
     
-<?php  $this->headLink()->appendStylesheet('http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.css') ?>
+<?php  $this->headLink()->appendStylesheet('http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.css')?>
 <?php  $this->headScript()->prependFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js');?>
 <?php  $this->headScript()->prependFile('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js');?>
 
@@ -14,21 +14,25 @@
   <?php echo $this->headLink()->appendStylesheet('/css/adminWithStyle.css')?>
 </head>
 <body>
-	<div id="header" style="background-color: #EEEEEE; height: 30px;">
+	<div id="header" style="background-color: #EEEEEE; height: 40px; padding-top: 5px;">
 		<div id="header-logo" style="float: left">
 			<b><?php $this->layout()->menu; ?></b>
 		</div>
 		<div id="header-navigation" style="float: right">
+		<?php 	if($this->loggedIn === true):?>
 			<a
-				href="<?php echo $this->url(array('module'=>'admin', 'controller' => 'orders', 'action' => 'index'));?>">Orders</a>
+				href="<?php echo $this->url(array('module'=>'admin', 'controller' => 'orders', 'action' => 'index'));?>" class="button"><?php echo $this->translate('Orders');?></a>
 			<a
-				href="<?php echo $this->url(array('module'=>'admin', 'controller' => 'articles', 'action' => 'index'));?>">Articles</a>
+				href="<?php echo $this->url(array('module'=>'admin', 'controller' => 'articles', 'action' => 'index'));?>" class="button"><?php echo $this->translate('Articles');?></a>
 			<a
-				href="<?php echo $this->url(array('module'=>'admin', 'controller' => 'menu', 'action' => 'index'));?>">Menu</a>
+				href="<?php echo $this->url(array('module'=>'admin', 'controller' => 'menu', 'action' => 'index'));?>" class="button"><?php echo $this->translate('Menu');?></a>
 			<a
-				href="<?php echo $this->url(array('module'=>'admin', 'controller' => 'system', 'action' => 'index'));?>">System</a>
+				href="<?php echo $this->url(array('module'=>'admin', 'controller' => 'system', 'action' => 'index'));?>" class="button"><?php echo $this->translate('System');?></a>
 			<a
-				href="<?php echo $this->url(array('module'=>'admin', 'controller' => 'translations', 'action' => 'index'));?>">Translations</a>
+				href="<?php echo $this->url(array('module'=>'admin', 'controller' => 'translations', 'action' => 'index'));?>" class="button"><?php echo $this->translate('Translations');?></a>
+			<a
+				href="<?php echo $this->url(array('controller' => 'login', 'action' => 'logout'));?>" class="button logout"><?php echo $this->translate('Logout'); ?></a>
+				<?php endif;?>
 		</div>
 	</div>
 	<div id="content">

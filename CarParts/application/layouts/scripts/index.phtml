@@ -16,16 +16,18 @@
   <div id="language_bar"> 
        <a href="#" id="SIGNIN"><?php echo $this->translate('Sign in'); ?></a> 
        <a href="#" id="JOIN"><?php echo $this->translate('Join'); ?></a>
-       <a href="http://sv.bilparts.test.chepa.lv"><img src="/img/flag_SW.png" alt="SV" width="22" height="16" class="language"></a> 
-       <a href="http://ru.bilparts.test.chepa.lv"><img src="/img/flag_RU.png" alt="RU" width="22" height="16" class="language"></a> 
-       <a href="http://nl.bilparts.test.chepa.lv"><img src="/img/flag_NL.png" alt="NL" width="22" height="16" class="language"></a> 
-       <a href="http://fi.bilparts.test.chepa.lv"><img src="/img/flag_FI.png" alt="FI" width="22" height="16" class="language"></a> 
-       <a href="http://da.bilparts.test.chepa.lv"><img src="/img/flag_DE.png" alt="DA" width="22" height="16" class="language"></a> 
+       <a href="<?php echo sprintf($this->languageLink, 'sv');?>"><img src="/img/flag_SW.png" alt="SV" width="22" height="16" class="language"></a> 
+       <a href="<?php echo sprintf($this->languageLink, 'ru');?>"><img src="/img/flag_RU.png" alt="RU" width="22" height="16" class="language"></a> 
+       <a href="<?php echo sprintf($this->languageLink, 'nl');?>"><img src="/img/flag_NL.png" alt="NL" width="22" height="16" class="language"></a> 
+       <a href="<?php echo sprintf($this->languageLink, 'fi');?>"><img src="/img/flag_FI.png" alt="FI" width="22" height="16" class="language"></a> 
+       <a href="<?php echo sprintf($this->languageLink, 'da');?>"><img src="/img/flag_DE.png" alt="DA" width="22" height="16" class="language"></a> 
+       <a href="<?php echo sprintf($this->languageLink, 'en');?>">en</a> 
+       <a href="<?php echo sprintf($this->languageLink, 'lv');?>">lv</a> 
    </div>
   <div id="top_menu">
       <a href="/"><?php echo $this->translate('Home'); ?></a> 
       <a href="<?php echo $this->url(array('controller' => 'article', 'action' => 'read', 'article_alias' => 'aboutUs'), 'article-read', true);?>"><?php echo $this->translate('About us'); ?></a>
-      <a href="<?php echo $this->url(array('controller' => 'parts'));?>"><?php echo $this->translate('Products'); ?></a>
+      <a href="/parts/<?php //echo $this->url(array('controller' => 'parts'));?>"><?php echo $this->translate('Products'); ?></a>
       <a href="<?php echo $this->url(array('controller' => 'article', 'action' => 'read', 'article_alias' => 'Partners'), 'article-read', true);?>"><?php echo $this->translate('Partners'); ?></a>
       <a href="<?php echo $this->url(array('controller' => 'article', 'action' => 'read', 'article_alias' => 'Services'), 'article-read', true);?>"><?php echo $this->translate('Services'); ?></a>
       <a href="<?php echo $this->url(array('controller' => 'article', 'action' => 'read', 'article_alias' => 'contacts'), 'article-read', true);?>"><?php echo $this->translate('Contacts'); ?></a>

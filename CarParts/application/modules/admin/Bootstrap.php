@@ -5,10 +5,6 @@ class Admin_Bootstrap extends Zend_Application_Module_Bootstrap
 
     public function _initLayout ()
     {       
-        
-        // Uzsetojam layout uz admin.phtml
-
-        Zend_Layout::getMvcInstance()->setLayout('admin');
 
     }
 
@@ -30,5 +26,6 @@ class Admin_Bootstrap extends Zend_Application_Module_Bootstrap
         $front = $bootstrap->getResource('frontcontroller');
     
         $front->registerPlugin(new Admin_Plugin_Layout());
+        $front->registerPlugin(new Admin_Plugin_CheckLogin());
     }
 }

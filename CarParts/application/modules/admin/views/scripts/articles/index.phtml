@@ -1,7 +1,7 @@
 <?php echo $this->languageSelectForm; ?>
 
-<a href="<?php echo $this->url(array('controller' => 'articles', 'action' => 'create')); ?>"><?php echo $this->translate('Create new');?></a>
-<table>
+<a href="<?php echo $this->url(array('controller' => 'articles', 'action' => 'create')); ?>" class="button green"><?php echo $this->translate('Create new');?></a>
+<table class="styled">
 <tr>
     <th><?php echo $this->translate('id');?></th>
     <th><?php echo $this->translate('Name');?></th>
@@ -11,6 +11,7 @@
     <th><?php echo $this->translate('Delete');?></th>
 </tr>
 <?php
+if($this->articles){
 foreach($this->articles as $article):
     ?>
 <tr>
@@ -21,5 +22,15 @@ foreach($this->articles as $article):
     <td><a href="<?php echo $this->url(array('action' => 'edit', 'article_id' => $article->getArticleId()));?>"><?php echo $this->translate('Edit');?></a></td>
     <td><a href=""><?php echo $this->translate('Delete');?></a></td>
 </tr>    
-    <?php endforeach;?>
+    <?php endforeach; 
+    
+    }
+    else {?>
+<tr>
+    <td colspan="6"><?php echo $this->translate('Nothing found')?></td>
+</tr>        
+<?php 
+    }
+    ?>
+    
     </table>

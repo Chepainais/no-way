@@ -98,7 +98,7 @@ EOF;
 	 */
 	public function articlesAction() {
 		$parts = new Application_Model_Parts ();
-		$ApeMotors = new Custom_Apemotors();
+		$ApeMotors = new Application_Model_Apemotors();
 		
 		$vendor_id = $this->view->vendor_id = $this->getRequest ()->getParam ( 'vendor_id' );
 		$model_id = $this->view->model_id = $this->getRequest ()->getParam ( 'model_id' );
@@ -130,7 +130,7 @@ EOF;
 	 */
 	public function articleAction() {
 		$parts = new Application_Model_Parts ();
-		$ApeMotors = new Custom_Apemotors();
+// 		$ApeMotors = new Application_Model_Apemotors();
 		
 		$vendor_id = $this->view->vendor_id = $this->getRequest ()->getParam ( 'vendor_id' );
 		$model_id = $this->view->model_id = $this->getRequest ()->getParam ( 'model_id' );
@@ -142,7 +142,7 @@ EOF;
 		$this->view->article = $article;
 		$this->view->article ['params'] = $parts->getArtAdditionalInfo ( $art_id );
 		
-		$price = $ApeMotors->getPrice($article['ART_ARTICLE_NR']);
+// 		$price = $ApeMotors->getPrice($article['ART_ARTICLE_NR']);
 
 		
 		$this->view->article ['price'] = $price;

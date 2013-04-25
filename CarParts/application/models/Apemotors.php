@@ -1,6 +1,6 @@
 <?php
 
-class Custom_Apemotors
+class Application_Model_Apemotors
 {
 
     private $_url = "http://webshop.apemotors.lv/ProductInfoBySupplierCode.aspx";
