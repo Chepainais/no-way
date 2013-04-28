@@ -4,17 +4,17 @@ class CartController extends Zend_Controller_Action
 {
 
     /**
-     * 
      * @var Application_Model_Cart
+     *
      */
-    private $cart;
+    private $cart = null;
 
-    public function init ()
+    public function init()
     {
         $this->cart = new Zend_Session_Namespace('cart');
     }
 
-    public function indexAction ()
+    public function indexAction()
     {
         $cart = new Application_Model_Cart();
         if($this->_request->getPost()){
@@ -28,7 +28,7 @@ class CartController extends Zend_Controller_Action
         // action body
     }
 
-    public function itemaddAction ()
+    public function itemaddAction()
     {
         $this->_helper->layout->disableLayout();
         
@@ -43,12 +43,28 @@ class CartController extends Zend_Controller_Action
         
         $this->view->item_id = 'item:' . $this->getParam('item_id');
     }
-    public function clearAction(){
+
+    public function clearAction()
+    {
         $cart = new Application_Model_Cart();
         $cart->clear();
         $this->_redirect($this->view->url(array('controller' => 'cart', 'action' =>'index')));
     }
+
+    public function checkoutAction()
+    {
+        $formPrivate = new Application_Form_CheckoutPrivate();
+        $this->view->formPrivate = $formPrivate;
+        
+        $formCompany = new Application_Form_CheckoutCompanies();
+        $this->view->formCompany = $formCompany;
+    }
+    
+
+
 }
+
+
 
 
 

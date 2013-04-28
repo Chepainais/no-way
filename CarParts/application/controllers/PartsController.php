@@ -106,23 +106,29 @@ EOF;
 		$str_id = $this->view->str_id = $this->getRequest ()->getParam ( 'str_id' );
 		
 		$searchTree = $parts->retrieveArticles ( $typ_id, $str_id );
+		
+		$searchTree2 = array();
 		foreach ( $searchTree as $id => $st ) {
 		    $params  = $parts->retrieveArticle ( $st ['LA_ART_ID'] );
-			$searchTree [$id] ['params'] = $params;
-			$searchTree [$id] ['image'] = $parts->getArtImageURL ( $st ['LA_ART_ID'] );
-			$codes[$id] = $params['ART_ARTICLE_NR'];
+		    $searchTree2 [$st ['LA_ART_ID']] = $st;
+			$searchTree2 [$st ['LA_ART_ID']] ['params'] = $params;
+			$searchTree2 [$st ['LA_ART_ID']] ['image'] = $parts->getArtImageURL ( $st ['LA_ART_ID'] );
+			$codes[$st ['LA_ART_ID']] = Array ('code' => $params['ART_ARTICLE_NR'], 'vendor' => $params['SUP_BRAND']);
 		}
+
 		// Ievācam Ape Motors cenas. Vācam atsevišķi, lai var vienā pieprasījumā visas pieprasīt.
 		$ApePrices = $ApeMotors->getPrices($codes);
+// 		var_dump($ApePrices);
 		foreach($ApePrices as $itemId => $ApePrice){
-		    if($ApePrice['supplierName'] == $searchTree [$itemId]['params']['SUP_BRAND']) {
-    		    $searchTree [$itemId]['ApePrice'] = $ApePrice['price'];
-    		    $searchTree [$itemId]['ApeQuantity'] = $ApePrice['availableQuantity'];
-    		    $searchTree [$itemId]['ApeDescription'] = $ApePrice['description'];
-    		    $searchTree [$itemId]['ApeSupplier'] = $ApePrice['supplierName'];
+		    if($ApePrice['supplierName'] == $searchTree2 [$itemId]['params']['SUP_BRAND']) {
+    		    $searchTree2 [$itemId]['ApePrice'] = $ApePrice['price'];
+    		    $searchTree2 [$itemId]['ApeQuantity'] = $ApePrice['availableQuantity'];
+    		    $searchTree2 [$itemId]['ApeDescription'] = $ApePrice['description'];
+    		    $searchTree2 [$itemId]['ApeSupplier'] = $ApePrice['supplierName'];
 		    }
 		}
-		$this->view->searchTree2 = $searchTree;
+// 		var_dump($searchTree2);
+		$this->view->searchTree2 = $searchTree2;
 	}
 	
 	/**
@@ -130,7 +136,7 @@ EOF;
 	 */
 	public function articleAction() {
 		$parts = new Application_Model_Parts ();
-// 		$ApeMotors = new Application_Model_Apemotors();
+		$ApeMotors = new Application_Model_Apemotors();
 		
 		$vendor_id = $this->view->vendor_id = $this->getRequest ()->getParam ( 'vendor_id' );
 		$model_id = $this->view->model_id = $this->getRequest ()->getParam ( 'model_id' );
@@ -142,7 +148,7 @@ EOF;
 		$this->view->article = $article;
 		$this->view->article ['params'] = $parts->getArtAdditionalInfo ( $art_id );
 		
-// 		$price = $ApeMotors->getPrice($article['ART_ARTICLE_NR']);
+		$price = $ApeMotors->getPrice($article['ART_ID'], $article['ART_ARTICLE_NR']);
 
 		
 		$this->view->article ['price'] = $price;

@@ -1,0 +1,24 @@
+<div id="tabs">
+	<ul>
+		<li><a href="#private"><?php echo $this->translate('Private');?></a></li>
+		<li><a href="#company"><?php echo $this->translate('Company');?></a></li>
+		<li></li>
+	</ul>
+	<div id="private">
+	   <?php echo $this->formPrivate;?>
+	</div>
+	
+	<div id="company">
+	   <?php echo $this->formCompany;?>
+	</div>
+</div>
+
+<?php $script = <<<EOF
+$(document).ready(function(){
+    $('#tabs').tabs();
+})
+EOF;
+?>
+<?php 
+$this->headScript()->appendScript($script);
+?>

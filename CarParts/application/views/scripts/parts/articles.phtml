@@ -6,7 +6,7 @@
     <th scope="col"><?php echo $this->translate('Description');?></th>
     <th scope="col"><?php echo $this->translate('Brand');?></th>
     <th scope="col"><?php echo $this->translate('Availability');?></th>
-    <?php $ape = false;
+    <?php $ape = true;
     if($ape){?>
     <th scope="col">Ape Cena</th>
     <th scope="col">Ape Daudzums</th>
@@ -15,7 +15,7 @@
     <?php }?>
   </tr>
   <?php
-  foreach($this->searchTree2 as $article){
+  foreach($this->searchTree2 as $id => $article){
 	?>
   <tr>
     <td><a href="<?php echo $this->url(array('action' => 'type',
@@ -23,7 +23,7 @@
         							'model_id'=>$this->model_id,
         							'typ_id' => $this->typ_id,
         							'str_id' => $this->str_id,
-        							'art_id' => $article['params']['ART_ID'],
+        							'art_id' => $id,
         								),
         							'parts-vendor-model-type-cat-article', true);?>"><?PHP echo $article['LA_ART_ID'];?></a></td>
     <td><?php echo $article['params']['ART_ARTICLE_NR'];?></td>

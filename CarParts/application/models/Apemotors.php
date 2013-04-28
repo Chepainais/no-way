@@ -4,45 +4,110 @@ class Application_Model_Apemotors
 {
 
     private $_url = "http://webshop.apemotors.lv/ProductInfoBySupplierCode.aspx";
-
-    function getPrice ($itemCode)
-    {
-        $data['productCodes'] = $itemCode;
-        $response = $this->request($data);
+    
+    /**
+     * @var Zend_Cache
+     */
+    private $cache;
+    
+    function __construct(){
+        $frontendOptions = array(
+                'lifetime' => 10800, // cache lifetime of 3 hours
+                'automatic_serialization' => true
+        );
         
-        $xml = simplexml_load_string($response);
-        $items = array();
-        foreach ($xml->Product as $item) {
-            if ((string) $item->Found == 'True') {
-                $id = array_search((string) $item->SupplierProductCode, $itemCode);
-                $items[$id]['price'] = (string) $item->ProductDetails->Price;
-                $items[$id]['availableQuantity'] = (string) $item->ProductDetails->AvailableQuantity;
-                $items[$id]['description'] = (string) $item->ProductDetails->Description;
-                $items[$id]['supplierName'] = (string) $item->ProductDetails->SupplierName;
-            }
-        }
+        $backendOptions = array(
+                'cache_dir' => APPLICATION_PATH. '/../misc/temp/' // Directory where to put the cache files
+        );
         
-        return $items;
+        // getting a Zend_Cache_Core object
+        $this->cache = Zend_Cache::factory('Core',
+                'File',
+                $frontendOptions,
+                $backendOptions);
+        
+        
     }
-
+/**
+ * Get Ape Item prices
+ * 
+ * 
+ * @param array $itemCodes
+ * @return array
+ */
     function getPrices (Array $itemCodes)
     {
-        $data['productCodes'] = join(';', $itemCodes);
-        $response = $this->request($data);
-        
-        $xml = simplexml_load_string($response);
+//         var_dump($itemCodes);
+        $itemCodesOrigin = $itemCodes;
+
         $items = array();
+        // Savācam sakešotās vērtības, tās preces vairs neapstrādāsim
+        foreach($itemCodes as $key => $code){
+            $item = $item = $this->cache->load('a'.$key);
+            if($item){
+                $items[$key] = $item;
+                unset($itemCodes[$key]);
+            }
+        }
+        // Sagatavojam kodus Ape pieprasījumam
+        $justCodes = array();
+        foreach($itemCodes as $itemId => $itemParams){
+            $justCodes[] = $itemParams['code'];
+        }
+        $data['productCodes'] = join(';', $justCodes);
+        
+        // Veidojam Ape pieprasījumu
+        if(!empty($itemCodes)){
+            $response = $this->request($data);
+            var_dump($response);
+        }
+        $xml = simplexml_load_string($response);
+
+            // var_dump($itemCodesOrigin);
         foreach ($xml->Product as $item) {
-            if ((string) $item->Found == 'True') {
-                $id = array_search((string) $item->SupplierProductCode, $itemCodes);
-                $items[$id]['price'] = (string) $item->ProductDetails->Price;
-                $items[$id]['availableQuantity'] = (string) $item->ProductDetails->AvailableQuantity;
-                $items[$id]['description'] = (string) $item->ProductDetails->Description;
-                $items[$id]['supplierName'] = (string) $item->ProductDetails->SupplierName;
+            $itemCode = str_replace('productCodes=', '', $item->SupplierProductCode);
+            $id = null;
+            
+            $id = $this->_findItemIdFromCode($itemCode, $itemCodesOrigin);
+            
+            $items[$id] = array( 'a' => '1');
+            if ($id) {
+                if ((string) $item->Found == 'True') {
+                    foreach ($item->ProductDetails as $product) {
+                        // return price ONLY if vendors matches
+                        if((string)$product->SupplierName == $itemCodesOrigin[$id]['vendor']){
+                            $items[$id]['price'] = (string) $product->Price;
+                            $items[$id]['availableQuantity'] = (string) $product->AvailableQuantity;
+                            $items[$id]['description'] = (string) $product->Description;
+                            $items[$id]['supplierName'] = (string) $product->SupplierName;
+                        }
+                    }
+                }
+                
+                if (! $this->cache->save($items[$id], 'a' . $id)) {
+                   // @todo log error
+                }
+            } else {
+                // @todo log itemnot found error
             }
         }
 
         return $items;
+    }
+    /**
+     * Find item id in items array
+     * 
+     * @param string $code item code
+     * @param array $items item array('id' => array('code', 'vendor'))
+     * @return string
+     */
+    private function _findItemIdFromCode($code, $items){
+        foreach($items as $itemId => $item){
+            if($item['code'] == $code){
+                return $itemId;
+            }
+        }
+        return false;
     }
 
     private function request ($data)

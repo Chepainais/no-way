@@ -44,7 +44,7 @@ foreach($this->items as $item){
        <td></td>
        <td></td>
        <td> <input type="submit" value="<?php echo $this->translate('Change');?>"></td>
-       <td></td>
+       <td><a href="<?php echo $this->url(array('controller' => 'cart', 'action' => 'checkout'));?>"><?php echo $this->translate('Checkout');?></a></td>
    </tr>
     </table>
    
