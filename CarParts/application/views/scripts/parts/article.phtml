@@ -6,8 +6,9 @@
 
 
 <div><?php if($this->article['price']){?>
-	Cena: <?php echo $this->currency($this->article['price']['PRI_PRICE']/100, $this->article['price']['PRI_CURRENCY_CODE']). ' (' . 
-					 $this->article['price']['PRICE_UNIT_DES_TEXT'] . ' / ' .$this->article['price']['QUANTITY_UNIT_DES_TEXT'] .')' ;?> 
+
+	<?php echo $this->translate('Price');?>: <?php echo $this->article['price']['price'] . ' ' . $this->translate('CURRENCY_CODE') . '  (' . $this->translate('In Stock') .' ' . 
+					 $this->article['price']['availableQuantity'] .')' ;?> 
 <?php }?>
 </div>
 

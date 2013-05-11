@@ -29,6 +29,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 $config->dbTecdoc->params->toArray());
         Zend_Registry::set('dbTecdoc', $dbTecdoc);
         
+        $dbIntercar = Zend_Db::factory($config->dbIntercars->adapter,
+                $config->dbIntercars->params->toArray());
+        Zend_Registry::set('dbIntercars', $dbIntercar);        
+        
         $db = Zend_Db::factory($config->db->adapter, 
                 $config->db->params->toArray());
         Zend_Db_Table::setDefaultAdapter($db);

@@ -4,7 +4,13 @@ class Application_Model_Apemotors
 {
 
     private $_url = "http://webshop.apemotors.lv/ProductInfoBySupplierCode.aspx";
-    
+    private $_vendors = array('REINZ' ,'BOSCH' ,'LEMFÖRDER' ,'WALKER' ,'BLUE PRINT' ,'SKF' ,'BOGE' ,'SACHS' ,'ELSTOCK' ,'BUDWEG CALIPER' ,'SPIDAN' ,'MAHLE ORIGINAL' ,
+                              'KILEN' ,'FERODO' ,'PAYEN' ,'FAE' ,'LUK' ,'GATES' ,'MOOG' ,'DENSO' ,'BOSAL' ,'METELLI' ,'ERA' ,'JP GROUP' ,'NISSENS' ,'AE' ,'INA' ,
+                              'FEBI BILSTEIN' ,'KONI' ,'AP' ,'CORTECO' ,'GLYCO' ,'GRAF' ,'CONTITECH' ,'NGK' ,'SNR' ,'PIERBURG' ,'HERTH+BUSS JAKOPARTS' ,'SASIC' ,
+                              'PEX' ,'AISIN' ,'VEMO' ,'FACET' ,'GOETZE ENGINE' ,'CALORSTAT BY VERNET' ,'MAGNETI MARELLI' ,'DAYCO' ,'CHAMPION' ,'CALIX' ,
+                              'WIX FILTERS' ,'BREMBO' ,'FTE' ,'VAICO' ,'MESSMER' ,'GOETZE' ,'ZF PARTS' ,'BERAL' ,'PE AUTOMOTIVE' ,'FRI.TECH.' ,'OSRAM' ,'WOLF' ,
+                              'ZAFFO' ,'SCANTECH' ,'FA1' ,'DELPHI' ,'MOTUL' ,'MANN-FILTER' ,'EXEDY' ,'BEHR THERMOT-TRONIK' ,'NÜRAL' ,'YUASA' ,'GSP' ,
+                              'TRW ENGINE COMPONENT' ,'DT' ,'TRUSTING' ,'HERTH+BUSS ELPARTS' ,'ZF SRE' ,'BERGA');
     /**
      * @var Zend_Cache
      */
@@ -43,12 +49,18 @@ class Application_Model_Apemotors
         $items = array();
         // Savācam sakešotās vērtības, tās preces vairs neapstrādāsim
         foreach($itemCodes as $key => $code){
-            $item = $item = $this->cache->load('a'.$key);
-            if($item){
-                $items[$key] = $item;
+            // Ja nav Ape ražotāju sarakstā, tad vispār neapskatam
+            if(!in_array(strtoupper($code['vendor']), $this->_vendors)){
                 unset($itemCodes[$key]);
+            } else {
+                $item = $item = $this->cache->load('a'.$key);
+                if($item){
+                    $items[$key] = $item;
+                    unset($itemCodes[$key]);
+                }
             }
         }
+
         // Sagatavojam kodus Ape pieprasījumam
         $justCodes = array();
         foreach($itemCodes as $itemId => $itemParams){
@@ -59,7 +71,6 @@ class Application_Model_Apemotors
         // Veidojam Ape pieprasījumu
         if(!empty($itemCodes)){
             $response = $this->request($data);
-            var_dump($response);
         }
         $xml = simplexml_load_string($response);
 

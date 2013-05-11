@@ -113,6 +113,14 @@ a#SIGNIN, a#JOIN {
 		padding:5px;
 
 }
+.cat {
+	width: 144px;
+	height: 140px;
+	float: left;
+	margin: 5px;
+	font-size: 14px;
+}
+
 /* STYLED TABLE  --> */
 .styled {
 	margin:0px;padding:0px;

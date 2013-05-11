@@ -99,6 +99,7 @@ EOF;
 	public function articlesAction() {
 		$parts = new Application_Model_Parts ();
 		$ApeMotors = new Application_Model_Apemotors();
+		$Intercar = new Application_Model_Intercar();
 		
 		$vendor_id = $this->view->vendor_id = $this->getRequest ()->getParam ( 'vendor_id' );
 		$model_id = $this->view->model_id = $this->getRequest ()->getParam ( 'model_id' );
@@ -112,8 +113,11 @@ EOF;
 		    $params  = $parts->retrieveArticle ( $st ['LA_ART_ID'] );
 		    $searchTree2 [$st ['LA_ART_ID']] = $st;
 			$searchTree2 [$st ['LA_ART_ID']] ['params'] = $params;
-			$searchTree2 [$st ['LA_ART_ID']] ['image'] = $parts->getArtImageURL ( $st ['LA_ART_ID'] );
+// 			$searchTree2 [$st ['LA_ART_ID']] ['image'] = $parts->getArtImageURL ( $st ['LA_ART_ID'] );
 			$codes[$st ['LA_ART_ID']] = Array ('code' => $params['ART_ARTICLE_NR'], 'vendor' => $params['SUP_BRAND']);
+			
+			$searchTree2 [$st ['LA_ART_ID']]['intercar'] = $Intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
+			
 		}
 
 		// Ievācam Ape Motors cenas. Vācam atsevišķi, lai var vienā pieprasījumā visas pieprasīt.
@@ -127,7 +131,7 @@ EOF;
     		    $searchTree2 [$itemId]['ApeSupplier'] = $ApePrice['supplierName'];
 		    }
 		}
-// 		var_dump($searchTree2);
+
 		$this->view->searchTree2 = $searchTree2;
 	}
 	
@@ -148,8 +152,7 @@ EOF;
 		$this->view->article = $article;
 		$this->view->article ['params'] = $parts->getArtAdditionalInfo ( $art_id );
 		
-		$price = $ApeMotors->getPrice($article['ART_ID'], $article['ART_ARTICLE_NR']);
-
+		$price = current($ApeMotors->getPrices(Array($article['ART_ID'] => array( 'code' => $article['ART_ARTICLE_NR'], 'vendor' => $article['SUP_BRAND']))));
 		
 		$this->view->article ['price'] = $price;
 		$this->view->article ['image'] = $parts->getArtImageURL ( $art_id );

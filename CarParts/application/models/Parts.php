@@ -74,7 +74,7 @@ class Application_Model_Parts {
 			} else {
 				$modelList = array ();
 				foreach ( $result->fetchAll () as $model ) {
-					$modelList [$model ['MOD_ID']] = $model ['MOD_CDS_TEXT'];
+					$modelList [$model ['MOD_ID']] = $model ['MOD_CDS_TEXT'] . ' [' . substr($model['MOD_PCON_START'],0,4) . ' - '. substr($model['MOD_PCON_END'],0,4) . ']';
 				}
 				return $modelList;
 			}

@@ -1,5 +1,7 @@
 <?php
+
 foreach ($this->searchTree as $searchTree) {
+    ?><div class="cat"><?php
    if($searchTree['DESCENDANTS']){ ?>
 <a href="<?php echo $this->url(array('action' => 'type',
 									'vendor_id' => $this->vendor_id, 
@@ -7,8 +9,10 @@ foreach ($this->searchTree as $searchTree) {
         							'typ_id' => $this->typ_id,
         							'str_id' => $searchTree['STR_ID'],
         								),
-        							'parts-vendor-model-type-cat', true);?>"><?php echo $searchTree['STR_DES_TEXT'];?></a>
-        							<br />
+        							'parts-vendor-model-type-cat', true);?>">
+        							<?php if (file_exists(APPLICATION_PATH . '/../public/img/cat/' . $searchTree['STR_ID'] . '.gif')) {?>
+        							<img alt="<?php echo $searchTree['STR_DES_TEXT'];?>" src="/img/cat/<?php echo $searchTree['STR_ID']?>.gif"> <?php }?><?php echo $searchTree['STR_DES_TEXT'];?></a>
+        						
 	<?php } else{?>
 	<a href="<?php echo $this->url(array('action' => 'type',
 									'vendor_id' => $this->vendor_id, 
@@ -17,6 +21,7 @@ foreach ($this->searchTree as $searchTree) {
         							'str_id' => $searchTree['STR_ID'],
 	        						'art' => true,
         								),
-        							'parts-vendor-model-type-cat-art', true);?>"><?php echo $searchTree['STR_DES_TEXT'];?></a><br />
+        							'parts-vendor-model-type-cat-art', true);?>"><?php echo $searchTree['STR_DES_TEXT'];?></a>
 <?PHP }
+?> </div><?php
 }

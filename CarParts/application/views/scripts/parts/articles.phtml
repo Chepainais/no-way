@@ -1,17 +1,21 @@
+
+
+<a href="<?PHP echo $this->url(array('vendor_id' => $this->vendor_id, 'model_id' => $this->model_id, 'typ_id' => $this->typ_id, 'str_id' => '10001'), 'parts-vendor-model-type-cat'); ?>"><?php echo $this->translate('Back to all categories');?></a>
 <table border="0" class="styled">
   <tr>
     <th scope="col"><?php echo $this->translate('id');?></th>
     <th scope="col"><?php echo $this->translate('Product code');?></th>
     <th scope="col"><?php echo $this->translate('Name');?></th>
-    <th scope="col"><?php echo $this->translate('Description');?></th>
+<!--     <th scope="col"><?php echo $this->translate('Description');?></th> -->
     <th scope="col"><?php echo $this->translate('Brand');?></th>
-    <th scope="col"><?php echo $this->translate('Availability');?></th>
+ <!--   <th scope="col"><?php echo $this->translate('Availability');?></th> -->
     <?php $ape = true;
     if($ape){?>
     <th scope="col">Ape Cena</th>
-    <th scope="col">Ape Daudzums</th>
-    <th scope="col">Ape Description</th>
-    <th scope="col">Ape Supplier</th>
+<!--     <th scope="col">Ape Daudzums</th> -->
+<!--     <th scope="col">Ape Description</th> -->
+<!--     <th scope="col">Ape Supplier</th> -->
+    <th scope="col">Intercar Cena</th>
     <?php }?>
   </tr>
   <?php
@@ -28,15 +32,16 @@
         							'parts-vendor-model-type-cat-article', true);?>"><?PHP echo $article['LA_ART_ID'];?></a></td>
     <td><?php echo $article['params']['ART_ARTICLE_NR'];?></td>
     <td><?php echo $article['params']['ART_COMPLETE_DES_TEXT'];?></td>
-    <td><?php echo $article['params']['ART_DES_TEXT'];?></td>
+ <!--    <td><?php echo $article['params']['ART_DES_TEXT'];?></td> -->
     <td><?php echo $article['params']['SUP_BRAND'];?></td>
-    <td><?php echo $article['params']['ART_STATUS_TEXT'];?></td>
+ <!--  <td><?php echo $article['params']['ART_STATUS_TEXT'];?></td> -->
      <?php if($ape){?>
-    <td><?php echo $article['ApePrice'];?></td>
-    <td><?php echo $article['ApeQuantity'];?></td>
-    <td><?php echo $article['ApeDescription'];?></td>
-    <td><?php echo $article['ApeSupplier'];?></td>
+     <td><?php echo $article['ApePrice'];?></td>
+<!--     <td><?php echo $article['ApeQuantity'];?></td> -->
+<!--     <td><?php echo $article['ApeDescription'];?></td> -->
+<!--   <td><?php echo $article['ApeSupplier'];?></td> -->
     <?php }?>
+    <td><?php echo $article['intercar']['CEN'];?></td>
   </tr>
   <?php
 }
