@@ -100,6 +100,10 @@ a#SIGNIN, a#JOIN {
 }
 #model_form label {
 	color:#FFF;}
+#model_form #model{
+	max-width: 200px;
+}	
+	
 #cart {
 	position: absolute;
 	right: 0px;

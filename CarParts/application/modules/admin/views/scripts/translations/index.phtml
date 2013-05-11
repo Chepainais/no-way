@@ -17,6 +17,9 @@ foreach ($this->rows as $row) :
 	                              (isset($this->translations[$language][$row['msgid']]) ? $this->translations[$language][$row['msgid']] : ''), 
 	                              array('placeholder' => $row['msgid'], 
                                         'class' => 'translation'));
+if($this->googleTranslate){
+?><a href="<?php echo $this->url(array('action' => 'googletranslate'));?>?name=<?php echo $row['msgid'];?>&language=<?php echo $language;?>" class="googleTranslate"><img alt="GTranslate" src="/img/google_translate.png"></a><?php
+}
         ?>
     </td>
 	<?php endforeach;?>
@@ -36,6 +39,16 @@ foreach ($this->rows as $row) :
                 field.addClass('resultBad');
             }})
         })
+    $('a.googleTranslate').click(function(){
+        element = $(this);
+        url = $(this).attr('href');
+        var translation = $.get(url, function(data){
+            element.prev('input').val(data);
+            element.prev('input').change();
+        });
+
+        return false;
+    })
 
 })
 
