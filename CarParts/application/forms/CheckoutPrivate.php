@@ -9,14 +9,14 @@ class Application_Form_CheckoutPrivate extends Zend_Form
         // Add an first_name element
         $this->addElement('Text', 'first_name', 
                 array(
-                        'label' => 'first_name',
+                        'label' => 'first name',
                         'required' => true
                 )
                 );
         // Add an last_name element
         $this->addElement('Text', 'last_name', 
                 array(
-                        'label' => 'last_name',
+                        'label' => 'last name',
                         'required' => true
                 )
                 );
@@ -52,12 +52,18 @@ class Application_Form_CheckoutPrivate extends Zend_Form
                 )
                 );
         // Add an password element
-//         $this->addElement('Password', 'password', 
-//                 array(
-//                         'label' => 'password',
-//                         'required' => false
-//                 )
-//                 );
+        $this->addElement('Password', 'password', 
+                array(
+                        'label' => 'password',
+                        'required' => true
+                )
+                );
+        $this->addElement('Password', 'password_repeated',
+                array(
+                        'label' => 'password repeated',
+                        'required' => true
+                )
+        );        
         // Add an status element
 //         $this->addElement('Radio', 'status', 
 //                 array(
@@ -65,12 +71,12 @@ class Application_Form_CheckoutPrivate extends Zend_Form
 //                         'required' => false
 //                 )
 //                 );
-        // Add an Submit button
-//         $this->addElement('submit', 'submit', 
-//                 array(
-//                         'ignore' => true,
-//                         'label' => 'Submit'
-//                 ));
+//         Add an Submit button
+        $this->addElement('submit', 'submit', 
+                array(
+                        'ignore' => true,
+                        'label' => 'Submit'
+                ));
     }
 }
 
