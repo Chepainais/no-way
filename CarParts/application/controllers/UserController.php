@@ -25,6 +25,20 @@ class UserController extends Zend_Controller_Action
         
         if($this->getRequest()->isPost()){
             if($form->isValid($this->_request->getParams())){
+                // Save data
+                $client = new Application_Model_Clients();
+                $client->setFirstName($this->getParam('first_name'))
+                       ->setLastName($this->getParam('last_name'))
+                       ->setEmail($this->getParam('email'))
+                       ->setPhone($this->getParam('phone'))
+                       ->setTitle($this->getParam('title'))
+                       ->setCountry($this->getParam('country'))
+                       ->setPassword($this->getParam('password'))
+                       ->setStatus($this->getParam('status'))
+                       ->setTimeCreated($this->getParam('time_created'));
+                $mapper = new Application_Model_ClientsMapper();
+                $mapper->save($client);
+                
                 $this->redirect($this->view->url(array('action' => 'registered')));
             } else {
             $session->messages = $form->getMessages();
