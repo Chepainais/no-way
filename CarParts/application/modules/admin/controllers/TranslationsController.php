@@ -16,19 +16,28 @@ class Admin_TranslationsController extends Zend_Controller_Action
      */
     public function indexAction ()
     {
+        $session = new Zend_Session_Namespace('admin');
+        
         $this->db = Zend_Registry::get('db');
         $auth = Zend_Auth::getInstance();
         if(in_array($auth->getIdentity()->username, array('root', 'beatrise'))){
             $this->view->googleTranslate = true;
         }
         
-        $languages = Zend_Registry::get('config')->availablaLanguages->toArray();
+        $availablelanguages = Zend_Registry::get('config')->availablaLanguages->toArray();
+
+        $this->view->availablelanguages = $availablelanguages;
         
         Zend_Db_Table::setDefaultAdapter('db');
         $translations = new Application_Model_DbTable_Translations();
         $rows = $translations->selectDistinctMsgid();
         
-        $this->view->languages = $languages;
+        if(!$session->translationLanguages){
+            $this->view->languages = $availablelanguages;
+        } else {
+            $this->view->languages = $session->translationLanguages;
+        }
+        
         $this->view->rows = $rows;
         
         $this->view->translations = array();
@@ -68,6 +77,20 @@ class Admin_TranslationsController extends Zend_Controller_Action
         else {
             echo 0;
         }
+    }
+    
+    public function selectlanguagesAction(){
+        $session = new Zend_Session_Namespace('admin');
+        $languages = $this->getParam('languages');
+        $selectedLanguages = array();
+        foreach ($languages as $language => $active){
+            if($active) {
+                $selectedLanguages[] = $language;
+            }
+        }
+        $session->translationLanguages = $selectedLanguages;
+        
+        $this->redirect($this->view->url(array('action' => 'index')));
     }
     
     public function googletranslateAction(){

@@ -15,7 +15,13 @@ class UserController extends Zend_Controller_Action
 
     public function loginAction()
     {
-        // action body
+        $form = new Application_Form_Login();
+        if($this->getRequest()->isPost()){
+            if($form->isValid($this->_request->getParams())){
+            }
+        }
+            
+        $this->view->form = $form;
     }
 
     public function registerAction()
@@ -54,6 +60,7 @@ class UserController extends Zend_Controller_Action
                     $element->setValue($value);
                 }
             }
+            unset($session->messages);
         }
         
         $this->view->formMessages = $session->messages;

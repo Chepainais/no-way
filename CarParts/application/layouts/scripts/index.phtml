@@ -14,8 +14,8 @@
 <body>
 <div id="header">
   <div id="language_bar"> 
-       <a href="#" id="SIGNIN"><?php echo $this->translate('Sign in'); ?></a> 
-       <a href="#" id="JOIN"><?php echo $this->translate('Join'); ?></a>
+       <a href="<?php echo $this->url(array('controller' => 'user', 'action' => 'login'), 'default');?>" id="SIGNIN"><?php echo $this->translate('Sign in'); ?></a> 
+       <a href="<?php echo $this->url(array('controller' => 'user', 'action' => 'register'), 'default');?>" id="JOIN"><?php echo $this->translate('Join'); ?></a>
        <a href="<?php echo sprintf($this->languageLink, 'no');?>"><img src="/img/flag_no.png" alt="NO" width="22" height="16" class="language"></a> 
        <a href="<?php echo sprintf($this->languageLink, 'sv');?>"><img src="/img/flag_SW.png" alt="SV" width="22" height="16" class="language"></a> 
        <a href="<?php echo sprintf($this->languageLink, 'ru');?>"><img src="/img/flag_RU.png" alt="RU" width="22" height="16" class="language"></a> 

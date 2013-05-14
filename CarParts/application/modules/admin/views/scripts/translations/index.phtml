@@ -1,3 +1,13 @@
+<a href="#" id="selectLanguages"><?php echo $this->translate('Select languages');?></a>
+<div id="selectLanguagesModal">
+    <?php
+    echo $this->form('languagesSelectForm', array('action' => $this->url(array('action' => 'selectlanguages'))));
+    foreach($this->availablelanguages as $language):?>
+        <label><?php echo $language;?> <?php echo $this->formCheckbox('languages[' . $language . ']', 1, array('label' => $language))?></label>
+
+    <?php endforeach;?>
+    </form>
+</div>
 <?php echo $this->form('translations');?>
 <table class="styled">
 <tr>
@@ -11,7 +21,7 @@ foreach ($this->rows as $row) :
     ?>
 <tr>
 
-		<td><?php echo $row['msgid'];?></td>
+		<td width="200"><?php echo $row['msgid'];?></td>
 	<?php foreach($this->languages as $language):?>
 	<td><?php echo $this->formText('translation[' .$language. '][' . $row['msgid'].']',
 	                              (isset($this->translations[$language][$row['msgid']]) ? $this->translations[$language][$row['msgid']] : ''), 
@@ -39,6 +49,13 @@ if($this->googleTranslate){
                 field.addClass('resultBad');
             }})
         })
+        
+    $('div#selectLanguagesModal').dialog({autoOpen:false, title: 'Select languages', modal: true, buttons: {'Submit' : function(){\$('#languagesSelectForm').submit();}}});
+    $('a#selectLanguages').click(function(data){
+        $('div#selectLanguagesModal').dialog('open');
+    })    
+        
+        
     $('a.googleTranslate').click(function(){
         element = $(this);
         url = $(this).attr('href');
