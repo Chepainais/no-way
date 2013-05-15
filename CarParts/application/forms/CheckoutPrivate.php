@@ -20,6 +20,15 @@ class Application_Form_CheckoutPrivate extends Zend_Form
                         'required' => true
                 )
                 );
+        // Add an title element
+        $this->addElement('Radio', 'title',
+                array(
+                        'label' => 'title',
+                        'required' => true,
+                        'multiOptions' => array('mr', 'ms'),
+                        'separator' => ''
+                )
+        );
         // Add an email element
         $this->addElement('Text', 'email', 
                 array(
@@ -34,21 +43,13 @@ class Application_Form_CheckoutPrivate extends Zend_Form
                         'required' => true
                 )
                 );
-        // Add an title element
-        $this->addElement('Radio', 'title', 
-                array(
-                        'label' => 'title',
-                        'required' => true, 
-                        'multiOptions' => array('mr', 'ms'),
-                        'separator' => ''
-                )
-                );
+
         // Add an country element
         $this->addElement('Select', 'country', 
                 array(
                         'label' => 'country',
                         'required' => true,
-                        'multiOptions' => array('no' => 'Norvegia', 'sv' => 'Sveden', 'lv' => 'Latvia', 'fi' => 'Finland'),
+                        'multiOptions' => array('no' => 'Norwegia', 'sv' => 'Sweden', 'fi' => 'Finland'),
                 )
                 );
         // Add an password element

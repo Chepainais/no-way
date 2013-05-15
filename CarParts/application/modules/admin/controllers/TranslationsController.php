@@ -107,7 +107,7 @@ class Admin_TranslationsController extends Zend_Controller_Action
         $service = new Google_TranslateService($client);
 
         $name = $this->getParam('name');
-        $name = str_replace('_', '', $name);
+        $name = str_replace('_', ' ', $name);
         $languageTo = $this->getParam('language');
 
         $translations = $service->translations->listTranslations($name, $languageTo, array('source' => 'en'));

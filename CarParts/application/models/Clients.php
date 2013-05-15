@@ -184,11 +184,21 @@ class Application_Model_Clients
         }
     }
 
+    public function readByEmailPassword ($email, $password)
+    {
+        $query = "SELECT * FROM `$this->_table` WHERE `email` = '$email' AND password = MD5('$password') LIMIT 1";
+        $res = $this->db->execSQL($query);
+        $data = $this->db->fetchAssoc($res);
+        if ($data) {
+            $this->setOptions($data);
+        }
+    }
+
     public function __set ($name, $value)
     {
         $method = 'set' . $name;
         if (('mapper' == $name) || ! method_exists($this, $method)) {
-            throw new Exception('Invalid clients property');
+            throw new Exception('Invalid clients property ' . $name);
         }
         $this->$method($value);
     }
@@ -197,7 +207,7 @@ class Application_Model_Clients
     {
         $method = 'get' . $name;
         if (('mapper' == $name) || ! method_exists($this, $method)) {
-            throw new Exception('Invalid clients property');
+            throw new Exception('Invalid clients property: ' . $name);
         }
         return $this->$method();
     }
