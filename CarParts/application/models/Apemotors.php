@@ -53,7 +53,7 @@ class Application_Model_Apemotors
             if(!in_array(strtoupper($code['vendor']), $this->_vendors)){
                 unset($itemCodes[$key]);
             } else {
-                $item = $item = $this->cache->load('a'.$key);
+                $item = $this->cache->load('a' . $key);
                 if($item){
                     $items[$key] = $item;
                     unset($itemCodes[$key]);
@@ -74,7 +74,7 @@ class Application_Model_Apemotors
         }
         $xml = simplexml_load_string($response);
 
-            // var_dump($itemCodesOrigin);
+//             var_dump($xml);
         foreach ($xml->Product as $item) {
             $itemCode = str_replace('productCodes=', '', $item->SupplierProductCode);
             $id = null;
@@ -83,6 +83,7 @@ class Application_Model_Apemotors
             
             $items[$id] = array( 'a' => '1');
             if ($id) {
+//                 var_dump($item);
                 if ((string) $item->Found == 'True') {
                     foreach ($item->ProductDetails as $product) {
                         // return price ONLY if vendors matches
@@ -91,18 +92,18 @@ class Application_Model_Apemotors
                             $items[$id]['availableQuantity'] = (string) $product->AvailableQuantity;
                             $items[$id]['description'] = (string) $product->Description;
                             $items[$id]['supplierName'] = (string) $product->SupplierName;
+//                             var_dump($items[$id]);
                         }
                     }
                 }
                 
-                if (! $this->cache->save($items[$id], 'a' . $id)) {
+                if (! $this->cache->save($items[$id] , 'a' . $id)) {
                    // @todo log error
                 }
             } else {
                 // @todo log itemnot found error
             }
         }
-
         return $items;
     }
     /**

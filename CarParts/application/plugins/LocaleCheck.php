@@ -31,7 +31,8 @@ class Application_Plugin_LocaleCheck extends Zend_Controller_Plugin_Abstract
                // Default locale
               $usLocale = new Zend_Locale('en');
            }
-              
+           $currency = new Zend_Currency('sv_SE');
+           Zend_Registry::set('Zend_Currency', $currency);
           
        }
        else {

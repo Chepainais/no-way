@@ -27,6 +27,7 @@ WHERE KOD_P2 LIKE '$subCode' OR KOD_P LIKE '$code' AND kh.NAZ = '$vendor' LIMIT 
         
         $result = $this->db->query ( $sql );
         foreach ( $result->fetchAll () as $tow ) {
+            $tow['CEN'] = Application_Model_Currency::convert($tow['CEN'], 'LVL', 'NOK');
             return ($tow);
         }
     }

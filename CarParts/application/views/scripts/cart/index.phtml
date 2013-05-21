@@ -9,13 +9,11 @@
     	<th><?php echo $this->translate('Count');?></th>
     	<th><?php echo $this->translate('Cost');?></th>
     </tr>
-    
 <?php 
     $totalCount = 0;
     $totalPrice = 0;
-    
-    
 foreach($this->items as $item){
+
     $totalCount += $item['count'];
     $totalPrice += ($item['price'] * $item['count']);
     ?>

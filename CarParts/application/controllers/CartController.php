@@ -23,7 +23,7 @@ class CartController extends Zend_Controller_Action
             }
             $this->redirect($this->view->url());
         }
-        $items = $this->cart->items;      
+        $items = $this->cart->items;   
         $this->view->items = $items;
         // action body
     }

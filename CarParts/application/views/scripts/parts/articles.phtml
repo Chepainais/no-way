@@ -41,7 +41,7 @@
 <!--     <td><?php echo $article['ApeDescription'];?></td> -->
 <!--   <td><?php echo $article['ApeSupplier'];?></td> -->
     <?php }?>
-    <td><?php echo $article['intercar']['CEN'];?></td>
+    <td><?php if($article['intercar']['CEN']) {echo $this->currency($article['intercar']['CEN'], 'NOK');}?></td>
   </tr>
   <?php
 }
