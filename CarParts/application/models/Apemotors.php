@@ -47,6 +47,8 @@ class Application_Model_Apemotors
         $itemCodesOrigin = $itemCodes;
 
         $items = array();
+        
+        
         // Savācam sakešotās vērtības, tās preces vairs neapstrādāsim
         foreach($itemCodes as $key => $code){
             // Ja nav Ape ražotāju sarakstā, tad vispār neapskatam
@@ -63,45 +65,43 @@ class Application_Model_Apemotors
 
         // Sagatavojam kodus Ape pieprasījumam
         $justCodes = array();
+        $returningItems = array();
         foreach($itemCodes as $itemId => $itemParams){
+            $returningItems[$itemParams['code']][$itemParams['vendor']] = $itemId;
             $justCodes[] = $itemParams['code'];
         }
         $data['productCodes'] = join(';', $justCodes);
-        
-        // Veidojam Ape pieprasījumu
-        if(!empty($itemCodes)){
+            
+            // Veidojam Ape pieprasījumu
+        if (! empty($itemCodes)) {
             $response = $this->request($data);
-        }
-        $xml = simplexml_load_string($response);
-
-//             var_dump($xml);
-        foreach ($xml->Product as $item) {
-            $itemCode = str_replace('productCodes=', '', $item->SupplierProductCode);
-            $id = null;
             
-            $id = $this->_findItemIdFromCode($itemCode, $itemCodesOrigin);
+            // $xml = simplexml_load_string($response);
+            $array = Custom_XML2Array::createArray($response);
             
-            $items[$id] = array( 'a' => '1');
-            if ($id) {
-//                 var_dump($item);
-                if ((string) $item->Found == 'True') {
-                    foreach ($item->ProductDetails as $product) {
-                        // return price ONLY if vendors matches
-                        if((string)$product->SupplierName == $itemCodesOrigin[$id]['vendor']){
-                            $items[$id]['price'] = (string) $product->Price;
-                            $items[$id]['availableQuantity'] = (string) $product->AvailableQuantity;
-                            $items[$id]['description'] = (string) $product->Description;
-                            $items[$id]['supplierName'] = (string) $product->SupplierName;
-//                             var_dump($items[$id]);
+            foreach ($array['ProductList'] as $codeProducts) {
+                foreach ($codeProducts as $product) {
+                    $code = str_replace('productCodes=', '', 
+                            $product['SupplierProductCode']);
+                    if ($product['Found'] == 'True') {
+                        // var_dump($product['ProductDetails']['SupplierName']);
+                        $itemId = (int) @$returningItems[$code][$product['ProductDetails']['SupplierName']];
+                        if ($itemId) {
+                            $items[$itemId] = $product;
                         }
                     }
                 }
-                
-                if (! $this->cache->save($items[$id] , 'a' . $id)) {
-                   // @todo log error
+            }
+            
+            foreach ($itemCodes as $itemId => $item) {
+                if (isset($items[$itemId])) {
+                    // Saglabāt vērtības
+                    $this->cache->save($items[$itemId], 'a' . $itemId);
+                    
+                } else {
+                    $this->cache->save(array('0' => '1'), 'a' . $itemId);
+                    // Saglabāt kā neesošu
                 }
-            } else {
-                // @todo log itemnot found error
             }
         }
         return $items;

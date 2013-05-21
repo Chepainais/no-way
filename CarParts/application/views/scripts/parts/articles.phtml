@@ -36,7 +36,7 @@
     <td><?php echo $article['params']['SUP_BRAND'];?></td>
  <!--  <td><?php echo $article['params']['ART_STATUS_TEXT'];?></td> -->
      <?php if($ape){?>
-     <td><?php echo $article['ApePrice'];?></td>
+     <td><?php if($article['Ape']['ProductDetails']['Price']) { echo $this->currency($article['Ape']['ProductDetails']['Price'], 'NOK'); }?></td>
 <!--     <td><?php echo $article['ApeQuantity'];?></td> -->
 <!--     <td><?php echo $article['ApeDescription'];?></td> -->
 <!--   <td><?php echo $article['ApeSupplier'];?></td> -->

@@ -122,14 +122,9 @@ EOF;
 
 		// Ievācam Ape Motors cenas. Vācam atsevišķi, lai var vienā pieprasījumā visas pieprasīt.
 		$ApePrices = $ApeMotors->getPrices($codes);
-// 		var_dump($ApePrices);
 		foreach($ApePrices as $itemId => $ApePrice){
-		    if($ApePrice['supplierName'] == $searchTree2 [$itemId]['params']['SUP_BRAND']) {
-    		    $searchTree2 [$itemId]['ApePrice'] = $ApePrice['price'];
-    		    $searchTree2 [$itemId]['ApeQuantity'] = $ApePrice['availableQuantity'];
-    		    $searchTree2 [$itemId]['ApeDescription'] = $ApePrice['description'];
-    		    $searchTree2 [$itemId]['ApeSupplier'] = $ApePrice['supplierName'];
-		    }
+		        $ApePrice['ProductDetails']['Price'] = Application_Model_Currency::convert($ApePrice['ProductDetails']['Price'], 'LVL', 'NOK');
+    		    $searchTree2 [$itemId]['Ape'] = $ApePrice;
 		}
 
 		$this->view->searchTree2 = $searchTree2;
