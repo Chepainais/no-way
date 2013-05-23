@@ -23,7 +23,7 @@ class Application_Model_Intercar
         $sql = "SELECT kh.NAZ, t.KOD, tc.CEN FROM `tow` t 
 LEFT JOIN tow_cen tc ON t.KOD = tc.TOW_KOD 
 LEFT JOIN kh ON t.KH_KOD = kh.KOD
-WHERE KOD_P2 LIKE '$subCode' OR KOD_P LIKE '$code' AND kh.NAZ = '$vendor' LIMIT 1";
+WHERE KOD_P2 LIKE '$subCode' OR KOD_P LIKE '$code' AND kh.NAZ = '$vendor' ORDER BY t.CEN DESC LIMIT 1";
         
         $result = $this->db->query ( $sql );
         foreach ( $result->fetchAll () as $tow ) {

@@ -1,49 +1,64 @@
-
-
-<a href="<?PHP echo $this->url(array('vendor_id' => $this->vendor_id, 'model_id' => $this->model_id, 'typ_id' => $this->typ_id, 'str_id' => '10001'), 'parts-vendor-model-type-cat'); ?>"><?php echo $this->translate('Back to all categories');?></a>
-<table border="0" class="styled">
-  <tr>
-    <th scope="col"><?php echo $this->translate('id');?></th>
-    <th scope="col"><?php echo $this->translate('Product code');?></th>
-    <th scope="col"><?php echo $this->translate('Name');?></th>
-<!--     <th scope="col"><?php echo $this->translate('Description');?></th> -->
-    <th scope="col"><?php echo $this->translate('Brand');?></th>
- <!--   <th scope="col"><?php echo $this->translate('Availability');?></th> -->
-    <?php $ape = true;
-    if($ape){?>
-    <th scope="col">Ape Cena</th>
-<!--     <th scope="col">Ape Daudzums</th> -->
-<!--     <th scope="col">Ape Description</th> -->
-<!--     <th scope="col">Ape Supplier</th> -->
-    <th scope="col">Intercar Cena</th>
-    <?php }?>
-  </tr>
-  <?php
+<div>
+	<a
+		href="<?PHP echo $this->url(array('vendor_id' => $this->vendor_id, 'model_id' => $this->model_id, 'typ_id' => $this->typ_id, 'str_id' => '10001'), 'parts-vendor-model-type-cat'); ?>"><?php echo $this->translate('Back to all categories');?></a>
+</div>
+<?php
   foreach($this->searchTree2 as $id => $article){
 	?>
-  <tr>
-    <td><a href="<?php echo $this->url(array('action' => 'type',
+<div class="item">
+	<div class="image"></div>
+	<div class="name">
+		<h3>
+			<a
+				href="<?php echo $this->url(array('action' => 'type',
 									'vendor_id' => $this->vendor_id, 
         							'model_id'=>$this->model_id,
         							'typ_id' => $this->typ_id,
         							'str_id' => $this->str_id,
         							'art_id' => $id,
         								),
-        							'parts-vendor-model-type-cat-article', true);?>"><?PHP echo $article['LA_ART_ID'];?></a></td>
-    <td><?php echo $article['params']['ART_ARTICLE_NR'];?></td>
-    <td><?php echo $article['params']['ART_COMPLETE_DES_TEXT'];?></td>
- <!--    <td><?php echo $article['params']['ART_DES_TEXT'];?></td> -->
-    <td><?php echo $article['params']['SUP_BRAND'];?></td>
- <!--  <td><?php echo $article['params']['ART_STATUS_TEXT'];?></td> -->
-     <?php if($ape){?>
-     <td><?php if($article['Ape']['ProductDetails']['Price']) { echo $this->currency($article['Ape']['ProductDetails']['Price'], 'NOK'); }?></td>
-<!--     <td><?php echo $article['ApeQuantity'];?></td> -->
-<!--     <td><?php echo $article['ApeDescription'];?></td> -->
-<!--   <td><?php echo $article['ApeSupplier'];?></td> -->
-    <?php }?>
-    <td><?php if($article['intercar']['CEN']) {echo $this->currency($article['intercar']['CEN'], 'NOK');}?></td>
-  </tr>
-  <?php
+        							'parts-vendor-model-type-cat-article', true);?>"><?PHP echo $article['params']['ART_COMPLETE_DES_TEXT'];?></a>
+		</h3>
+	</div>
+
+	<div class="description">
+
+		<div class="code"><?php echo $article['params']['ART_ARTICLE_NR'];?></div>
+		<div class="vendor"><?php echo $article['params']['SUP_BRAND'];?></div>
+	</div>
+	<div class="prices">
+	
+	<?php if(isset($article['Ape'])): if($article['Ape']['ProductDetails']['Price']):?>	
+	<div class="price ape">
+	   <input type="radio" checked="checked" name="price<?php echo $article['LA_ART_ID']?>" value="ape">
+	   <?php echo $this->currency($article['Ape']['ProductDetails']['Price'], 'NOK');?>
+	</div><?php endif; endif;?>
+		<?php if($article['intercar']['CEN']):?>
+		<div class="price ic">
+		<input type="radio" checked="checked" name="price<?php echo $article['LA_ART_ID']?>" value="ic">
+		  <?php echo $this->currency($article['intercar']['CEN'], 'NOK');?>
+		</div><?php endif;?>
+		<a href="/cart/itemAdd/item_id/<?php echo $article['LA_ART_ID']?>"
+			class="add_to_cart"><?php echo $this->translate('Add to cart');?></a>
+	</div>
+</div>
+<?php
 }
 ?>
-</table>
+
+<div id="add_to_cart_modal"></div>
+<?php $script = <<<EOF
+$(document).ready(function(){
+    modal = $('#add_to_cart_modal').dialog({autoOpen:false});
+    $("a.add_to_cart").click(function(){
+    url = $(this).attr('href');
+    modal.load(url);
+    modal.dialog('open');
+        return false;
+})
+})
+EOF;
+?>
+<?php 
+$this->headScript()->appendScript($script);
+?>

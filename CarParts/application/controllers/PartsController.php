@@ -119,13 +119,22 @@ EOF;
 			$searchTree2 [$st ['LA_ART_ID']]['intercar'] = $Intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
 			
 		}
-
-		// Ievācam Ape Motors cenas. Vācam atsevišķi, lai var vienā pieprasījumā visas pieprasīt.
-		$ApePrices = $ApeMotors->getPrices($codes);
-		foreach($ApePrices as $itemId => $ApePrice){
-		        $ApePrice['ProductDetails']['Price'] = Application_Model_Currency::convert($ApePrice['ProductDetails']['Price'], 'LVL', 'NOK');
-    		    $searchTree2 [$itemId]['Ape'] = $ApePrice;
-		}
+            
+            // Ievācam Ape Motors cenas. Vācam atsevišķi, lai var vienā
+        // pieprasījumā visas pieprasīt.
+        $ApePrices = $ApeMotors->getPrices($codes);
+        foreach ($ApePrices as $itemId => $ApePrice) {
+            if (isset($ApePrice['ProductDetails'])) {
+                $ApePrice['ProductDetails']['Price'] = Application_Model_Currency::convert( $ApePrice['ProductDetails']['Price'], 'LVL', 'NOK', 1.21);
+                $searchTree2[$itemId]['Ape'] = $ApePrice;
+            }
+        }
+        
+        foreach($searchTree2 as $item_id => $st){
+            if(!isset($st['Ape']) && !isset($st['intercar'])){
+                unset($searchTree2[$item_id]);
+            }
+        }
 
 		$this->view->searchTree2 = $searchTree2;
 	}

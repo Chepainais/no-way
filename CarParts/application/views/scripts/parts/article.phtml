@@ -32,7 +32,7 @@
 	<?php }?>
 	</table>
 </div>
-<div id="add_to_cart_modal">Pievienot grozam</div>
+<div id="add_to_cart_modal"></div>
 <?php $script = <<<EOF
 $(document).ready(function(){
     modal = $('#add_to_cart_modal').dialog({autoOpen:false});
@@ -45,10 +45,6 @@ $(document).ready(function(){
 })
 EOF;
 ?>
-
-
-
-
 <?php 
 $this->headScript()->appendScript($script);
 ?>
