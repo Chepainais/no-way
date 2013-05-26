@@ -48,6 +48,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->headMeta()
             ->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
             ->appendHttpEquiv('Content-Language', 'en-US');
+        $view->addHelperPath('Custom/View/Helper', 'Custom_View_Helper');
     }
 
     protected function _initRoutes ()

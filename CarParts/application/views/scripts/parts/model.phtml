@@ -1,41 +1,17 @@
 
 <table class="styled" cellspacing="0">
-  <tr>
-    <th scope="col">&nbsp;</th>
-    <th scope="col">&nbsp;</th>
-    <th scope="col">&nbsp;</th>
-    <th scope="col">&nbsp;</th>
-    <th colspan="2" scope="col"><?php echo $this->translate('production time');?></th>
-    <th scope="col">&nbsp;</th>
-    <th colspan="2" scope="col"><?php echo $this->translate('Power KW');?></th>
-    <th colspan="2" scope="col"><?php echo $this->translate('Power HP');?></th>
-    <th scope="col">&nbsp;</th>
-    <th scope="col">&nbsp;</th>
-    <th scope="col">&nbsp;</th>
-    <th scope="col">&nbsp;</th>
-    <th scope="col">&nbsp;</th>
-    <th scope="col">&nbsp;</th>
-    <th scope="col">&nbsp;</th>
-  </tr>
+
   <tr>
     <th scope="col"><?php echo $this->translate('id');?></th>
-    <th scope="col"><?php echo $this->translate('Vehicle brand');?></th>
-    <th scope="col"><?php echo $this->translate('Vehicle model');?></th>
-    <th scope="col"><?php echo $this->translate('Name');?></th>
-    <th scope="col"><?php echo $this->translate('from');?></th>
-    <th scope="col"><?php echo $this->translate('to');?></th>
+<!-- <th scope="col"><?php echo $this->translate('Vehicle brand');?></th>
+    <th scope="col"><?php echo $this->translate('Vehicle model');?></th> -->
+    <th scope="col"><?php echo $this->translate('Model Name');?></th>
+    <th scope="col"><?php echo $this->translate('Production time');?></th>
     <th scope="col"><?php echo $this->translate('Engine');?></th>
-    <th scope="col"><?php echo $this->translate('from');?></th>
-    <th scope="col"><?php echo $this->translate('to');?></th>
-    <th scope="col"><?php echo $this->translate('From');?></th>
-    <th scope="col"><?php echo $this->translate('To');?></th>
-    <th scope="col"><?php echo $this->translate('Cylinders');?></th>
+    <th scope="col"><?php echo $this->translate('Power');?></th>
+
     <th scope="col"><?php echo $this->translate('Engine code');?></th>
-    <th scope="col"><?php echo $this->translate('Engine type');?></th>
-    <th scope="col"><?php echo $this->translate('Fuel');?></th>
-    <th scope="col"><?php echo $this->translate('Body');?></th>
-    <th scope="col"><?php echo $this->translate('Axle');?></th>
-    <th scope="col"><?php echo $this->translate('Max weight');?></th>
+
   </tr>
   <?php
  foreach($this->types as $type){
@@ -48,23 +24,16 @@
             									'str_id' => $this->str_id,
             										),
             									'parts-vendor-model-type-cat', true);?>"><?PHP echo $type['TYP_ID'];?></a></td>
-    <td><?PHP echo $type['MFA_BRAND'];?></td>
-    <td><?PHP echo $type['MOD_CDS_TEXT'];?></td>
-    <td><?PHP echo $type['TYP_CDS_TEXT'];?></td>
-    <td><?PHP echo $type['TYP_PCON_START'];?></td>
-    <td><?PHP echo $type['TYP_PCON_END'];?></td>
-    <td><?PHP echo $type['TYP_CCM'];?></td>
-    <td><?PHP echo $type['TYP_KW_FROM'];?></td>
-    <td><?PHP echo $type['TYP_KW_UPTO'];?></td>
-    <td><?PHP echo $type['TYP_HP_FROM'];?></td>
-    <td><?PHP echo $type['TYP_HP_UPTO'];?></td>
-    <td><?PHP echo $type['TYP_CYLINDERS'];?></td>
+ <!--    <td><?PHP echo $type['MFA_BRAND'];?></td>
+    <td><?PHP echo $type['MOD_CDS_TEXT'];?></td> -->
+    <td><?PHP echo $type['TYP_CDS_TEXT'];?></td> 
+    <td><?PHP echo $this->Yearmonth($type['TYP_PCON_START'], $type['TYP_PCON_END']);?></td>
+    <td><?PHP echo $type['TYP_CCM'];?> ccm</td>
+    <td><?PHP echo $type['TYP_KW_FROM'] . 'kw / ' .  $type['TYP_HP_FROM'] . 'hp';?></td>
+
+  <!--   <td><?PHP echo $type['TYP_CYLINDERS'];?></td>  -->
     <td><?PHP echo $type['ENG_CODE'];?></td>
-    <td><?PHP echo $type['TYP_ENGINE_DES_TEXT'];?></td>
-    <td><?PHP echo $type['TYP_FUEL_DES_TEXT'];?></td>
-    <td><?PHP echo $type['TYP_BODY_DES_TEXT'];?></td>
-    <td><?PHP echo $type['TYP_AXLE_DES_TEXT'];?></td>
-    <td><?PHP echo $type['TYP_MAX_WEIGHT'];?></td>
+
   </tr>
   <?php 
 }?>

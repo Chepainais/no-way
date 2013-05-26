@@ -226,15 +226,24 @@ a#SIGNIN, a#JOIN {
 	float: left;
 	margin: 10px;
 	padding: 5px;
+	overflow: hidden;
 }
 .item .image {
 	position: relative;
-	height: 120px;
-	width: 120px;
+	height: 122px;
+	width: 122px;
 	margin-right: 10px;
 	margin-bottom: 10px;
-	background-color: #CCC;
 	float: left;
+	overflow: hidden;
+}
+
+.item .image.no {
+	background-color: #fff;
+	border: solid 1px #000;
+}
+
+.item .image img {
 }
 .item .name {
 	width: 260px;
@@ -267,4 +276,9 @@ a#SIGNIN, a#JOIN {
 }
 .item .prices .price.ic {
 	color: #900;
+}
+.item .criteria {
+	position: relative;
+	clear:both;
+	width: 100%;
 }

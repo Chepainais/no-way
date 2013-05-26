@@ -129,10 +129,13 @@ EOF;
                 $searchTree2[$itemId]['Ape'] = $ApePrice;
             }
         }
-        
-        foreach($searchTree2 as $item_id => $st){
-            if(!isset($st['Ape']) && !isset($st['intercar'])){
+        foreach ($searchTree2 as $item_id => $st) {
+            if (! isset($st['Ape']) && ! isset($st['intercar'])) {
                 unset($searchTree2[$item_id]);
+            } else {
+                $searchTree2[$item_id]['image'] = $parts->getArtImageURL($item_id);
+                $searchTree2[$item_id]['criteria'] = array();
+                $searchTree2[$item_id]['criteria'] = $parts->getArtCriteria($item_id);
             }
         }
 

@@ -3,21 +3,31 @@
 		href="<?PHP echo $this->url(array('vendor_id' => $this->vendor_id, 'model_id' => $this->model_id, 'typ_id' => $this->typ_id, 'str_id' => '10001'), 'parts-vendor-model-type-cat'); ?>"><?php echo $this->translate('Back to all categories');?></a>
 </div>
 <?php
-  foreach($this->searchTree2 as $id => $article){
-	?>
+if (! empty($this->searchTree2)) {
+    foreach ($this->searchTree2 as $id => $article) :
+        ?>
 <div class="item">
-	<div class="image"></div>
+	<div class="image<?php if ($article['image']){echo ' yes';} else {echo ' no';}?>">
+	   <?php
+        if ($article['image']) :
+            ?><img src="/<?php echo $article['image'];?>" width="120" />
+	   <?php endif; ?>
+	   <div class="clear"></div>
+	</div>
 	<div class="name">
 		<h3>
 			<a
-				href="<?php echo $this->url(array('action' => 'type',
-									'vendor_id' => $this->vendor_id, 
-        							'model_id'=>$this->model_id,
-        							'typ_id' => $this->typ_id,
-        							'str_id' => $this->str_id,
-        							'art_id' => $id,
-        								),
-        							'parts-vendor-model-type-cat-article', true);?>"><?PHP echo $article['params']['ART_COMPLETE_DES_TEXT'];?></a>
+				href="<?php
+            echo $this->url(
+                array(
+                        'action' => 'type',
+                        'vendor_id' => $this->vendor_id,
+                        'model_id' => $this->model_id,
+                        'typ_id' => $this->typ_id,
+                        'str_id' => $this->str_id,
+                        'art_id' => $id
+                ), 'parts-vendor-model-type-cat-article', true);
+        ?>"><?PHP echo $article['params']['ART_COMPLETE_DES_TEXT'];?></a>
 		</h3>
 	</div>
 
@@ -27,27 +37,43 @@
 		<div class="vendor"><?php echo $article['params']['SUP_BRAND'];?></div>
 	</div>
 	<div class="prices">
-	
+	<?php echo $this->form('itemAdd' . $id, array('method' => 'post', 'action' => $this->url(array('controller' =>'cart', 'action' => 'itemAdd', 'item_id' => $id), 'default')));?>
 	<?php if(isset($article['Ape'])): if($article['Ape']['ProductDetails']['Price']):?>	
 	<div class="price ape">
-	   <input type="radio" checked="checked" name="price<?php echo $article['LA_ART_ID']?>" value="ape">
+			<input type="radio" checked="checked"
+				name="price<?php echo $article['LA_ART_ID']?>" value="ape">
 	   <?php echo $this->currency($article['Ape']['ProductDetails']['Price'], 'NOK');?>
 	</div><?php endif; endif;?>
 		<?php if($article['intercar']['CEN']):?>
 		<div class="price ic">
-		<input type="radio" checked="checked" name="price<?php echo $article['LA_ART_ID']?>" value="ic">
+			<input type="radio" checked="checked"
+				name="price<?php echo $article['LA_ART_ID']?>" value="ic">
 		  <?php echo $this->currency($article['intercar']['CEN'], 'NOK');?>
 		</div><?php endif;?>
-		<a href="/cart/itemAdd/item_id/<?php echo $article['LA_ART_ID']?>"
-			class="add_to_cart"><?php echo $this->translate('Add to cart');?></a>
+		<?php echo $this->formText('amount' . $id, 1, array('name' => 'amount', 'size' => 2))?>
+		<?php echo $this->formSubmit('Add to Cart', 'Add to Cart', array('class' => 'itemAddToCart'));?>
+			</form>
+	</div>
+	<div class="criteria">
+	   <?php foreach($article['criteria'] as $criteria):?>
+	   	<?php echo $criteria['CRITERIA_DES_TEXT'];?>:
+		<?php echo $criteria['CRITERIA_VALUE_TEXT'];?>;
+	   <?php endforeach;?>
 	</div>
 </div>
 <?php
+    endforeach
+    ;
+} else {
+    ?><div class="nothin-found"><?php echo $this->translate('Nothing found')?></div><?php
 }
+
 ?>
 
 <div id="add_to_cart_modal"></div>
-<?php $script = <<<EOF
+<?php
+
+$script = <<<EOF
 $(document).ready(function(){
     modal = $('#add_to_cart_modal').dialog({autoOpen:false});
     $("a.add_to_cart").click(function(){
@@ -59,6 +85,7 @@ $(document).ready(function(){
 })
 EOF;
 ?>
-<?php 
+<?php
+
 $this->headScript()->appendScript($script);
 ?>
