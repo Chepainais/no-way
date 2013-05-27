@@ -76,12 +76,14 @@ if (! empty($this->searchTree2)) {
 $script = <<<EOF
 $(document).ready(function(){
     modal = $('#add_to_cart_modal').dialog({autoOpen:false});
-    $("a.add_to_cart").click(function(){
-    url = $(this).attr('href');
-    modal.load(url);
-    modal.dialog('open');
-        return false;
-})
+    $("input.itemAddToCart").click(function(){
+       var form = $(this).parent('form');
+	   formData = form.serialize();  
+	   $.post(form.attr('action'), formData, function(data){
+            modal.html(data).dialog('open')
+        })
+		        return false;
+    })
 })
 EOF;
 ?>

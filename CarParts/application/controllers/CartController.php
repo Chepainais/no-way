@@ -23,7 +23,11 @@ class CartController extends Zend_Controller_Action
             }
             $this->redirect($this->view->url());
         }
-        $items = $this->cart->items;   
+        $items = $this->cart->items;  
+
+        var_dump($items);
+        die();
+        
         $this->view->items = $items;
         // action body
     }
@@ -34,13 +38,22 @@ class CartController extends Zend_Controller_Action
         
         $parts = new Application_Model_Parts();
         $cart = new Application_Model_Cart();
-        $intercar = new Application_Model_Intercar();
         
-        $params = $parts->retrieveArticle($this->getParam('item_id'));
-        $price = $intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
-        $cart->itemAdd($this->getParam('item_id'), 1, $params['ART_COMPLETE_DES_TEXT'], $price, $params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
+        $item_id = $this->getParam('item_id');
         
-        
+        $params = $parts->retrieveArticle($item_id);
+        $priceType = $this->getParam('price' . $item_id);
+        if($priceType == 'ic'){
+            $intercar = new Application_Model_Intercar();
+            $price = $intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
+        } elseif($priceType == 'ape') {
+            $ape = new Application_Model_Apemotors();
+            $ape_price = current($ape->getPrices(array($item_id => array('code' => $params['ART_ARTICLE_NR'], 'vendor' => $params['SUP_BRAND']))));
+            $price = Application_Model_Currency::convert($ape_price['ProductDetails']['Price'], 'LVL', 'NOK');
+        }
+
+        $cart->itemAdd($item_id, $this->getParam('amount'), $params['ART_COMPLETE_DES_TEXT'], $price, $params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
+
         $this->view->item_id = 'item:' . $this->getParam('item_id');
     }
 
@@ -48,7 +61,7 @@ class CartController extends Zend_Controller_Action
     {
         $cart = new Application_Model_Cart();
         $cart->clear();
-        $this->_redirect($this->view->url(array('controller' => 'cart', 'action' =>'index')));
+        $this->_redirect($this->view->url(array('controller' => 'cart', 'action' =>'index'), 'default'));
     }
 
     public function checkoutAction()

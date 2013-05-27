@@ -125,7 +125,7 @@ EOF;
         $ApePrices = $ApeMotors->getPrices($codes);
         foreach ($ApePrices as $itemId => $ApePrice) {
             if (isset($ApePrice['ProductDetails'])) {
-                $ApePrice['ProductDetails']['Price'] = Application_Model_Currency::convert( $ApePrice['ProductDetails']['Price'], 'LVL', 'NOK', 1.21);
+                $ApePrice['ProductDetails']['Price'] = $ApePrice['ProductDetails']['Price'];
                 $searchTree2[$itemId]['Ape'] = $ApePrice;
             }
         }
