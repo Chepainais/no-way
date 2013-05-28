@@ -65,5 +65,6 @@ class Application_Form_CheckoutCompanies extends Zend_Form
                         'label' => 'phone',
                         'required' => false
                 ));
+        $this->addElement('Submit', 'Submit');
     }
 }

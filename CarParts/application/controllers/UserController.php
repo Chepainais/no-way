@@ -57,6 +57,14 @@ class UserController extends Zend_Controller_Action
         }
         $this->view->form = $form;
     }
+    
+    public function logoutAction(){
+//         $_SESSION = array();
+//         session_destroy();
+        $auth = Zend_Auth::getInstance();
+        $auth->clearIdentity();
+        $this->redirect('/');
+    }
 
     public function registerAction()
     {
@@ -79,7 +87,7 @@ class UserController extends Zend_Controller_Action
                 $mapper = new Application_Model_ClientsMapper();
                 $mapper->save($client);
                 
-                $this->redirect($this->view->url(array('action' => 'registered')));
+                $this->redirect($this->view->url(array('controller' => 'user', 'action' => 'registered')));
             } else {
             $session->messages = $form->getMessages();
             $session->values = $form->getValues();
@@ -100,6 +108,7 @@ class UserController extends Zend_Controller_Action
         $this->view->formMessages = $session->messages;
         $this->view->form = $form;
     }
+    
 
     public function registeredAction()
     {

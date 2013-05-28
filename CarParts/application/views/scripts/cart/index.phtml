@@ -1,5 +1,6 @@
 
 <div id="view-content">
+<?php  if(!empty($this->items)): ?>
 	<form method="post">
 	<table>
 	    <tr>
@@ -12,7 +13,8 @@
 <?php 
     $totalCount = 0;
     $totalPrice = 0;
-foreach($this->items as $item){
+   
+foreach($this->items as $item):
 
     $totalCount += $item['count'];
     $totalPrice += ($item['price'] * $item['count']);
@@ -26,8 +28,11 @@ foreach($this->items as $item){
         <td align="center"><?php echo $item['price'];?></td>
     </tr>
     
-    <?php 
-}?>
+    <?php
+
+    endforeach;
+
+    ?>
     <tr>
 <!--     	<td></td> -->
     	<td></td>
@@ -38,13 +43,17 @@ foreach($this->items as $item){
     </tr>
    <tr>
 <!--        <td></td> -->
-       <td><a href="<?php echo $this->url(array('controller' => 'cart', 'action' => 'clear'));?>"><?php echo $this->translate('Clear cart');?></a></td>
+       <td><a href="<?php echo $this->url(array('controller' => 'cart', 'action' => 'clear'), 'default');?>"><?php echo $this->translate('Clear cart');?></a></td>
        <td></td>
        <td></td>
        <td> <input type="submit" value="<?php echo $this->translate('Change');?>"></td>
-       <td><a href="<?php echo $this->url(array('controller' => 'cart', 'action' => 'checkout'));?>"><?php echo $this->translate('Checkout');?></a></td>
+       <td><a href="<?php echo $this->url(array('controller' => 'checkout', 'action' => 'index'), 'default');?>"><?php echo $this->translate('Checkout');?></a></td>
    </tr>
     </table>
    
     </form>
+    <?php else:?>
+            <?php echo $this->translate('Nothing found, cart is empty');?>
+        <?php 
+        endif;?>
 </div>

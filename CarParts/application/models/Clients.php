@@ -194,6 +194,16 @@ class Application_Model_Clients
         }
     }
 
+    public function readByEmail ($email)
+    {
+        $query = "SELECT * FROM `$this->_table` WHERE `email` = '$email' LIMIT 1";
+        $res = $this->db->execSQL($query);
+        $data = $this->db->fetchAssoc($res);
+        if ($data) {
+            $this->setOptions($data);
+        }
+    }
+    
     public function __set ($name, $value)
     {
         $method = 'set' . $name;
@@ -216,8 +226,11 @@ class Application_Model_Clients
     {
         $methods = get_class_methods($this);
         foreach ($options as $key => $value) {
-            $method = 'set' . ucfirst(
-                    preg_replace('/(_|-)([a-z])/e', "strtoupper('\2')", $key));
+            $method_parts = explode('_', $key);
+            $method = 'set'; 
+            foreach($method_parts as $part) {
+                $method .= ucfirst($part);
+            }
             if (in_array($method, $methods)) {
                 $this->$method($value);
             }

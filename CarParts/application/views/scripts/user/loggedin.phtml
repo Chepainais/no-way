@@ -1,2 +1,3 @@
-Successfully logged in
-<?php
+<?php echo $this->translate('Successfully logged in')?>
+
+<a href="<?php echo $this->url(array('controller' => 'checkout', 'action' => 'client'));?>"><?php echo $this->translate('Go to checkout');?></a>

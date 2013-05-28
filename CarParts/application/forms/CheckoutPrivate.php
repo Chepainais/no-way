@@ -25,7 +25,7 @@ class Application_Form_CheckoutPrivate extends Zend_Form
                 array(
                         'label' => 'title',
                         'required' => true,
-                        'multiOptions' => array('mr', 'ms'),
+                        'multiOptions' => array('mr' => 'mr', 'ms' => 'ms'),
                         'separator' => ''
                 )
         );
@@ -33,7 +33,8 @@ class Application_Form_CheckoutPrivate extends Zend_Form
         $this->addElement('Text', 'email', 
                 array(
                         'label' => 'email',
-                        'required' => true
+                        'required' => true,
+                        'validators' => array('emailAddress')
                 )
                 );
         // Add an phone element

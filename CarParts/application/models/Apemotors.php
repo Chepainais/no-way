@@ -87,6 +87,7 @@ class Application_Model_Apemotors
                         // var_dump($product['ProductDetails']['SupplierName']);
                         $itemId = (int) @$returningItems[$code][$product['ProductDetails']['SupplierName']];
                         if ($itemId) {
+                            $product['ProductDetails']['Price'] = Application_Model_Currency::convert($product['ProductDetails']['Price'], 'LVL', 'NOK', 1.81);
                             $items[$itemId] = $product;
                         }
                     }
