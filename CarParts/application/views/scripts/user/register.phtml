@@ -1,7 +1,7 @@
 <div id="view-content">
 <h1><?php echo $this->translate('Register');?></h1>
 	<?php echo $this->form;?>
-	<?php if($this->formMessages) :?>
+	<?php if(!empty($this->formMessages)) :?>
 	<?php foreach ($this->formMessages as $field => $message):?>
 	<div><strong><?php echo $this->translate($field);?></strong>: <?php echo current($message); ?></div>
 	

@@ -72,6 +72,7 @@ class UserController extends Zend_Controller_Action
         $form = new Application_Form_CheckoutPrivate();
         
         if($this->getRequest()->isPost()){
+            unset($session->messages);
             if($form->isValid($this->_request->getParams())){
                 // Save data
                 $client = new Application_Model_Clients();
@@ -102,7 +103,6 @@ class UserController extends Zend_Controller_Action
                     $element->setValue($value);
                 }
             }
-            unset($session->messages);
         }
         
         $this->view->formMessages = $session->messages;
