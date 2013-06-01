@@ -1,0 +1,19 @@
+
+<div id="view-content">
+    <ul>
+    <?php if($this->articles):?>
+	<?php foreach($this->articles as $article):?>
+       <li>
+            <?php echo $article['NUMBER'] . ': ' .  $article['BRAND'] . ' - ' .  $article['ART_COMPLETE_DES_TEXT'];?>
+            <?php if(!empty($article['analogs'])):?>
+                <ul>Analogs:
+                <?php foreach($article['analogs'] as $analog):?>
+                    <li><?php echo $analog['NUMBER'] . ' - ' . $analog['BRAND'];?></li>
+                <?php endforeach;?>
+                </ul>
+            <?php endif;?>
+       </li>
+	<?php endforeach;?>
+	<?php endif;?>
+	</ul>
+</div>

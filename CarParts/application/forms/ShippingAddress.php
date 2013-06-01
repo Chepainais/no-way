@@ -5,8 +5,8 @@ class Application_Form_ShippingAddress extends Zend_Form
 
     public function init ()
     {
-        $country = new Zend_Form_Element_Text('country');
-        $country->setLabel('country')->setRequired(true);
+        $country = new Zend_Form_Element_Select('country');
+        $country->setLabel('country')->setRequired(true)->setMultioptions(array('no' => 'Norway', 'sv' => 'Sweden', 'fi' => 'Finland'));
         
         $address = new Zend_Form_Element_Text('address');
         $address->setLabel('address')->setRequired(true);

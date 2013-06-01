@@ -50,7 +50,7 @@ class Application_Form_CheckoutPrivate extends Zend_Form
                 array(
                         'label' => 'country',
                         'required' => true,
-                        'multiOptions' => array('no' => 'Norwegia', 'sv' => 'Sweden', 'fi' => 'Finland'),
+                        'multiOptions' => array('no' => 'Norway', 'sv' => 'Sweden', 'fi' => 'Finland'),
                 )
                 );
         // Add an password element

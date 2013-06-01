@@ -25,7 +25,7 @@ foreach($this->items as $item):
         <td><?php echo $item['brand']?></td>
         <td><?php echo $item['name']?></td>
         <td><input type="text" size="1" name="count[<?php echo $item['id']?>]" value="<?php echo $item['count'];?>" /></td>
-        <td align="center"><?php echo $item['price'];?></td>
+        <td align="center"><?php echo $this->currency($item['price'], 'NOK');?></td>
     </tr>
     
     <?php
@@ -39,7 +39,7 @@ foreach($this->items as $item):
     	<td></td>
     	<td align="right"><strong><?php echo $this->translate('Total');?>:</strong></td>
     	<td><strong><?php echo $totalCount;?></strong></td>
-    	<td><strong><?php echo $this->translate('CURRENCY_CODE') . ' '. $totalPrice  ;?></strong></td>
+    	<td><strong><?php echo $this->currency($totalPrice, 'NOK')  ;?></strong></td>
     </tr>
    <tr>
 <!--        <td></td> -->

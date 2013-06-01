@@ -203,6 +203,15 @@ class Application_Model_Parts {
 		$result = $this->db->query ( $sql );
 		return $result->fetchAll ();
 	}
+	
+	public function getParentCategorieId($str_id){
+	    $sql = "SELECT STR_ID_PARENT FROM search_tree WHERE STR_ID = $str_id;";
+	    $result = $this->db->query ( $sql );
+	    $r = current($result->fetchAll ());
+
+	    return $r['STR_ID_PARENT'];
+	}
+	
 	/**
 	 * Preces apraksts un citi parametri
 	 *
@@ -261,6 +270,66 @@ class Application_Model_Parts {
 		$result = $this->db->query ( $sql );
 		return $result->fetchAll ();
 	}
+	
+	
+	public function searchByCode($code){
+	    $sql = "SELECT DISTINCT
+                	IF (ART_LOOKUP.ARL_KIND IN (3, 4), BRANDS.BRA_BRAND, suppliers.SUP_BRAND) AS BRAND,
+                	ART_LOOKUP.ARL_SEARCH_NUMBER AS NUMBER,
+                	ART_LOOKUP.ARL_KIND,
+                	ART_LOOKUP.ARL_ART_ID,
+                	DES_TEXTS.TEX_TEXT AS ART_COMPLETE_DES_TEXT
+                FROM
+                	           ART_LOOKUP
+                	 LEFT JOIN brands ON BRANDS.BRA_ID = ART_LOOKUP.ARL_BRA_ID
+                	INNER JOIN articles ON ARTICLES.ART_ID = ART_LOOKUP.ARL_ART_ID
+                	INNER JOIN suppliers ON suppliers.SUP_ID = ARTICLES.ART_SUP_ID
+                	INNER JOIN DESIGNATIONS ON DESIGNATIONS.DES_ID = ARTICLES.ART_COMPLETE_DES_ID
+                	INNER JOIN DES_TEXTS ON DES_TEXTS.TEX_ID = DESIGNATIONS.DES_TEX_ID
+                WHERE
+                	ART_LOOKUP.ARL_SEARCH_NUMBER = '$code' AND
+                	ART_LOOKUP.ARL_KIND IN (1, 2, 3, 4) AND
+                	DESIGNATIONS.DES_LNG_ID = $this->language
+                GROUP BY
+                	BRAND,
+                	NUMBER
+                ;";
+	    $result = $this->db->query ( $sql );
+	    return $result->fetchAll ();
+	}
+	
+	
+	public function searchAnalog($code, $brand){
+	    $sql = "SELECT DISTINCT
+            	IF (ART_LOOKUP2.ARL_KIND = 3, BRANDS2.BRA_BRAND, SUPPLIERS2.SUP_BRAND) AS BRAND,
+            	IF (ART_LOOKUP2.ARL_KIND IN (2, 3), ART_LOOKUP2.ARL_DISPLAY_NR, ARTICLES2.ART_ARTICLE_NR) AS NUMBER,
+            	ART_LOOKUP2.ARL_KIND
+            FROM
+            	           ART_LOOKUP
+            	 LEFT JOIN brands ON BRANDS.BRA_ID = ART_LOOKUP.ARL_BRA_ID
+            	INNER JOIN articles ON ARTICLES.ART_ID = ART_LOOKUP.ARL_ART_ID
+            	INNER JOIN suppliers ON suppliers.SUP_ID = ARTICLES.ART_SUP_ID
+            	INNER JOIN ART_LOOKUP AS ART_LOOKUP2 FORCE KEY (PRIMARY) ON ART_LOOKUP2.ARL_ART_ID = ART_LOOKUP.ARL_ART_ID
+            	 LEFT JOIN brands AS BRANDS2 ON BRANDS2.BRA_ID = ART_LOOKUP2.ARL_BRA_ID
+            	INNER JOIN articles AS ARTICLES2 ON ARTICLES2.ART_ID = ART_LOOKUP2.ARL_ART_ID
+            	INNER JOIN suppliers AS SUPPLIERS2 FORCE KEY (PRIMARY) ON SUPPLIERS2.SUP_ID = ARTICLES2.ART_SUP_ID
+            WHERE
+            	ART_LOOKUP.ARL_SEARCH_NUMBER = '$code' AND
+            	(ART_LOOKUP.ARL_KIND IN (3, 4) AND BRANDS.BRA_BRAND = '$brand' OR
+            	 suppliers.SUP_BRAND = '$brand') AND
+            	(ART_LOOKUP.ARL_KIND, ART_LOOKUP2.ARL_KIND) IN
+            		((1, 1), (1, 2), (1, 3),
+                     (2, 1), (2, 2), (2, 3),
+            		 (3, 1), (3, 2), (3, 3),
+            		 (4, 1))
+            ORDER BY
+            	BRAND,
+            	NUMBER
+            ;";
+	    $result = $this->db->query ( $sql );
+	    return $result->fetchAll ();
+	}
+	
 	/**
 	 *
 	 * @param int $MOD_ID        	

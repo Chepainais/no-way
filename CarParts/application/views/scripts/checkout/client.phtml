@@ -1,6 +1,7 @@
 <div id="view-content">
 
 <div class="client_information">
+<?php if($this->loggedIn):?>
     <h4><?php echo $this->translate('Your information');?></h4>
     
     <?php echo $this->translate('first_name')?>: <?php echo $this->clientInformation->first_name;?><br />
@@ -9,7 +10,7 @@
     <?php echo $this->translate('country')?>: <?php echo $this->translate($this->clientInformation->country);?><br />
 </div>
 
-    <?php if($this->loggedIn):?>
+    
      <?php echo $this->form;?>
     <?php else:?>
         <?php echo $this->translate('You must login or register, to continue');?>

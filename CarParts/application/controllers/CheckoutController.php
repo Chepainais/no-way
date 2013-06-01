@@ -8,9 +8,10 @@ class CheckoutController extends Zend_Controller_Action
     /**
      * Zend Auth
      * @var Zend_Auth
+     *
      */
-    private $auth;
-    
+    private $auth = null;
+
     public function init()
     {
         $this->auth = Zend_Auth::getInstance();
@@ -36,6 +37,13 @@ class CheckoutController extends Zend_Controller_Action
                     $this->getRequest()
                         ->getParams())) {
                 $this->checkout->type = 'client';
+                $shipping = array();
+                foreach ($form->getElements() as $element => $params) {
+                    $shipping[$element] = $this->getRequest()->getParam($element);
+                }
+                
+                $this->checkout->shipping = $shipping;
+                $this->_redirect($this->view->url(array('action' => 'summary')));
             }
         }
         
@@ -66,8 +74,16 @@ class CheckoutController extends Zend_Controller_Action
         $this->view->data = $this->checkout->data;
     }
 
+    public function summaryAction()
+    {
+        $this->view->clientInformation = $this->auth->getIdentity();
+        
+    }
+
 
 }
+
+
 
 
 

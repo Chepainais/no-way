@@ -1,4 +1,66 @@
-<br /><br />
 <div id="view-content">
-	<p>Detaļas meklēšana <a href="<?PHP echo $this->url(array('action' => 'vendors')) ?>">Pēc auto modeļa</a></p>
+
+	<div class="top">
+		<h3><?php echo $this->translate('Search by')?>:</h3>
+	</div>
+	<div class="bottom">
+		<div class="right">
+			<a href="<?PHP echo $this->url(array('action' => 'vendors')) ?>"><?php echo $this->translate('Vehicle brand and model')?></a>
+			<div class="clear"></div>
+		</div>
+		<div class="left">
+		  <?php echo $this->translate('code');?>
+		  <?php echo $this->form('search-by-code', array('method' => 'get', 'action' => $this->url(array('controller' => 'parts', 'action' => 'search-by-code'), 'default')));?>
+		  <?php echo $this->formText('search-code', '', array('placeholder' => $this->translate('Search code here')));?>
+		  <?php echo $this->formSubmit('Search', $this->translate('Search by code'));?>
+		  </form>
+		  <div class="clear"></div>
+		</div>
+	</div>
+	<p></p>
 </div>
+
+<?php $this->headStyle()->captureStart();?>
+
+div#view-content{
+    position: relative;
+    width: 100%;
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding: 20px;
+    height: auto;
+    min-height: 300px;
+}
+div.top {
+    width: 100%;
+    clear: both;
+}
+
+div.top h3 {
+    text-align: left;
+}
+
+div.left, div.right{
+    position: relative;
+    width: 400px;
+    height: 150px;
+    margin-left: 35px;
+    float: left;
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+div.right a{
+    position: relative;
+    display: block;
+    float: left;
+
+    margin-right: 20px;
+    padding: 10px;
+    background-color: #ccc;
+    border: solid 1px #000;
+    border-radius: 10px;
+}
+
+<?php $this->headStyle()->captureEnd(); ?>

@@ -1,13 +1,15 @@
 <?php
-class PartsController extends Zend_Controller_Action 
-
+class PartsController extends Zend_Controller_Action
 {
-	/**
-	 *
-	 * @var Zend_Db
-	 */
-	private $db;
-	public function init() {
+
+    /**
+     * @var Zend_Db
+     *
+     */
+    private $db = null;
+
+    public function init()
+    {
 		$db = Zend_Registry::get ( 'db' );
 		$this->db = $db;
 		
@@ -36,8 +38,6 @@ class PartsController extends Zend_Controller_Action
 			}
 		}
 
-
-		
 		$this->view->formModel = $form;
 		$js = <<<EOF
 	$(document).ready(function(){
@@ -48,43 +48,54 @@ class PartsController extends Zend_Controller_Action
 	});
 EOF;
 		$this->view->headScript()->appendScript($js);
-	}
-	public function indexAction() {
+    }
+
+    public function indexAction()
+    {
 		// action body
-	}
-	
-	/**
-	 * Ražotāju saraksts
-	 */
-	public function vendorsAction() {
+    }
+
+    /**
+     * Ražotāju saraksts
+     *
+     */
+    public function vendorsAction()
+    {
 		$parts = new Application_Model_Parts ();
 		$this->view->vendors = $parts->retrieveVendors ();
-	}
-	
-	/**
-	 * Ražotāja modeļu saraksts
-	 */
-	public function vendorAction() {
+    }
+
+    /**
+     * Ražotāja modeļu saraksts
+     *
+     */
+    public function vendorAction()
+    {
 		$vendor_id = $this->getRequest ()->getParam ( 'vendor_id' );
 		$this->view->vendor_id = $vendor_id;
 		$parts = new Application_Model_Parts ( $vendor_id );
 		$this->view->models = $parts->retrieveVendorModels ( $vendor_id );
-	}
-	
-	/**
-	 * Modeļi
-	 */
-	public function modelAction() {
+    }
+
+    /**
+     * Modeļi
+     *
+     */
+    public function modelAction()
+    {
 		$vendor_id = $this->view->vendor_id = $this->getRequest ()->getParam ( 'vendor_id' );
 		$model_id = $this->view->model_id = $this->getRequest ()->getParam ( 'model_id' );
 		$parts = new Application_Model_Parts ();
 		$this->view->str_id = $parts->getModelSTR_ID ( $model_id );
 		$this->view->types = $parts->retrieveModelTypes ( $model_id, $this->getParam('fuel'), $this->getParam('year') );
-	}
-	/**
-	 * Modeļa tips (apakšmodelis)
-	 */
-	public function typeAction() {
+    }
+
+    /**
+     * Modeļa tips (apakšmodelis)
+     *
+     */
+    public function typeAction()
+    {
 		$vendor_id = $this->view->vendor_id = $this->getRequest ()->getParam ( 'vendor_id' );
 		$model_id = $this->view->model_id = $this->getRequest ()->getParam ( 'model_id' );
 		$typ_id = $this->view->typ_id = $this->getRequest ()->getParam ( 'typ_id' );
@@ -92,11 +103,14 @@ EOF;
 		
 		$parts = new Application_Model_Parts ();
 		$this->view->searchTree = $parts->searchTree ( $typ_id, $str_id );
-	}
-	/**
-	 * Detaļas pēc auto modeļa, tipa un detaļas kategorijas
-	 */
-	public function articlesAction() {
+    }
+
+    /**
+     * Detaļas pēc auto modeļa, tipa un detaļas kategorijas
+     *
+     */
+    public function articlesAction()
+    {
 		$parts = new Application_Model_Parts ();
 		$ApeMotors = new Application_Model_Apemotors();
 		$Intercar = new Application_Model_Intercar();
@@ -106,17 +120,21 @@ EOF;
 		$typ_id = $this->view->typ_id = $this->getRequest ()->getParam ( 'typ_id' );
 		$str_id = $this->view->str_id = $this->getRequest ()->getParam ( 'str_id' );
 		
-		$searchTree = $parts->retrieveArticles ( $typ_id, $str_id );
+		$articles = $parts->retrieveArticles ( $typ_id, $str_id );
 		
-		$searchTree2 = array();
-		foreach ( $searchTree as $id => $st ) {
+		
+		$parent_cat = $parts->getParentCategorieId($str_id);
+		$this->view->searchTreeSiblings = $parts->searchTree($typ_id, $parent_cat);
+
+		$articles_modified = array();
+		foreach ( $articles as $id => $st ) {
 		    $params  = $parts->retrieveArticle ( $st ['LA_ART_ID'] );
-		    $searchTree2 [$st ['LA_ART_ID']] = $st;
-			$searchTree2 [$st ['LA_ART_ID']] ['params'] = $params;
+		    $articles_modified [$st ['LA_ART_ID']] = $st;
+			$articles_modified [$st ['LA_ART_ID']] ['params'] = $params;
 // 			$searchTree2 [$st ['LA_ART_ID']] ['image'] = $parts->getArtImageURL ( $st ['LA_ART_ID'] );
 			$codes[$st ['LA_ART_ID']] = Array ('code' => $params['ART_ARTICLE_NR'], 'vendor' => $params['SUP_BRAND']);
 			
-			$searchTree2 [$st ['LA_ART_ID']]['intercar'] = $Intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
+			$articles_modified [$st ['LA_ART_ID']]['intercar'] = $Intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
 			
 		}
             
@@ -126,26 +144,28 @@ EOF;
         foreach ($ApePrices as $itemId => $ApePrice) {
             if (isset($ApePrice['ProductDetails'])) {
                 $ApePrice['ProductDetails']['Price'] = $ApePrice['ProductDetails']['Price'];
-                $searchTree2[$itemId]['Ape'] = $ApePrice;
+                $articles_modified[$itemId]['Ape'] = $ApePrice;
             }
         }
-        foreach ($searchTree2 as $item_id => $st) {
+        foreach ($articles_modified as $item_id => $st) {
             if (! isset($st['Ape']) && ! isset($st['intercar'])) {
-                unset($searchTree2[$item_id]);
+                unset($articles_modified[$item_id]);
             } else {
-                $searchTree2[$item_id]['image'] = $parts->getArtImageURL($item_id);
-                $searchTree2[$item_id]['criteria'] = array();
-                $searchTree2[$item_id]['criteria'] = $parts->getArtCriteria($item_id);
+                $articles_modified[$item_id]['image'] = $parts->getArtImageURL($item_id);
+                $articles_modified[$item_id]['criteria'] = array();
+                $articles_modified[$item_id]['criteria'] = $parts->getArtCriteria($item_id);
             }
         }
 
-		$this->view->searchTree2 = $searchTree2;
-	}
-	
-	/**
-	 * Viena prece
-	 */
-	public function articleAction() {
+		$this->view->searchTree2 = $articles_modified;
+    }
+
+    /**
+     * Viena prece
+     *
+     */
+    public function articleAction()
+    {
 		$parts = new Application_Model_Parts ();
 		$ApeMotors = new Application_Model_Apemotors();
 		
@@ -164,11 +184,14 @@ EOF;
 		$this->view->article ['price'] = $price;
 		$this->view->article ['image'] = $parts->getArtImageURL ( $art_id );
 		$this->view->article ['criteria'] = $parts->getArtCriteria ( $art_id );
-	}
-	/**
-	 * Meklēšanas darbība
-	 */
-	public function searchAction() {
+    }
+
+    /**
+     * Meklēšanas darbība no modeļa atlases
+     *
+     */
+    public function searchAction()
+    {
 		$this->_helper->layout->disableLayout();
 		$this->_helper->viewRenderer->setNoRender(true);
 		if($this->getParam('vendor')){
@@ -184,6 +207,30 @@ EOF;
 			}
 			$this->_redirect('/parts/vendor/' . $this->getParam('vendor'));
 		}
-	}
-}
+    }
 
+    public function searchByCodeAction()
+    {
+        $code = $this->getRequest()->getParam('search-code');
+        // Clean code from unwanted symbols
+        $code = preg_replace('/[^a-zA-Z0-9]/', '', $code);
+        if (strlen($code) < 4) {
+            echo $this->view->translate('Search string too short');
+        } else {
+            $parts = new Application_Model_Parts();
+            
+            $articles = $parts->searchByCode($code);
+            
+            if (! empty($articles)) {
+                foreach ($articles as $id => $article) {
+                    $articles[$id]['params'] = $parts->getArtAdditionalInfo($article['ARL_ART_ID']);
+                    $articles[$id]['analogs'] = $parts->searchAnalog(
+                            $article['NUMBER'], $article['BRAND']);
+                }
+            }
+            $this->view->articles = $articles;
+        }
+    }
+
+
+}
