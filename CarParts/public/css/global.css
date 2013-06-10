@@ -7,6 +7,28 @@ body {
 a {
 	color:#666;
 	text-decoration:none;}
+dl {
+    margin-bottom:50px;
+}
+ 
+dl dt {
+    color:#000;
+    float:left; 
+    font-weight:bold; 
+	margin: 0px;
+    margin-right:10px; 
+    padding-top:5px 0;
+    width:auto;
+	min-width: 150px; 
+}
+ 
+dl dd {
+	margin: 0px;
+    padding-top:5px 0;
+}
+dd {
+	height: 20px;
+}
 #header {
 	position: relative;
 	height: 210px;
@@ -58,10 +80,11 @@ a#SIGNIN, a#JOIN {
 }
 #content {
 	position: relative;
-	width: 1000px;
+	width: 1200px;
 	margin-right: auto;
 	margin-left: auto;
 }
+
 #top_menu {
 	height: 25px;
 	float: right;
@@ -124,7 +147,31 @@ a#SIGNIN, a#JOIN {
 	margin: 5px;
 	font-size: 14px;
 }
-
+#left_menu {
+	float: left;
+	height: 100%;
+	width: 200px;
+	position: relative;
+}
+#left_menu ul.siblings {
+	padding:0px;
+	background-color:#E5E5E5;
+	}
+#left_menu ul.siblings li{
+	list-style-type: none;
+	padding-left: 0px;
+	
+	}
+#left_menu ul.siblings li.current {
+	background-color: #F5F5F5;
+	padding-left:10px;
+}
+#items {
+	width:860px;
+	height:auto;
+	float:left;}
+	
+	
 /* STYLED TABLE   */
 .styled {
 	margin:0px;padding:0px;
@@ -282,3 +329,4 @@ a#SIGNIN, a#JOIN {
 	clear:both;
 	width: 100%;
 }
+

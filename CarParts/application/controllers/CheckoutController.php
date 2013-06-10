@@ -27,22 +27,40 @@ class CheckoutController extends Zend_Controller_Action
     {
         $this->view->clientInformation = $this->auth->getIdentity();
         $form = new Application_Form_ShippingAddress();
+        
+        foreach($form->getElements() as $element){
+            $element->setBelongsTo('shipping');
+        }
+        // Company information
+
+        if($this->getRequest()->getParam('action') == 'company') {
+            $this->checkout->type = 'company';
+            $formCompany = new Application_Form_CheckoutCompanies();
+            
+            $formCompany->addDisplayGroup($formCompany->getElements(), 'Company information', array('legend' => 'Company information'));
+            $formCompany->removeElement('Submit');
+            
+            foreach($formCompany->getElements() as $element){
+                $element->setBelongsTo('company');
+            }
+            
+            $form->addSubForm($formCompany, 'Company details');
+        } else {
+            $this->checkout->type = 'client';
+        }
+        
+        // Shiping information
         $form->addDisplayGroup($form->getElements(), 'shipping_information', array('legend' => 'Shipping information'));
         if(!$this->auth->hasIdentity()){
             return false;
         }
         if ($this->_request->isPost()) {
             
-            if ($form->isValid(
-                    $this->getRequest()
-                        ->getParams())) {
-                $this->checkout->type = 'client';
-                $shipping = array();
-                foreach ($form->getElements() as $element => $params) {
-                    $shipping[$element] = $this->getRequest()->getParam($element);
-                }
+            if ($form->isValid($this->getRequest()->getParams())) {
                 
-                $this->checkout->shipping = $shipping;
+                $this->checkout->shipping = $this->getRequest()->getParam('shipping');
+                $this->checkout->company = $this->getRequest()->getParam('company');
+
                 $this->_redirect($this->view->url(array('action' => 'summary')));
             }
         }
@@ -50,23 +68,13 @@ class CheckoutController extends Zend_Controller_Action
         $this->view->form = $form;
     }
 
-    public function companyAction()
+    /**
+     * Copany checkout - forwards to client checkout with added company data
+     * fields
+     */
+    public function companyAction ()
     {
-        $formCompany = new Application_Form_CheckoutCompanies();
-        
-        if ($this->_request->isPost()) {
-            if ($formCompany->isValid($this->getRequest()
-                    ->getParams())) {
-                $this->checkout->type = 'company';
-                $this->checkout->data = $this->getRequest()->getParams();
-                $this->_redirect(
-                        $this->view->url(array(
-                                'action' => 'overview'
-                        ), 'default'));
-            }
-        }
-        
-        $this->view->form = $formCompany;
+        $this->_forward('client');
     }
 
     public function overviewAction()
@@ -76,18 +84,13 @@ class CheckoutController extends Zend_Controller_Action
 
     public function summaryAction()
     {
+        $this->view->client = $this->auth->getIdentity();
+        $this->view->shipping = $this->checkout->shipping;
+        $this->view->company = $this->checkout->company;
+        
         $this->view->clientInformation = $this->auth->getIdentity();
         
     }
 
 
 }
-
-
-
-
-
-
-
-
-

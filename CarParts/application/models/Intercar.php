@@ -27,7 +27,7 @@ WHERE KOD_P2 LIKE " . $this->db->quote($subCode). " OR KOD_P LIKE " . $this->db-
 //         die( $sql );
         $result = $this->db->query ( $sql );
         foreach ( $result->fetchAll () as $tow ) {
-            $tow['CEN'] = Application_Model_Currency::convert($tow['CEN'], 'LVL', 'NOK');
+            $tow['CEN'] = Application_Model_Currency::convert($tow['CEN'], 'LVL', 'NOK', 1.21);
             return ($tow);
         }
     }

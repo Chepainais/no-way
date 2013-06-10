@@ -1,0 +1,42 @@
+<div id="information">
+    <div class="client_information">
+    <?php if($this->loggedIn):?>
+        <h4><?php echo $this->translate('Your information');?></h4>
+        <dl>
+            <dt> <?php echo $this->translate('first_name')?>:</dt> <dd><?php echo $this->client->first_name;?></dd>
+            <dt><?php echo $this->translate('last_name')?>:</dt> <dd><?php echo $this->client->last_name;?></dd>
+            <dt><?php echo $this->translate('email')?>: </dt> <dd><?php echo $this->client->email;?></dd>
+            <dt><?php echo $this->translate('country')?>: </dt> <dd><?php echo $this->translate($this->client->country);?></dd>
+        </dl>
+        <?php endif;?>
+    </div>
+    <?php if($this->company):?>
+    <div class="company_information">
+    	<h4><?php echo $this->translate('Company information'); ?></h4>
+        <dl>
+        <?php foreach($this->company as $key => $value):?>
+        	<dt><?php echo $this->translate($key); ?></dt>
+        	   <dd><?php echo $value;?></dd>
+       <?php endforeach;?>
+        </dl>
+    </div>
+    <?php endif;?>
+    
+    <div class="shipping_information">
+    	<h4><?php echo $this->translate('Shipping information'); ?></h4>
+    	    <dl>
+        <?php foreach($this->shipping as $key => $value):?>
+        	<dt><?php echo $this->translate($key); ?></dt>
+        	   <dd><?php echo $value;?></dd>
+       <?php endforeach;?>
+        </dl>
+    </div>
+</div>
+
+<?php $this->headStyle()->captureStart();?>
+div#information div{
+    width: 33%;
+    position: relative;
+    float: left;
+}
+<?php $this->headStyle()->captureEnd(); ?>
