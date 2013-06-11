@@ -31,6 +31,57 @@
        <?php endforeach;?>
         </dl>
     </div>
+    <div class="clear"></div>
+</div>
+<div id="order_information">
+
+	<table>
+	    <tr>
+    	<th><?php echo $this->translate('Item code');?></th>
+    	<th><?php echo $this->translate('Brand');?></th>
+    	<th><?php echo $this->translate('Item name');?></th>
+    	<th><?php echo $this->translate('Count');?></th>
+    	<th><?php echo $this->translate('Cost');?></th>
+    </tr>
+<?php 
+    $totalCount = 0;
+    $totalPrice = 0;
+foreach($this->cartItems as $item):
+
+    $totalCount += $item['count'];
+    $totalPrice += ($item['price'] * $item['count']);
+    ?>
+    <tr>
+       <!--  <td><?php echo $item['id'];?></td>  -->
+        <td><?php echo $item['code']?></td>
+        <td><?php echo $item['brand']?></td>
+        <td><?php echo $item['name']?></td>
+        <td><?php echo $item['count'];?></td>
+        <td align="center"><?php echo $this->currency($item['price'], 'NOK');?></td>
+    </tr>
+    
+    <?php
+
+    endforeach;
+
+    ?>
+    <tr>
+<!--     	<td></td> -->
+    	<td></td>
+    	<td></td>
+    	<td align="right"><strong><?php echo $this->translate('Total');?>:</strong></td>
+    	<td><strong><?php echo $totalCount;?></strong></td>
+    	<td><strong><?php echo $this->currency($totalPrice, 'NOK')  ;?></strong></td>
+    </tr>
+   <tr>
+<!--        <td></td> -->
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td><a href="<?php echo $this->url(array('controller' => 'checkout', 'action' => 'place_order'), 'default');?>"><?php echo $this->translate('Checkout');?></a></td>
+   </tr>
+    </table>
 </div>
 
 <?php $this->headStyle()->captureStart();?>

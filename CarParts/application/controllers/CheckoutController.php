@@ -37,7 +37,8 @@ class CheckoutController extends Zend_Controller_Action
             $this->checkout->type = 'company';
             $formCompany = new Application_Form_CheckoutCompanies();
             
-            $formCompany->addDisplayGroup($formCompany->getElements(), 'Company information', array('legend' => 'Company information'));
+            $formCompany->addDisplayGroup($formCompany->getElements(), 'company_information', array('legend' => 'Company information'));
+            
             $formCompany->removeElement('Submit');
             
             foreach($formCompany->getElements() as $element){
@@ -84,12 +85,18 @@ class CheckoutController extends Zend_Controller_Action
 
     public function summaryAction()
     {
+        unset($this->checkout->shipping['Submit']);
         $this->view->client = $this->auth->getIdentity();
         $this->view->shipping = $this->checkout->shipping;
         $this->view->company = $this->checkout->company;
         
+        // Translatable values
+        $this->view->shipping['country'] = $this->view->translate($this->view->shipping['country']);
+        
         $this->view->clientInformation = $this->auth->getIdentity();
         
+        $cart = new Zend_Session_Namespace('cart');
+        $this->view->cartItems = $cart->items;
     }
 
 
