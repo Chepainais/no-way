@@ -1,19 +1,85 @@
 
 <div id="view-content">
-    <ul>
-    <?php if($this->articles):?>
-	<?php foreach($this->articles as $article):?>
-       <li>
-            <?php echo $article['NUMBER'] . ': ' .  $article['BRAND'] . ' - ' .  $article['ART_COMPLETE_DES_TEXT'];?>
-            <?php if(!empty($article['analogs'])):?>
-                <ul>Analogs:
-                <?php foreach($article['analogs'] as $analog):?>
-                    <li><?php echo $analog['NUMBER'] . ' - ' . $analog['BRAND'];?></li>
-                <?php endforeach;?>
-                </ul>
-            <?php endif;?>
-       </li>
-	<?php endforeach;?>
-	<?php endif;?>
-	</ul>
+	<h4><?php echo $this->translate('Search by code'); ?></h4>
+	<div id="search">
+    <?php echo $this->form('search-by-code');?>
+    <?php echo $this->formText('search-code', $this->search_code);?>
+    <?php echo $this->formSubmit('Submit', 'Search');?>
+    </form>
+	</div>
+
+<?php
+if (! empty($this->searchTree2)) {
+    foreach ($this->searchTree2 as $id => $article) :
+        ?>
+<div class="item">
+		<div
+			class="image<?php if ($article['image']){echo ' yes';} else {echo ' no';}?>">
+	   <?php
+        if ($article['image']) :
+            ?><img src="/<?php echo $article['image'];?>" width="120" />
+	   <?php endif; ?>
+	   <div class="clear"></div>
+		</div>
+		<div class="name">
+			<h3>
+				<a
+					href="<?php
+            echo $this->url(
+                array(
+                        'action' => 'type',
+                        'vendor_id' => 1,
+                        'model_id' => 1,
+                        'typ_id' => 1,
+                        'str_id' => 10001,
+                        'art_id' => $id
+                ), 'parts-vendor-model-type-cat-article', true);
+        ?>"><?PHP echo $article['params']['ART_COMPLETE_DES_TEXT'];?></a>
+			</h3>
+		</div>
+
+		<div class="description">
+
+			<div class="code"><?php echo $article['params']['ART_ARTICLE_NR'];?></div>
+			<div class="vendor"><?php echo $article['params']['SUP_BRAND'];?></div>
+		</div>
+		<div class="prices">
+            <?php echo $this->itemPrice($article);?>
+		</div>
+		<div class="criteria">
+	   <?php foreach($article['criteria'] as $criteria):?>
+	   	<?php echo $criteria['CRITERIA_DES_TEXT'];?>:
+		<?php echo $criteria['CRITERIA_VALUE_TEXT'];?>;
+	   <?php endforeach;?>
+	</div>
+	</div>
+<?php
+    endforeach
+    ;
+} else {
+    ?><div class="nothin-found"><?php echo $this->translate('Nothing found')?></div><?php
+}?>
 </div>
+
+<div id="add_to_cart_modal"></div>
+<?php
+
+$script = <<<EOF
+$(document).ready(function(){
+    modal = $('#add_to_cart_modal').dialog({autoOpen:false});
+    $("input.itemAddToCart").click(function(){
+       var form = $(this).parent('form');
+        console.log(form.attr('action'));
+	   formData = form.serialize();  
+	   $.post(form.attr('action'), formData, function(data){
+            modal.html(data).dialog('open')
+        })
+		        return false;
+    })
+})
+EOF;
+?>
+<?php
+
+$this->headScript()->appendScript($script);
+?>

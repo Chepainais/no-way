@@ -5,11 +5,8 @@
 <div><?php echo $this->article['params']['AIN_TMO_TEXT'];?></div>
 
 
-<div><?php if($this->article['price']){?>
-
-	<?php echo $this->translate('Price');?>: <?php echo $this->article['price']['price'] . ' ' . $this->translate('CURRENCY_CODE') . '  (' . $this->translate('In Stock') .' ' . 
-					 $this->article['price']['availableQuantity'] .')' ;?> 
-<?php }?>
+<div>
+<?php echo $this->itemPrice($this->article);?>
 </div>
 
 <?php if($this->article['image']){?>
@@ -36,12 +33,14 @@
 <?php $script = <<<EOF
 $(document).ready(function(){
     modal = $('#add_to_cart_modal').dialog({autoOpen:false});
-    $("a.add_to_cart_button").click(function(){
-    url = $(this).attr('href');
-    modal.load(url);
-    modal.dialog('open');
-        return false;
-})
+    $("input.itemAddToCart").click(function(){
+       var form = $(this).parent('form');
+	   formData = form.serialize();  
+	   $.post(form.attr('action'), formData, function(data){
+            modal.html(data).dialog('open')
+        })
+		        return false;
+    })
 })
 EOF;
 ?>

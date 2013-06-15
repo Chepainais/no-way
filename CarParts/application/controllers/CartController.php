@@ -42,11 +42,11 @@ class CartController extends Zend_Controller_Action
         if($priceType == 'ic'){
             $intercar = new Application_Model_Intercar();
             $ic_price = $intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
-            $price = $ic_price['CEN'];
+            $price = $ic_price;
         } elseif($priceType == 'ape') {
             $ape = new Application_Model_Apemotors();
             $ape_price = current($ape->getPrices(array($item_id => array('code' => $params['ART_ARTICLE_NR'], 'vendor' => $params['SUP_BRAND']))));
-            $price = Application_Model_Currency::convert($ape_price['ProductDetails']['Price'], 'LVL', 'NOK');
+            $price = $ape_price['ProductDetails']['Price'];
         }
 
         $cart->itemAdd($item_id, $this->getParam('amount'), $params['ART_COMPLETE_DES_TEXT'], $price, $priceType, $params['ART_ARTICLE_NR'], $params['SUP_BRAND']);

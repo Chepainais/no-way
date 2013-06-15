@@ -85,6 +85,18 @@ class CheckoutController extends Zend_Controller_Action
 
     public function summaryAction()
     {
+        if ($this->_request->isPost()) {
+            if($this->getParam('accept_terms')) {
+                
+                // @todo save order details
+                
+                // @todo save company details
+                
+                // @todo save shipping details
+                
+                // @todo redirect to thank you page
+            }
+        }
         unset($this->checkout->shipping['Submit']);
         $this->view->client = $this->auth->getIdentity();
         $this->view->shipping = $this->checkout->shipping;

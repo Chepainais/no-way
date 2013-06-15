@@ -134,26 +134,28 @@ EOF;
 // 			$searchTree2 [$st ['LA_ART_ID']] ['image'] = $parts->getArtImageURL ( $st ['LA_ART_ID'] );
 			$codes[$st ['LA_ART_ID']] = Array ('code' => $params['ART_ARTICLE_NR'], 'vendor' => $params['SUP_BRAND']);
 			
-			$articles_modified [$st ['LA_ART_ID']]['intercar'] = $Intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
-			
+			$articles_modified [$st ['LA_ART_ID']]['prices']['ic'] = $Intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
 		}
             
             // Ievācam Ape Motors cenas. Vācam atsevišķi, lai var vienā
         // pieprasījumā visas pieprasīt.
-        $ApePrices = $ApeMotors->getPrices($codes);
-        foreach ($ApePrices as $itemId => $ApePrice) {
-            if (isset($ApePrice['ProductDetails'])) {
-                $ApePrice['ProductDetails']['Price'] = $ApePrice['ProductDetails']['Price'];
-                $articles_modified[$itemId]['Ape'] = $ApePrice;
+            if(!empty($codes)){
+            $ApePrices = $ApeMotors->getPrices($codes);
+            foreach ($ApePrices as $itemId => $ApePrice) {
+                if (isset($ApePrice['ProductDetails'])) {
+                    $articles_modified[$itemId]['prices']['ape'] = $ApePrice['ProductDetails']['Price'];
+                }
             }
-        }
-        foreach ($articles_modified as $item_id => $st) {
-            if (! isset($st['Ape']) && ! isset($st['intercar'])) {
-                unset($articles_modified[$item_id]);
-            } else {
-                $articles_modified[$item_id]['image'] = $parts->getArtImageURL($item_id);
-                $articles_modified[$item_id]['criteria'] = array();
-                $articles_modified[$item_id]['criteria'] = $parts->getArtCriteria($item_id);
+            foreach ($articles_modified as $item_id => $st) {
+                // Ja precei nav cenas - izmetam to no saraksta
+                if (! isset($st['prices']['ape']) && ! isset($st['prices']['ic'])) {
+                    unset($articles_modified[$item_id]);
+                } else {
+
+                    $articles_modified[$item_id]['image'] = $parts->getArtImageURL($item_id);
+                    $articles_modified[$item_id]['criteria'] = array();
+                    $articles_modified[$item_id]['criteria'] = $parts->getArtCriteria($item_id);
+                }
             }
         }
 
@@ -168,6 +170,7 @@ EOF;
     {
 		$parts = new Application_Model_Parts ();
 		$ApeMotors = new Application_Model_Apemotors();
+		$Intercar = new Application_Model_Intercar();
 		
 		$vendor_id = $this->view->vendor_id = $this->getRequest ()->getParam ( 'vendor_id' );
 		$model_id = $this->view->model_id = $this->getRequest ()->getParam ( 'model_id' );
@@ -176,12 +179,14 @@ EOF;
 		$art_id = $this->view->art_id = $this->getRequest ()->getParam ( 'art_id' );
 		
 		$article = $parts->retrieveArticle ( $art_id );
+		$article['ARL_ART_ID'] = $article['ART_ID'];
 		$this->view->article = $article;
 		$this->view->article ['params'] = $parts->getArtAdditionalInfo ( $art_id );
 		
-		$price = current($ApeMotors->getPrices(Array($article['ART_ID'] => array( 'code' => $article['ART_ARTICLE_NR'], 'vendor' => $article['SUP_BRAND']))));
+		$price['ape'] = current($ApeMotors->getPrices(Array($article['ART_ID'] => array( 'code' => $article['ART_ARTICLE_NR'], 'vendor' => $article['SUP_BRAND']))));
+		$price['ic'] =  $Intercar->getItemPrice($article['ART_ARTICLE_NR'], $article['SUP_BRAND']);
 		
-		$this->view->article ['price'] = $price;
+		$this->view->article ['prices'] = $price;
 		$this->view->article ['image'] = $parts->getArtImageURL ( $art_id );
 		$this->view->article ['criteria'] = $parts->getArtCriteria ( $art_id );
     }
@@ -211,6 +216,12 @@ EOF;
 
     public function searchByCodeAction()
     {
+        
+        $this->view->search_code = $this->getParam('search-code');
+        
+        $ApeMotors = new Application_Model_Apemotors();
+        $Intercar = new Application_Model_Intercar();
+        
         $code = $this->getRequest()->getParam('search-code');
         // Clean code from unwanted symbols
         $code = preg_replace('/[^a-zA-Z0-9]/', '', $code);
@@ -221,15 +232,45 @@ EOF;
             
             $articles = $parts->searchByCode($code);
             
-            if (! empty($articles)) {
-                foreach ($articles as $id => $article) {
-                    $articles[$id]['params'] = $parts->getArtAdditionalInfo($article['ARL_ART_ID']);
-                    $articles[$id]['analogs'] = $parts->searchAnalog(
-                            $article['NUMBER'], $article['BRAND']);
+            
+
+		$articles_modified = array();
+		foreach ( $articles as $id => $st ) {
+		    $params  = $parts->retrieveArticle ( $st ['ARL_ART_ID'] );
+		    $articles_modified [$st ['ARL_ART_ID']] = $st;
+			$articles_modified [$st ['ARL_ART_ID']] ['params'] = $params;
+// 			$searchTree2 [$st ['LA_ART_ID']] ['image'] = $parts->getArtImageURL ( $st ['LA_ART_ID'] );
+			$codes[$st ['ARL_ART_ID']] = Array ('code' => $params['ART_ARTICLE_NR'], 'vendor' => $params['SUP_BRAND']);
+			
+			$articles_modified [$st ['ARL_ART_ID']]['prices']['ic'] = $Intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
+			
+		}
+            
+            // Ievācam Ape Motors cenas. Vācam atsevišķi, lai var vienā
+        // pieprasījumā visas pieprasīt.
+        if(!empty($codes)){
+            $ApePrices = $ApeMotors->getPrices($codes);
+            foreach ($ApePrices as $itemId => $ApePrice) {
+                if (isset($ApePrice['ProductDetails'])) {
+                    $articles_modified[$itemId]['prices']['ape'] = $ApePrice['ProductDetails']['Price'];
                 }
             }
-            $this->view->articles = $articles;
+            foreach ($articles_modified as $item_id => $st) {
+                // Ja precei nav cenas - izmetam to no saraksta
+                if (! isset($st['prices']['ape']) && ! isset($st['prices']['ic'])) {
+                    unset($articles_modified[$item_id]);
+                } else {
+
+                    $articles_modified[$item_id]['image'] = $parts->getArtImageURL($item_id);
+                    $articles_modified[$item_id]['criteria'] = array();
+                    $articles_modified[$item_id]['criteria'] = $parts->getArtCriteria($item_id);
+                }
+            }
         }
+		$this->view->searchTree2 = $articles_modified;
+        }
+
+        
     }
 
 

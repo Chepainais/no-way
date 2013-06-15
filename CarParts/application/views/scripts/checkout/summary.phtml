@@ -34,7 +34,7 @@
     <div class="clear"></div>
 </div>
 <div id="order_information">
-
+    <?php echo $this->form('order_confirm', array('method' => 'post'));?>
 	<table>
 	    <tr>
     	<th><?php echo $this->translate('Item code');?></th>
@@ -78,10 +78,11 @@ foreach($this->cartItems as $item):
        <td></td>
        <td></td>
        <td></td>
-       <td></td>
-       <td><a href="<?php echo $this->url(array('controller' => 'checkout', 'action' => 'place_order'), 'default');?>"><?php echo $this->translate('Checkout');?></a></td>
+       <td><?php echo $this->translate('Have read and accept');?> <a target="_blank" id="terms" href="<?php echo $this->url(array('controller' => 'article', 'action' => 'read', 'article_alias' => 'terms'), 'article-read');?>"><?php echo $this->translate('terms'); ?><?php echo $this->formCheckbox('accept_terms', 1);?></a></td>
+       <td><?php echo $this->formSubmit('Submit', 'Place order', array('class' => 'place_order'));?></td>
    </tr>
     </table>
+    </form>
 </div>
 
 <?php $this->headStyle()->captureStart();?>
@@ -89,5 +90,13 @@ div#information div{
     width: 33%;
     position: relative;
     float: left;
+}
+a#terms {
+    text-decoration: underline;
+    color: red;
+}
+input[type=submit].place_order {
+    padding: 10px;
+    font-weight: bold;
 }
 <?php $this->headStyle()->captureEnd(); ?>

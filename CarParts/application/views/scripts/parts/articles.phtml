@@ -39,22 +39,7 @@ if (! empty($this->searchTree2)) {
 			<div class="vendor"><?php echo $article['params']['SUP_BRAND'];?></div>
 		</div>
 		<div class="prices">
-	<?php echo $this->form('itemAdd' . $id, array('method' => 'post', 'action' => $this->url(array('controller' =>'cart', 'action' => 'itemAdd', 'item_id' => $id), 'default')));?>
-	<?php if(isset($article['Ape'])): if($article['Ape']['ProductDetails']['Price']):?>	
-	<div class="price ape">
-				<input type="radio" checked="checked"
-					name="price<?php echo $article['LA_ART_ID']?>" value="ape">
-	   <?php echo $this->currency($article['Ape']['ProductDetails']['Price'], 'NOK');?>
-	</div><?php endif; endif;?>
-		<?php if($article['intercar']['CEN']):?>
-		<div class="price ic">
-				<input type="radio" checked="checked"
-					name="price<?php echo $article['LA_ART_ID']?>" value="ic">
-		  <?php echo $this->currency($article['intercar']['CEN'], 'NOK');?>
-		</div><?php endif;?>
-		<?php echo $this->formText('amount' . $id, 1, array('name' => 'amount', 'size' => 2))?>
-		<?php echo $this->formSubmit('Add to Cart', 'Add to Cart', array('class' => 'itemAddToCart'));?>
-			</form>
+            <?php echo $this->itemPrice($article);?>
 		</div>
 		<div class="criteria">
 	   <?php foreach($article['criteria'] as $criteria):?>

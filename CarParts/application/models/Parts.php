@@ -274,22 +274,22 @@ class Application_Model_Parts {
 	
 	public function searchByCode($code){
 	    $sql = "SELECT DISTINCT
-                	IF (ART_LOOKUP.ARL_KIND IN (3, 4), BRANDS.BRA_BRAND, suppliers.SUP_BRAND) AS BRAND,
+                	IF (ART_LOOKUP.ARL_KIND IN (3, 4), brands.BRA_BRAND, suppliers.SUP_BRAND) AS BRAND,
                 	ART_LOOKUP.ARL_SEARCH_NUMBER AS NUMBER,
                 	ART_LOOKUP.ARL_KIND,
                 	ART_LOOKUP.ARL_ART_ID,
-                	DES_TEXTS.TEX_TEXT AS ART_COMPLETE_DES_TEXT
+                	des_texts.TEX_TEXT AS ART_COMPLETE_DES_TEXT
                 FROM
                 	           ART_LOOKUP
-                	 LEFT JOIN brands ON BRANDS.BRA_ID = ART_LOOKUP.ARL_BRA_ID
-                	INNER JOIN articles ON ARTICLES.ART_ID = ART_LOOKUP.ARL_ART_ID
-                	INNER JOIN suppliers ON suppliers.SUP_ID = ARTICLES.ART_SUP_ID
-                	INNER JOIN DESIGNATIONS ON DESIGNATIONS.DES_ID = ARTICLES.ART_COMPLETE_DES_ID
-                	INNER JOIN DES_TEXTS ON DES_TEXTS.TEX_ID = DESIGNATIONS.DES_TEX_ID
+                	 LEFT JOIN brands ON brands.BRA_ID = ART_LOOKUP.ARL_BRA_ID
+                	INNER JOIN articles ON articles.ART_ID = ART_LOOKUP.ARL_ART_ID
+                	INNER JOIN suppliers ON suppliers.SUP_ID = articles.ART_SUP_ID
+                	INNER JOIN designations ON designations.DES_ID = articles.ART_COMPLETE_DES_ID
+                	INNER JOIN des_texts ON des_texts.TEX_ID = designations.DES_TEX_ID
                 WHERE
                 	ART_LOOKUP.ARL_SEARCH_NUMBER = '$code' AND
                 	ART_LOOKUP.ARL_KIND IN (1, 2, 3, 4) AND
-                	DESIGNATIONS.DES_LNG_ID = $this->language
+                	designations.DES_LNG_ID = $this->language
                 GROUP BY
                 	BRAND,
                 	NUMBER
@@ -301,21 +301,21 @@ class Application_Model_Parts {
 	
 	public function searchAnalog($code, $brand){
 	    $sql = "SELECT DISTINCT
-            	IF (ART_LOOKUP2.ARL_KIND = 3, BRANDS2.BRA_BRAND, SUPPLIERS2.SUP_BRAND) AS BRAND,
+            	IF (ART_LOOKUP2.ARL_KIND = 3, brands2.BRA_BRAND, SUPPLIERS2.SUP_BRAND) AS BRAND,
             	IF (ART_LOOKUP2.ARL_KIND IN (2, 3), ART_LOOKUP2.ARL_DISPLAY_NR, ARTICLES2.ART_ARTICLE_NR) AS NUMBER,
             	ART_LOOKUP2.ARL_KIND
             FROM
             	           ART_LOOKUP
-            	 LEFT JOIN brands ON BRANDS.BRA_ID = ART_LOOKUP.ARL_BRA_ID
+            	 LEFT JOIN brands ON brands.BRA_ID = ART_LOOKUP.ARL_BRA_ID
             	INNER JOIN articles ON ARTICLES.ART_ID = ART_LOOKUP.ARL_ART_ID
             	INNER JOIN suppliers ON suppliers.SUP_ID = ARTICLES.ART_SUP_ID
             	INNER JOIN ART_LOOKUP AS ART_LOOKUP2 FORCE KEY (PRIMARY) ON ART_LOOKUP2.ARL_ART_ID = ART_LOOKUP.ARL_ART_ID
-            	 LEFT JOIN brands AS BRANDS2 ON BRANDS2.BRA_ID = ART_LOOKUP2.ARL_BRA_ID
+            	 LEFT JOIN brands AS brands2 ON brands2.BRA_ID = ART_LOOKUP2.ARL_BRA_ID
             	INNER JOIN articles AS ARTICLES2 ON ARTICLES2.ART_ID = ART_LOOKUP2.ARL_ART_ID
             	INNER JOIN suppliers AS SUPPLIERS2 FORCE KEY (PRIMARY) ON SUPPLIERS2.SUP_ID = ARTICLES2.ART_SUP_ID
             WHERE
             	ART_LOOKUP.ARL_SEARCH_NUMBER = '$code' AND
-            	(ART_LOOKUP.ARL_KIND IN (3, 4) AND BRANDS.BRA_BRAND = '$brand' OR
+            	(ART_LOOKUP.ARL_KIND IN (3, 4) AND brands.BRA_BRAND = '$brand' OR
             	 suppliers.SUP_BRAND = '$brand') AND
             	(ART_LOOKUP.ARL_KIND, ART_LOOKUP2.ARL_KIND) IN
             		((1, 1), (1, 2), (1, 3),
@@ -448,6 +448,20 @@ class Application_Model_Parts {
 		$result = $this->db->query ( $sql );
 		return $result->fetchAll ();
 	}
+	
+	public function getArtSearchTree($ART_ID){
+	    $sql = "SELECT search_tree4.*
+	FROM link_art 
+	INNER JOIN link_la_typ ON LA_ID = LAT_LA_ID
+	INNER JOIN link_ga_str ON LAT_GA_ID = LGS_GA_ID
+	INNER JOIN search_tree ON LGS_STR_ID = search_tree.STR_ID
+	LEFT JOIN search_tree4 ON search_tree.STR_ID IN (STR_ID2, STR_ID3, STR_ID4, STR_ID5)
+WHERE LA_ART_ID = $ART_ID AND STR_TYPE = 1
+GROUP BY search_tree.STR_ID ORDER BY search_tree.STR_LEVEL DESC LIMIT 1";
+	    $result = $this->db->query ( $sql );
+	    return $result->fetchAll ();
+	}
+	
 	public function getFuelTypes() {
 		$sql = "SELECT DES_ID , TEX_TEXT as fuel_name FROM designations 
 	LEFT JOIN des_texts
