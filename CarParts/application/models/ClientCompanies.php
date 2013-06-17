@@ -1,37 +1,35 @@
 <?PHP
 
-class Application_Model_Orders
+class Application_Model_ClientCompanies
 {
 
-    protected $_table = 'orders';
+    protected $_table = 'client_companies';
 
-    protected $_order_id = null;
+    protected $_id_client_companie = null;
 
     protected $_client_id = null;
-    
+
     protected $_company_id = null;
-    
-    protected $_shipping_address_id = null;
 
-    protected $_token = null;
-
-    protected $_time_created = null;
+    protected $_active = null;
 
     protected $_created_by = null;
 
-    protected $_time_edited = null;
-
     protected $_edited_by = null;
 
-    public function setOrderId ($order_id)
+    protected $_time_edited = null;
+
+    protected $_time_created = null;
+
+    public function setIdClientCompanie ($id_client_companie)
     {
-        $this->_order_id = $order_id;
+        $this->_id_client_companie = $id_client_companie;
         return $this;
     }
 
-    public function getOrderId ()
+    public function getIdClientCompanie ()
     {
-        return $this->_order_id;
+        return $this->_id_client_companie;
     }
 
     public function setClientId ($client_id)
@@ -50,43 +48,21 @@ class Application_Model_Orders
         $this->_company_id = $company_id;
         return $this;
     }
-    
+
     public function getCompanyId ()
     {
         return $this->_company_id;
     }
 
-    public function setShippingAddressId ($shipping_address_id)
+    public function setActive ($active)
     {
-        $this->_shipping_address_id = $shipping_address_id;
+        $this->_active = $active;
         return $this;
     }
 
-    public function getShippingAddressId ()
+    public function getActive ()
     {
-        return $this->_shipping_address_id;
-    }
-    
-    public function setToken ($token)
-    {
-        $this->_token = $token;
-        return $this;
-    }
-
-    public function getToken ()
-    {
-        return $this->_token;
-    }
-
-    public function setTimeCreated ($time_created)
-    {
-        $this->_time_created = $time_created;
-        return $this;
-    }
-
-    public function getTimeCreated ()
-    {
-        return $this->_time_created;
+        return $this->_active;
     }
 
     public function setCreatedBy ($created_by)
@@ -100,17 +76,6 @@ class Application_Model_Orders
         return $this->_created_by;
     }
 
-    public function setTimeEdited ($time_edited)
-    {
-        $this->_time_edited = $time_edited;
-        return $this;
-    }
-
-    public function getTimeEdited ()
-    {
-        return $this->_time_edited;
-    }
-
     public function setEditedBy ($edited_by)
     {
         $this->_edited_by = $edited_by;
@@ -122,9 +87,31 @@ class Application_Model_Orders
         return $this->_edited_by;
     }
 
-    public function readByOrderId ($order_id)
+    public function setTimeEdited ($time_edited)
     {
-        $query = "SELECT * FROM `$this->_table` WHERE `order_id` = '$order_id' LIMIT 1";
+        $this->_time_edited = $time_edited;
+        return $this;
+    }
+
+    public function getTimeEdited ()
+    {
+        return $this->_time_edited;
+    }
+
+    public function setTimeCreated ($time_created)
+    {
+        $this->_time_created = $time_created;
+        return $this;
+    }
+
+    public function getTimeCreated ()
+    {
+        return $this->_time_created;
+    }
+
+    public function readByIdClientCompanie ($id_client_companie)
+    {
+        $query = "SELECT * FROM `$this->_table` WHERE `id_client_companie` = '$id_client_companie' LIMIT 1";
         $res = $this->db->execSQL($query);
         $data = $this->db->fetchAssoc($res);
         if ($data) {
@@ -170,7 +157,7 @@ class Application_Model_Orders
     {
         $method = 'set' . $name;
         if (('mapper' == $name) || ! method_exists($this, $method)) {
-            throw new Exception('Invalid orders property');
+            throw new Exception('Invalid client_companies property');
         }
         $this->$method($value);
     }
@@ -179,7 +166,7 @@ class Application_Model_Orders
     {
         $method = 'get' . $name;
         if (('mapper' == $name) || ! method_exists($this, $method)) {
-            throw new Exception('Invalid orders property');
+            throw new Exception('Invalid client_companies property');
         }
         return $this->$method();
     }
@@ -199,4 +186,26 @@ class Application_Model_Orders
         return $this;
     }
 
+    public function save ()
+    {
+        if ($this->exists()) {
+            $query = "UPDATE `client_companies` SET " . 
+                     ($this->getClientId() ? ' `client_id` = "' . $this->ClientId() . '", ' : '') .
+                     ($this->getCompanyId() ? ' `company_id` = "' . $this->CompanyId() . '", ' : '') .
+                     ($this->getActive() ? ' `active` = "' . $this->Active() .
+                     '", ' : '');
+            "WHERE `id_client_companie` = " . $this->getIdClientCompanie() . ";";
+        } else {
+            $query = "INSERT INTO `client_companies` SET " .
+                     ($this->getClientId() ? ' `client_id` = "' . $this->ClientId() . '", ' : '') .
+                     ($this->getCompanyId() ? ' `company_id` = "' . $this->CompanyId() . '", ' : '') .
+                     ($this->getActive() ? ' `active` = "' . $this->Active() .
+                     '", ' : '');
+            if ($this->db->execSQL($query)) {
+                $this->setIdClientCompanie($this->db->insertId());
+                return true;
+            }
+        }
+        return false;
+    }
 }

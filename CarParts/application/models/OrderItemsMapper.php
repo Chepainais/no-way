@@ -3,6 +3,8 @@
 class Application_Model_OrderItemsMapper
 {
 
+    private $_dbTable = null;
+    
     public function setDbTable ($dbTable)
     {
         if (is_string($dbTable)) {

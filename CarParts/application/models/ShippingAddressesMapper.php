@@ -2,7 +2,7 @@
 
 class Application_Model_ShippingAddressesMapper
 {
-
+    private $_dbTable;
     public function setDbTable ($dbTable)
     {
         if (is_string($dbTable)) {
@@ -42,7 +42,8 @@ class Application_Model_ShippingAddressesMapper
         
         if (null === ($id = $ShippingAddresses->getIdShippingAddress())) {
             unset($data['id_shipping_address']);
-            $this->getDbTable()->insert($data);
+            $shipping_address_id = $this->getDbTable()->insert($data);
+            $ShippingAddresses->setIdShippingAddress($shipping_address_id);
         } else {
             $this->getDbTable()->update($data, 
                     array(
@@ -66,11 +67,8 @@ class Application_Model_ShippingAddressesMapper
                             ->setAddress($row['address'])
                             ->setAddress2($row['address2'])
                             ->setZipCode($row['zip_code'])
-                            ->setPhone($row['phone'])
-                            ->setTimeCreated($row['time_created'])
-                            ->setCreatedBy($row['created_by'])
-                            ->setTimeEdited($row['time_edited'])
-                            ->setEditedBy($row['edited_by']);
+                            ->setPhone($row['phone']);
+
     }
 
     public function fetchAll ()
@@ -86,11 +84,7 @@ class Application_Model_ShippingAddressesMapper
                     ->setAddress($row['address'])
                     ->setAddress2($row['address2'])
                     ->setZipCode($row['zip_code'])
-                    ->setPhone($row['phone'])
-                    ->setTimeCreated($row['time_created'])
-                    ->setCreatedBy($row['created_by'])
-                    ->setTimeEdited($row['time_edited'])
-                    ->setEditedBy($row['edited_by']);
+                    ->setPhone($row['phone']);
             $entries[] = $entry;
         }
         return $entries;

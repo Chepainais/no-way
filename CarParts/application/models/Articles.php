@@ -183,10 +183,11 @@ class Application_Model_Articles
     {
         $methods = get_class_methods($this);
         foreach ($options as $key => $value) {
-            $method = 'set' .
-                     ucfirst(
-                            preg_replace('/(_|-)([a-z])/e', "strtoupper('\2')", 
-                                    $key));
+            $method_parts = explode('_', $key);
+            $method = 'set'; 
+            foreach($method_parts as $part) {
+                $method .= ucfirst($part);
+            }
             if (in_array($method, $methods)) {
                 $this->$method($value);
             }

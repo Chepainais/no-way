@@ -3,6 +3,8 @@
 class Application_Model_OrdersMapper
 {
 
+    public $_dbTable;
+    
     public function setDbTable ($dbTable)
     {
         if (is_string($dbTable)) {
@@ -28,16 +30,15 @@ class Application_Model_OrdersMapper
         $data = array(
                 'order_id' => $Orders->getOrderId(),
                 'client_id' => $Orders->getClientId(),
-                'token' => $Orders->getToken(),
-                'time_created' => $Orders->getTimeCreated(),
-                'created_by' => $Orders->getCreatedBy(),
-                'time_edited' => $Orders->getTimeEdited(),
-                'edited_by' => $Orders->getEditedBy()
+                'company_id' => $Orders->getCompanyId(),
+                'shipping_address_id'   => $Orders->getShippingAddressId(),
+                'token' => $Orders->getToken()
         );
         
         if (null === ($id = $Orders->getOrderId())) {
             unset($data['order_id']);
-            $this->getDbTable()->insert($data);
+            $order_id = $this->getDbTable()->insert($data);
+            $Orders->setOrderId($order_id);
         } else {
             $this->getDbTable()->update($data, array(
                     'order_id = ?' => $id
@@ -54,6 +55,8 @@ class Application_Model_OrdersMapper
         $row = $result->current();
         $Orders->setOrderId($row['order_id'])
             ->setClientId($row['client_id'])
+            ->setCompanyId($row['company_id'])
+            ->setShippingAddressId($row['shipping_address_id'])
             ->setToken($row['token'])
             ->setTimeCreated($row['time_created'])
             ->setCreatedBy($row['created_by'])
@@ -69,6 +72,8 @@ class Application_Model_OrdersMapper
             $entry = new Application_Model_Orders();
             $entry->setOrderId($row['order_id'])
                 ->setClientId($row['client_id'])
+                ->setCompanyId($row['company_id'])
+                ->setShippingAddressId($row['shipping_address_id'])
                 ->setToken($row['token'])
                 ->setTimeCreated($row['time_created'])
                 ->setCreatedBy($row['created_by'])

@@ -1,14 +1,14 @@
 <?php
 
 /**
- * DB Table order_items class
+ * DB Table shipping_addresses class
  *
  * This class extends Zend_Table
  */
-class Application_Model_DBTable_OrderItems extends Zend_Db_Table_Abstract
+class Application_Model_DBTable_ShippingAddresses extends Zend_Db_Table_Abstract
 {
 
-    protected $_name = 'order_items';
+    protected $_name = 'shipping_addresses';
 
     public function insert (Array $data)
     {

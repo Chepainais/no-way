@@ -85,29 +85,77 @@ class CheckoutController extends Zend_Controller_Action
 
     public function summaryAction()
     {
+        $cart = new Zend_Session_Namespace('cart');
+        $client = $this->auth->getIdentity();
+        
+        // Ja tiek apstiprināts pasūtījums
         if ($this->_request->isPost()) {
             if($this->getParam('accept_terms')) {
                 
-                // @todo save order details
+                // @todo create order
                 
-                // @todo save company details
+                $order = new Application_Model_Orders();
+                $order_mapper = new Application_Model_OrdersMapper();
                 
+                $order->setClientId($client->client_id);
+                
+                $order_mapper->save($order);
+                $order->setClientId($client->client_id);
+                if ($this->checkout->type == 'company') {
+                    $company = new Application_Model_Companies();
+                    $company->setOptions($this->checkout->company);
+                    // Save company
+                    $companyMapper = new Application_Model_CompaniesMapper();
+                    $company->setActive(true);
+                    $companyMapper->save($company);
+                    
+                    $this->checkout->company['company_id'] = $company->getCompanyId();
+                    
+                    $order->setCompanyId($company->getCompanyId());
+                }
+                // save order details
+                
+                foreach($cart->items as $id => $item) {
+                    $orderItem = new Application_Model_OrderItems();
+                    $orderItem->setTdId($id)
+                         ->setOrderId($order->getOrderId())
+                         ->setAmount($item['count'])
+                         ->setPrice($item['price']);
+                    $itemMapper = new Application_Model_OrderItemsMapper;
+                    $itemMapper->save($orderItem);
+                }
+
                 // @todo save shipping details
+                
+                $shipping = new Application_Model_ShippingAddresses;
+                $shippingMapper = new Application_Model_ShippingAddressesMapper;
+                $shipping->setOptions($this->checkout->shipping);
+                $shipping->setClientId($client->client_id)
+                         ->setCompanyId($company->getCompanyId());
+                $shippingMapper->save($shipping);
+                
+                $order->setShippingAddressId($shipping->getIdShippingAddress());
+                $order_mapper->save($order);
+                // @todo clear cart
                 
                 // @todo redirect to thank you page
             }
         }
+        
         unset($this->checkout->shipping['Submit']);
+        
         $this->view->client = $this->auth->getIdentity();
         $this->view->shipping = $this->checkout->shipping;
         $this->view->company = $this->checkout->company;
+        // Nerādam uzņēmuma id sarakstā
+        unset($this->view->company['company_id']);
         
         // Translatable values
         $this->view->shipping['country'] = $this->view->translate($this->view->shipping['country']);
         
         $this->view->clientInformation = $this->auth->getIdentity();
         
-        $cart = new Zend_Session_Namespace('cart');
+        
         $this->view->cartItems = $cart->items;
     }
 
