@@ -28,7 +28,9 @@ class Custom_View_Helper_ItemPrice extends Zend_View_Helper_Abstract
                 unset($article['prices'][$index]);
             }
         }
-            
+        if(empty($article['prices'])){
+            return '';
+        }
         // Atrodam un zemāko cenu
         $lowest = array_search(min($article['prices']), $article['prices']);
         // Rādam zemākās cenas formas lauku

@@ -1,0 +1,25 @@
+<h1>
+    <?php echo $this->translate('Orders'); ?>
+</h1>
+<div id="orders">
+<?php if(!empty($this->orders)):?>
+	<table>
+		<tr>
+			<th><?php echo $this->translate('id'); ?></th>
+			<th><?php echo $this->translate('client'); ?></th>
+			<th></th>
+			<th></th>
+			<th><?php echo $this->translate('Time created'); ?></th>
+		</tr>
+		<?php foreach ($this->orders as $order):?>
+		<tr>
+			<td><a href="<?php echo $this->url(array('controller' => 'orders', 'action' => 'order', 'order_id' => $order['order_id']), 'default'); ?>"><?php echo $order['order_id'];?></a></td>
+			<td><?php echo $order['client']->getFirstName();?> <?php echo $order['client']->getLastName();?></td>
+			<td></td>
+			<td></td>
+			<td><?php echo $order['time_created'];?></td>
+		</tr>
+		<?php endforeach;?>
+	</table>
+	<?php endif;?>
+</div>

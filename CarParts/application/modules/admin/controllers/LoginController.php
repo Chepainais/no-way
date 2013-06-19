@@ -33,6 +33,8 @@ class Admin_LoginController extends Zend_Controller_Action
             $authAdapter->setCredential($this->_request->getParam('password'));
             
             $auth = Zend_Auth::getInstance();
+            $storage = new Zend_Auth_Storage_Session('administration');
+            $auth->setStorage($storage);
             $result = $auth->authenticate($authAdapter);
             if (! $result->isValid()) {
                 // Ja nav ielogojies - pārmetam uz autorizācijas logu

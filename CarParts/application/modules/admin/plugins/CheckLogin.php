@@ -13,9 +13,13 @@ class Admin_Plugin_CheckLogin extends Zend_Controller_Plugin_Abstract
         $this->db = Zend_Registry::get('db');
         $auth = Zend_Auth::getInstance();
         
+        $storage = new Zend_Auth_Storage_Session('administration');
+        $auth->setStorage($storage);
+        
         $layout = Zend_Layout::getMvcInstance();
         $view = $layout->getView();
-        if (! $auth->getIdentity() && $request->getControllerName() != 'login') {
+        $authorization = $auth->getIdentity();
+        if (! $authorization && $request->getControllerName() != 'login') {
 
             $view->assign('loggedIn', false);
             // Ja nav ielogojies - pārmetam uz autorizācijas logu
@@ -23,7 +27,7 @@ class Admin_Plugin_CheckLogin extends Zend_Controller_Plugin_Abstract
                 ->setControllerName('login')
                 ->setActionName('index')
                 ->setDispatched(false);
-        } elseif($auth->getIdentity()) {
+        } elseif($authorization) {
           $view->assign('loggedIn', true);
         }
     }

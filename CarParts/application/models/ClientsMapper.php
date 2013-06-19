@@ -2,6 +2,7 @@
 
 class Application_Model_ClientsMapper
 {
+    private $_dbTable;
 
     public function setDbTable ($dbTable)
     {

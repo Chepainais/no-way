@@ -2,6 +2,7 @@
 
 class Application_Model_ClientCompaniesMapper
 {
+    private $_dbTable;
 
     public function setDbTable ($dbTable)
     {
@@ -55,6 +56,21 @@ class Application_Model_ClientCompaniesMapper
             return;
         }
         $row = $result->current();
+        $ClientCompanies->setIdClientCompanie($row['id_client_companie'])
+            ->setClientId($row['client_id'])
+            ->setCompanyId($row['company_id'])
+            ->setActive($row['active']);
+        
+    }
+    
+    public function findByClientAndCompany($client_id, $company_id, Application_Model_ClientCompanies $ClientCompanies){
+        $select = new Zend_Db_Table_Select($this->getDbTable());
+        $select->where('client_id = ?', $client_id)
+               ->where('company_id = ?', $company_id);
+        $stmt = $select->query();
+        $result = $stmt->fetchAll();
+        
+        $row = current($result);
         $ClientCompanies->setIdClientCompanie($row['id_client_companie'])
             ->setClientId($row['client_id'])
             ->setCompanyId($row['company_id'])

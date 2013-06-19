@@ -16,11 +16,11 @@ class Application_Plugin_LayoutVariables extends Zend_Controller_Plugin_Abstract
         $view->languageLink = $link;
         
         $auth = Zend_Auth::getInstance();
-        
         if (! $auth->getIdentity()) {
             $view->loggedIn = false;
         } elseif ($auth->getIdentity()) {
             $view->loggedIn = true;
+            $view->auth = $auth->getIdentity();
         }
     }
 }

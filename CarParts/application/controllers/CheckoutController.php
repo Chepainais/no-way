@@ -112,6 +112,20 @@ class CheckoutController extends Zend_Controller_Action
                     $this->checkout->company['company_id'] = $company->getCompanyId();
                     
                     $order->setCompanyId($company->getCompanyId());
+                    
+                    $clientCompany = new Application_Model_ClientCompanies();
+                    $clientCompanyMapper = new Application_Model_ClientCompaniesMapper();
+                    $clientCompanyMapper->findByClientAndCompany($client->client_id, $company->getCompanyId(), $clientCompany);
+                    
+                    if(!$clientCompany->getIdClientCompanie()){
+                        $clientCompany->setClientId($client->client_id)
+                                      ->setCompanyId($company->getCompanyId())
+                                      ->setActive(true);
+                        $clientCompanyMapper->save($clientCompany);
+                    } else {
+                        $clientCompany->setActive(true);
+                        $clientCompanyMapper->save($clientCompany);
+                    }
                 }
                 // save order details
                 

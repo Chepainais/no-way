@@ -20,7 +20,7 @@
        <a href="<?php echo $this->url(array('controller' => 'user', 'action' => 'register'), 'default');?>" id="JOIN"><?php echo $this->translate('Join'); ?></a>
    <?php ?>
    <?php else: ?>
-    <?php echo $this->translate('Logged in as')?> <a href="<?php echo $this->url(array('controller' => 'user', 'action' => 'logout'), 'default');?>">[<?php echo $this->translate('exit')?>]</a>
+    <?php echo $this->translate('Logged in as')?> <?php echo $this->auth->email; ?> <a href="<?php echo $this->url(array('controller' => 'user', 'action' => 'logout'), 'default');?>">[<?php echo $this->translate('exit')?>]</a>
    <?php endif;?>
        <a href="<?php echo sprintf($this->languageLink, 'no');?>"><img src="/img/flag_no.png" alt="NO" width="22" height="16" class="language"></a> 
        <a href="<?php echo sprintf($this->languageLink, 'sv');?>"><img src="/img/flag_SW.png" alt="SV" width="22" height="16" class="language"></a> 

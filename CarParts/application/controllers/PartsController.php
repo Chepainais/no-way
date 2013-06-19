@@ -148,7 +148,7 @@ EOF;
             }
             foreach ($articles_modified as $item_id => $st) {
                 // Ja precei nav cenas - izmetam to no saraksta
-                if (! isset($st['prices']['ape']) && ! isset($st['prices']['ic'])) {
+                if ((!isset($st['prices']['ape']) || $st['prices']['ape'] == 0) && (!isset($st['prices']['ic']) || $st['prices']['ic'] == 0)) {
                     unset($articles_modified[$item_id]);
                 } else {
 

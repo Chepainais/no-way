@@ -83,4 +83,22 @@ class Application_Model_OrdersMapper
         }
         return $entries;
     }
+    
+    public function fetchByStatus ($status)
+    {
+        $select = new Zend_Db_Table_Select($this->getDbTable());
+        $select->where('status = ?', $status)
+               ->order('order_id DESC');
+        $stmt = $select->query();
+        $result = $stmt->fetchAll();
+        
+        foreach($result as $key => $row) {
+            $client = new Application_Model_Clients();
+            $clientMapper = new Application_Model_ClientsMapper();
+            $clientMapper->find($row['client_id'], $client);
+            $result[$key]['client'] = $client;
+        }
+        
+        return $result;
+    }
 }

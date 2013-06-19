@@ -9,6 +9,8 @@ class Application_Model_DBTable_Clients extends Zend_Db_Table_Abstract
 
     protected $_name = 'clients';
 
+    protected $_dependentTables = array('Application_Model_DBTable_Orders');
+    
     public function insert (Array $data)
     {
         $data['time_created'] = new Zend_Db_Expr('NOW()');

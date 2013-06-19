@@ -119,9 +119,9 @@ class Application_Model_ClientCompanies
         }
     }
 
-    public function readByClientId ($client_id)
+    public function readByClientAndCompanyId ($client_id, $company_id)
     {
-        $query = "SELECT * FROM `$this->_table` WHERE `client_id` = '$client_id' LIMIT 1";
+        $query = "SELECT * FROM `$this->_table` WHERE `client_id` = '$client_id' and company_id = '$company_id' LIMIT 1";
         $res = $this->db->execSQL($query);
         $data = $this->db->fetchAssoc($res);
         if ($data) {
@@ -157,7 +157,7 @@ class Application_Model_ClientCompanies
     {
         $method = 'set' . $name;
         if (('mapper' == $name) || ! method_exists($this, $method)) {
-            throw new Exception('Invalid client_companies property');
+            throw new Exception('Invalid client_companies property ' .$name);
         }
         $this->$method($value);
     }
@@ -166,7 +166,7 @@ class Application_Model_ClientCompanies
     {
         $method = 'get' . $name;
         if (('mapper' == $name) || ! method_exists($this, $method)) {
-            throw new Exception('Invalid client_companies property');
+            throw new Exception('Invalid client_companies property ' . $name);
         }
         return $this->$method();
     }
@@ -186,26 +186,4 @@ class Application_Model_ClientCompanies
         return $this;
     }
 
-    public function save ()
-    {
-        if ($this->exists()) {
-            $query = "UPDATE `client_companies` SET " . 
-                     ($this->getClientId() ? ' `client_id` = "' . $this->ClientId() . '", ' : '') .
-                     ($this->getCompanyId() ? ' `company_id` = "' . $this->CompanyId() . '", ' : '') .
-                     ($this->getActive() ? ' `active` = "' . $this->Active() .
-                     '", ' : '');
-            "WHERE `id_client_companie` = " . $this->getIdClientCompanie() . ";";
-        } else {
-            $query = "INSERT INTO `client_companies` SET " .
-                     ($this->getClientId() ? ' `client_id` = "' . $this->ClientId() . '", ' : '') .
-                     ($this->getCompanyId() ? ' `company_id` = "' . $this->CompanyId() . '", ' : '') .
-                     ($this->getActive() ? ' `active` = "' . $this->Active() .
-                     '", ' : '');
-            if ($this->db->execSQL($query)) {
-                $this->setIdClientCompanie($this->db->insertId());
-                return true;
-            }
-        }
-        return false;
-    }
 }

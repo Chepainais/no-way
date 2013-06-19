@@ -10,6 +10,8 @@ class Application_Model_DBTable_Companies extends Zend_Db_Table_Abstract
 
     protected $_name = 'companies';
 
+    protected $_dependentTables = array('Application_Model_DBTable_Orders');
+    
     public function insert (Array $data)
     {
         $data['time_created'] = new Zend_Db_Expr('NOW()');
