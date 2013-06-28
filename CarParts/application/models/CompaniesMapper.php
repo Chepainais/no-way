@@ -30,7 +30,6 @@ class Application_Model_CompaniesMapper
         $data = array(
                 'company_id' => $companie->getCompanyId(),
                 'name' => $companie->getName(),
-                'companiescol' => $companie->getCompaniescol(),
                 'reg_number' => $companie->getRegNumber(),
                 'vat_number' => $companie->getVatNumber(),
                 'address' => $companie->getAddress(),
@@ -69,7 +68,6 @@ class Application_Model_CompaniesMapper
         $row = $result->current();
         $Companies->setCompanyId($row['company_id'])
             ->setName($row['name'])
-            ->setCompaniescol($row['companiescol'])
             ->setRegNumber($row['reg_number'])
             ->setVatNumber($row['vat_number'])
             ->setAddress($row['address'])
@@ -96,7 +94,6 @@ class Application_Model_CompaniesMapper
             $entry = new Application_Model_Companies();
             $entry->setCompanyId($row['company_id'])
                 ->setName($row['name'])
-                ->setCompaniescol($row['companiescol'])
                 ->setRegNumber($row['reg_number'])
                 ->setVatNumber($row['vat_number'])
                 ->setAddress($row['address'])

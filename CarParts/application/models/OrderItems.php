@@ -10,6 +10,8 @@ class Application_Model_OrderItems
     protected $_order_id = null;
 
     protected $_td_id = null;
+    
+    protected $_td_info = null;
 
     protected $_amount = null;
 
@@ -49,6 +51,14 @@ class Application_Model_OrderItems
     {
         $this->_td_id = $td_id;
         return $this;
+    }
+    
+    public function setTdInfo($td_info){
+        $this->_td_info = $td_info;
+    }
+    
+    public  function getTdInfo(){
+        return $this->_td_info;
     }
 
     public function getTdId ()

@@ -141,6 +141,44 @@ a.green {
 	height: auto;
 	width: 300px;
 }
+
+div#order div.details div {
+	position: relative;
+	float: left;
+	width: 30%;
+	
+}
+div.clear {
+	width: 100%;
+	height: 1px;
+	clear:both;
+}
+dl {
+    margin-bottom:50px;
+}
+ 
+dl dt {
+    color:#000;
+    float:left; 
+    font-weight:bold; 
+	margin: 0px;
+    margin-right:10px; 
+    padding-top:5px 0;
+    width:auto;
+	min-width: 150px; 
+}
+ 
+dl dd {
+	margin: 0px;
+    padding-top:5px 0;
+}
+dd {
+
+}
+
+tr.total td{
+	font-weight: bold;
+}
 /* STYLED TABLE  --> */
 .styled {
 	margin:0px;padding:0px;

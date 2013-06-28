@@ -333,4 +333,8 @@ a#SIGNIN, a#JOIN {
 	clear:both;
 	width: 100%;
 }
-
+div.clear {
+	width: 100%;
+	height: 1px;
+	clear:both;
+}

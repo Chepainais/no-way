@@ -87,4 +87,28 @@ class Application_Model_OrderItemsMapper
         }
         return $entries;
     }
+    
+    public function fetchOrderItems ($order_id) {
+    	$select = new Zend_Db_Table_Select($this->getDbTable());
+    	$select->where('order_id = ?', $order_id)
+    	->order('order_item_id ASC');
+    	$stmt = $select->query();
+    	$result = $stmt->fetchAll();
+    	$entries = array();
+    	
+    	$parts = new Application_Model_Parts();
+    	
+    	foreach ($result as $row) {
+    		$entry = new Application_Model_OrderItems();
+    		$entry->setOrderItemId($row['order_item_id'])
+    		->setOrderId($row['order_id'])
+    		->setTdId($row['td_id'])
+    		->setAmount($row['amount'])
+    		->setPrice($row['price'])
+    		->setTdInfo($parts->retrieveArticle($row['td_id']));
+
+    		$entries[] = $entry;
+    	}
+    	return $entries;
+    }
 }

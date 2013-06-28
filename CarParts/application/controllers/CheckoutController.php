@@ -151,8 +151,10 @@ class CheckoutController extends Zend_Controller_Action
                 $order->setShippingAddressId($shipping->getIdShippingAddress());
                 $order_mapper->save($order);
                 // @todo clear cart
-                
+                $cart = new Zend_Session_Namespace('cart');
+                $cart->unsetAll();
                 // @todo redirect to thank you page
+                $this->_redirect($this->view->url(array('controller' => 'article', 'action' => 'read', 'article_alias' => 'thankyou')));
             }
         }
         

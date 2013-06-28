@@ -8,7 +8,6 @@ class Application_Model_Companies
 
     protected $_name = null;
 
-    protected $_companiescol = null;
 
     protected $_reg_number = null;
 
@@ -64,16 +63,6 @@ class Application_Model_Companies
         return $this->_name;
     }
 
-    public function setCompaniescol ($companiescol)
-    {
-        $this->_companiescol = $companiescol;
-        return $this;
-    }
-
-    public function getCompaniescol ()
-    {
-        return $this->_companiescol;
-    }
 
     public function setRegNumber ($reg_number)
     {
@@ -300,7 +289,6 @@ class Application_Model_Companies
         if ($this->exists()) {
         $query = "UPDATE `companies` SET " .
             ($this->getName() ? ' `name` = "' . $this->Name() . '", ' : '') .
-            ($this->getCompaniescol() ? ' `companiescol` = "' . $this->Companiescol() . '", ' : '') .
             ($this->getRegNumber() ? ' `reg_number` = "' . $this->RegNumber() . '", ' : '') .
             ($this->getVatNumber() ? ' `vat_number` = "' . $this->VatNumber() . '", ' : '') .
             ($this->getAddress() ? ' `address` = "' . $this->Address() . '", ' : '') .
@@ -319,7 +307,6 @@ class Application_Model_Companies
          else { 
          $query = "INSERT INTO `companies` SET " .
             ($this->getName() ? ' `name` = "' . $this->Name() . '", ' : '') .
-            ($this->getCompaniescol() ? ' `companiescol` = "' . $this->Companiescol() . '", ' : '') .
             ($this->getRegNumber() ? ' `reg_number` = "' . $this->RegNumber() . '", ' : '') .
             ($this->getVatNumber() ? ' `vat_number` = "' . $this->VatNumber() . '", ' : '') .
             ($this->getAddress() ? ' `address` = "' . $this->Address() . '", ' : '') .
