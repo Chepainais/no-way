@@ -18,8 +18,8 @@ class Application_Model_Payments_Cps {
 		
 		$amount = mt_rand(1, 90);
 		$currency = 'USD';
-		$product_name = 'Product name';
-		$product_url = 'http://www.bilpart.no';
+		$product_name = 'Product Name';
+		$product_url = 'www.test.com';
 		$client = array (
 				'first_name' => 'FirstName',
 				'last_name' => 'LastName', 
@@ -41,9 +41,10 @@ class Application_Model_Payments_Cps {
 		
 		$writer->startElement('cpsxml');
 		$writer->writeAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-		$writer->writeAttribute('xsi:schemaLocation', 'https://3ds.cps.lv/GatorServo/Gator_SendForAuth.xsd');
+		$writer->writeAttribute('xsi:schemaLocation', 'http://www.cps.lv/xml/ns/cpsxml https://3ds.cps.lv/GatorServo/Gator_SendForAuth.xsd');
 		$writer->writeAttribute('xmlns', 'http://www.cps.lv/xml/ns/cpsxml');
 		$writer->startElement('header');
+		$writer->writeAttribute('xmlns', '');
 			$writer->writeElement('responsetype', 'direct');
 			$writer->writeElement('user', $this->config->user);
 			$writer->writeElement('transType', 'DB');		
@@ -52,6 +53,7 @@ class Application_Model_Payments_Cps {
 			$writer->writeElement('redirectUrl', 'http://ru.bilparts.test.chepa.lv/payment/cps_result');		
 		$writer->endElement(); // header
 		$writer->startElement('request');
+		$writer->writeAttribute('xmlns', '');
 			$writer->writeElement('orderNumber', $order_id);
 			$writer->startElement('cardholder');
 				$writer->writeElement('firstName', $client['first_name']);
@@ -76,8 +78,8 @@ class Application_Model_Payments_Cps {
 		$writer->endElement(); // cpsxml
 		
 		$writer->endDocument ();
-		$xml = $writer->outputMemory(true);
-		echo  '<pre><code>' . htmlentities($xml) . '</pre></code>';
+		return $xml = $writer->outputMemory(true);
+// 		echo  '<pre><code>' . htmlentities($xml) . '</pre></code>';
 	}
 	
 	private function digisign($toSign){

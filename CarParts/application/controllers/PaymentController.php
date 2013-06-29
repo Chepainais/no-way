@@ -20,8 +20,8 @@ class PaymentController extends Zend_Controller_Action
         // action body
         $payment = new Application_Model_Payments_Cps();
         $xml = $payment->buildXml();
-        
-        $this->view->form = new Application_Form_CardHolder();
+        $this->view->xml = $xml;
+        //$this->view->form = new Application_Form_CardHolder();
         
     }
 

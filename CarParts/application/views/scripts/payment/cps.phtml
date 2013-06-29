@@ -1,1 +1,6 @@
-<?php echo $this->form;?>
+<?php echo $this->form('payment', array('method' => 'post', 'action' => 'https://3ds.cps.lv/GatorServo/request'))?>
+
+ <input name="type" value="sendForAuth"/>
+ <?php echo $this->formTextarea('xml', $this->xml);?>
+<?php echo $this->formSubmit('submit', 'send')?>
+</form>
