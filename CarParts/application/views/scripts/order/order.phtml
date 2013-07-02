@@ -1,12 +1,14 @@
+<?php if(isset($this->order)):?>
+
 <div id="information">
     <div class="client_information">
     <?php if($this->loggedIn):?>
-        <h4><?php echo $this->translate('Your information');?></h4>
+        <h4><?php echo $this->translate('Client information');?></h4>
         <dl>
-            <dt> <?php echo $this->translate('first_name')?>:</dt> <dd><?php echo $this->client->first_name;?></dd>
-            <dt><?php echo $this->translate('last_name')?>:</dt> <dd><?php echo $this->client->last_name;?></dd>
-            <dt><?php echo $this->translate('email')?>: </dt> <dd><?php echo $this->client->email;?></dd>
-            <dt><?php echo $this->translate('country')?>: </dt> <dd><?php echo $this->translate($this->client->country);?></dd>
+            <dt> <?php echo $this->translate('first_name')?>:</dt> <dd><?php echo $this->client->getFirstName();?></dd>
+            <dt><?php echo $this->translate('last_name')?>:</dt> <dd><?php echo $this->client->getLastName();?></dd>
+            <dt><?php echo $this->translate('email')?>: </dt> <dd><?php echo $this->client->getEmail();?></dd>
+            <dt><?php echo $this->translate('country')?>: </dt> <dd><?php echo $this->translate($this->client->getCountry());?></dd>
         </dl>
         <?php endif;?>
     </div>
@@ -46,18 +48,18 @@
 <?php 
     $totalCount = 0;
     $totalPrice = 0;
-foreach($this->cartItems as $item):
+foreach($this->order_items as $item):
 
-    $totalCount += $item['count'];
-    $totalPrice += ($item['price'] * $item['count']);
+    $totalCount += $item->getAmount();
+    $totalPrice += ($item->getPrice() * $item->getAmount());
+    $tdInfo = $item->getTdInfo();
     ?>
     <tr>
-       <!--  <td><?php echo $item['id'];?></td>  -->
-        <td><?php echo $item['code']?></td>
-        <td><?php echo $item['brand']?></td>
-        <td><?php echo $item['name']?></td>
-        <td><?php echo $item['count'];?></td>
-        <td align="center"><?php echo $this->currency($item['price'], 'NOK');?></td>
+		<td><?php echo $tdInfo['ART_ARTICLE_NR'];?></td>
+		<td><?php echo $tdInfo['SUP_BRAND'];?></td>
+		<td><?php echo $tdInfo['ART_COMPLETE_DES_TEXT'];?></td>
+		<td><?php echo $item->getAmount();?></td>
+        <td align="center"><?php echo $this->currency($item->getPrice(), 'NOK');?></td>
     </tr>
     
     <?php
@@ -78,12 +80,18 @@ foreach($this->cartItems as $item):
        <td></td>
        <td></td>
        <td></td>
-       <td><?php echo $this->translate('Have read and accept');?> <a target="_blank" id="terms" href="<?php echo $this->url(array('controller' => 'article', 'action' => 'read', 'article_alias' => 'terms'), 'article-read');?>"><?php echo $this->translate('terms'); ?><?php echo $this->formCheckbox('accept_terms', 1);?></a></td>
-       <td><?php echo $this->formSubmit('Submit', 'Place order', array('class' => 'place_order'));?></td>
+       <td></td>
+       <td></td>
    </tr>
     </table>
     </form>
 </div>
+
+
+<?php else: ?>
+<?php echo $this->translate('Order not found'); ?>
+<?php endif;?>
+
 
 <?php $this->headStyle()->captureStart();?>
 

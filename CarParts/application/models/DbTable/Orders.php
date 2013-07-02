@@ -25,6 +25,7 @@ class Application_Model_DBTable_Orders extends Zend_Db_Table_Abstract
     
     public function insert (Array $data)
     {
+    	$data['token'] = substr(uniqid(md5(rand()), true), 0, 32);
         $data['time_created'] = new Zend_Db_Expr('NOW()');
         return parent::insert($data);
     }

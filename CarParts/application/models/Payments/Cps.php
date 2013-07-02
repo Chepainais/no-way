@@ -16,7 +16,7 @@ class Application_Model_Payments_Cps {
 		$digiSign = '';
 		$order_id = mt_rand(1000,9999);
 		
-		$amount = mt_rand(1, 90);
+		$amount = mt_rand(300, 900);
 		$currency = 'USD';
 		$product_name = 'Product Name';
 		$product_url = 'www.test.com';
@@ -27,7 +27,7 @@ class Application_Model_Payments_Cps {
 				'city' => 'City', 
 				'zip' => '54321', 
 				'country' => 'LV', 
-				'email' => 'email@domain.com' 
+				'email' => 'email875@gmail.com' 
 		);
 		$dataToSign = 'sendForAuth'.$this->config->user.$order_id.$amount.$currency.$product_name;
 		$digiSign =  $this->digisign($dataToSign);
@@ -47,10 +47,11 @@ class Application_Model_Payments_Cps {
 		$writer->writeAttribute('xmlns', '');
 			$writer->writeElement('responsetype', 'direct');
 			$writer->writeElement('user', $this->config->user);
+			$writer->writeElement('type', 'sendForAuth');		
 			$writer->writeElement('transType', 'DB');		
 			$writer->writeElement('digiSignature', $digiSign);		
 // 			$writer->writeElement('callbackUrl', $digiSign);		
-			$writer->writeElement('redirectUrl', 'http://ru.bilparts.test.chepa.lv/payment/cps_result');		
+			$writer->writeElement('redirectUrl', 'http://ru.bilparts.test.chepa.lv/payment/cps-result');		
 		$writer->endElement(); // header
 		$writer->startElement('request');
 		$writer->writeAttribute('xmlns', '');
@@ -82,7 +83,7 @@ class Application_Model_Payments_Cps {
 // 		echo  '<pre><code>' . htmlentities($xml) . '</pre></code>';
 	}
 	
-	private function digisign($toSign){
+	public function digisign($toSign){
 		$signature = null;
 		$pemkey = null;
 		$p12cert = array ();
@@ -94,7 +95,7 @@ class Application_Model_Payments_Cps {
 				fclose ( $fd );
 				if(!openssl_pkcs12_read ( $p12buf, $p12cert, 'pasS%123' )){
 					 $msg = openssl_error_string();
-				    throw new Exception('Cannot red cps certificate');
+				    throw new Exception('Cannot read cps certificate');
 				}
 				
 				$configArgs['config']  = $this->config->configArgs->config;		

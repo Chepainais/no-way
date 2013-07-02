@@ -25,11 +25,16 @@ class CheckoutController extends Zend_Controller_Action
 
     public function clientAction()
     {
+
+    	
         $this->view->clientInformation = $this->auth->getIdentity();
         $form = new Application_Form_ShippingAddress();
         
         foreach($form->getElements() as $element){
             $element->setBelongsTo('shipping');
+            if(isset($this->checkout->shipping[$element->getName()])){
+            	$element->setValue($this->checkout->shipping[$element->getName()]);
+            }
         }
         // Company information
 
@@ -43,6 +48,9 @@ class CheckoutController extends Zend_Controller_Action
             
             foreach($formCompany->getElements() as $element){
                 $element->setBelongsTo('company');
+                if(isset($this->checkout->company[$element->getName()])){
+                	$element->setValue($this->checkout->company[$element->getName()]);
+                }
             }
             
             $form->addSubForm($formCompany, 'Company details');
@@ -139,7 +147,7 @@ class CheckoutController extends Zend_Controller_Action
                     $itemMapper->save($orderItem);
                 }
 
-                // @todo save shipping details
+                // save shipping details
                 
                 $shipping = new Application_Model_ShippingAddresses;
                 $shippingMapper = new Application_Model_ShippingAddressesMapper;
@@ -150,11 +158,12 @@ class CheckoutController extends Zend_Controller_Action
                 
                 $order->setShippingAddressId($shipping->getIdShippingAddress());
                 $order_mapper->save($order);
-                // @todo clear cart
-                $cart = new Zend_Session_Namespace('cart');
-                $cart->unsetAll();
-                // @todo redirect to thank you page
-                $this->_redirect($this->view->url(array('controller' => 'article', 'action' => 'read', 'article_alias' => 'thankyou')));
+                // clear cart
+                
+//                 $cart = new Zend_Session_Namespace('cart');
+//                 $cart->unsetAll();
+                // redirect to thank you page
+                $this->_redirect($this->view->url(array('controller' => 'payment', 'action' => 'cps')));
             }
         }
         

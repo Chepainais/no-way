@@ -175,7 +175,11 @@ a#SIGNIN, a#JOIN {
 	height:auto;
 	float:left;}
 	
-	
+div#information div.client_information, div#information div.shipping_information, div#information div.company_information{
+    width: 33%;
+    position: relative;
+    float: left;
+}	
 /* STYLED TABLE   */
 .styled {
 	margin:0px;padding:0px;

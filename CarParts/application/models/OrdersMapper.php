@@ -32,7 +32,7 @@ class Application_Model_OrdersMapper
                 'client_id' => $Orders->getClientId(),
                 'company_id' => $Orders->getCompanyId(),
                 'shipping_address_id'   => $Orders->getShippingAddressId(),
-                'token' => $Orders->getToken()
+//                 'token' => $Orders->getToken()
         );
         
         if (null === ($id = $Orders->getOrderId())) {

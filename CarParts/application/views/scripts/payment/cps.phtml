@@ -1,6 +1,13 @@
 <?php echo $this->form('payment', array('method' => 'post', 'action' => 'https://3ds.cps.lv/GatorServo/request'))?>
 
- <input name="type" value="sendForAuth"/>
- <?php echo $this->formTextarea('xml', $this->xml);?>
-<?php echo $this->formSubmit('submit', 'send')?>
+ <input type="hidden" name="type" value="sendForAuth"/>
+ <?php echo $this->formHidden('xml', $this->xml);?>
+<?php echo $this->formSubmit('Pay', 'send')?>
 </form>
+
+<?php $this->headScript()->captureStart();?>
+	$(document).ready(function(){
+	console.log($('#payment'));
+		$('#payment').submit();
+	});
+<?php $this->headScript()->captureEnd();?>

@@ -104,6 +104,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                                 'controller' => 'article',
                                 'action' => 'read'
                         )));
+        $router->addRoute('order',
+        		new Zend_Controller_Router_Route(
+        				'order/:order_id/:token',
+        				array(
+        						'controller' => 'order',
+        						'action' => 'order'
+        				)));
     }
     
     protected function _initRegisterPlugins(){
