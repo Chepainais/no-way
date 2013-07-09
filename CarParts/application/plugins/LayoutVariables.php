@@ -12,7 +12,11 @@ class Application_Plugin_LayoutVariables extends Zend_Controller_Plugin_Abstract
         $view->cart = new Application_Model_Cart();
         // Valodu linkiem sagataves
         $link = '//' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-        $link = preg_replace('|//[a-z]{2}\.|', '//%s.', $link);
+        if(preg_match('|//[a-z]{2}\.|', $link)){
+        	$link = preg_replace('|//[a-z]{2}\.|', '//%s.', $link);
+        } else {
+        	$link = preg_replace('|//|', '//%s.', $link);
+        }
         $view->languageLink = $link;
         
         $auth = Zend_Auth::getInstance();
