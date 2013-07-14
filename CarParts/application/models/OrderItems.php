@@ -11,6 +11,8 @@ class Application_Model_OrderItems
 
     protected $_td_id = null;
     
+    protected $_name = null;
+    
     protected $_td_info = null;
 
     protected $_amount = null;
@@ -75,6 +77,17 @@ class Application_Model_OrderItems
     public function getAmount ()
     {
         return $this->_amount;
+    }
+    
+    public function setName ($name)
+    {
+    	$this->_name = $name;
+    	return $this;
+    }
+    
+    public function getName ()
+    {
+    	return $this->_name;
     }
 
     public function setPrice ($price)
@@ -203,12 +216,11 @@ class Application_Model_OrderItems
     {
         if ($this->exists()) {
             $query = "UPDATE `order_items` SET " .
-                     ($this->getOrderId() ? ' `order_id` = "' . $this->OrderId() .
-                     '", ' : '') .
-                     ($this->getTdId() ? ' `td_id` = "' . $this->TdId() . '", ' : '') .
-                     ($this->getAmount() ? ' `amount` = "' . $this->Amount() .
-                     '", ' : '') .
-                     ($this->getPrice() ? ' `price` = "' . $this->Price() . '", ' : '') .
+                     ($this->getOrderId() ? ' `order_id` = "' . $this->OrderId() . '", ' : '') .
+                     ($this->getTdId() ? ' `td_id` = "' . $this->getTdId() . '", ' : '') .
+                     ($this->getTdId() ? ' `name` = "' . $this->getName() . '", ' : '') .
+                     ($this->getAmount() ? ' `amount` = "' . $this->getAmount() . '", ' : '') .
+                     ($this->getPrice() ? ' `price` = "' . $this->getPrice() . '", ' : '') .
                      ($this->getTimeEdited() ? ' `time_edited` = "' .
                      $this->TimeEdited() . '", ' : '') .
                      ($this->getEditedBy() ? ' `edited_by` = "' .

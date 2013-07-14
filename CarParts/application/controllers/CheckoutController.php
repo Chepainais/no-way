@@ -11,11 +11,18 @@ class CheckoutController extends Zend_Controller_Action
      *
      */
     private $auth = null;
+    /**
+     * Zend_Registry
+     * @var Zend_Registry
+     */
+    private $config = null;
 
     public function init()
     {
         $this->auth = Zend_Auth::getInstance();
         $this->checkout = new Zend_Session_Namespace('checkout');
+        
+        $this->config = Zend_Registry::get('config');
     }
 
     public function indexAction()
@@ -152,18 +159,63 @@ class CheckoutController extends Zend_Controller_Action
                 $shipping = new Application_Model_ShippingAddresses;
                 $shippingMapper = new Application_Model_ShippingAddressesMapper;
                 $shipping->setOptions($this->checkout->shipping);
-                $shipping->setClientId($client->client_id)
+                if(isset($company)){
+               		$shipping->setClientId($client->client_id)
                          ->setCompanyId($company->getCompanyId());
+                }
+                
                 $shippingMapper->save($shipping);
                 
                 $order->setShippingAddressId($shipping->getIdShippingAddress());
                 $order_mapper->save($order);
+                
+                // Reload order data
+                
+                $order_mapper->find($order->getOrderId(), $order);
+                
                 // clear cart
                 
 //                 $cart = new Zend_Session_Namespace('cart');
 //                 $cart->unsetAll();
+
+                
+                // @todo Send email to client
+                $email_transport = new Zend_Mail_Transport_Smtp($this->config->email->smtp);
+                $mail = new Zend_Mail('UTF-8');
+                $html = new Zend_View();
+				$html->setScriptPath(APPLICATION_PATH . '/views/scripts/emails/');
+				$html->assign('order_url', $this->view->serverUrl() . $this->view->url ( array (
+						'controller' => 'order',
+						'action' => 'order',
+						'order_id' => $order->getOrderId(),
+						'token' => $order->getToken() 
+				) ));
+                
+				
+				$emailBody = $html->render('_order_details_to_client.phtml');
+				
+				$mail->setBodyHtml ( $emailBody, 'UTF-8');
+                $mail->addTo($client->email);
+                $mail->setFrom($this->config->email->order_email, 'Order details');
+                $mail->setSubject($this->view->translate('Email Order details subject'));
+                
+                $mail->send($email_transport);
+                
+                // @todo Send email to info email
+                $adminMail = new Zend_Mail('UTF-8');
+                $adminEmailBody = $html->render('_order_details_to_admin.phtml');
+                
+                $adminMail->setBodyHtml ( $adminEmailBody, 'UTF-8');
+                $adminMail->addTo($this->config->email->order_email);
+                $adminMail->setFrom($this->config->email->system_email, 'Your internet shop');
+                $adminMail->setSubject('New Order');
+                $adminMail->send($email_transport);            
+
                 // redirect to thank you page
-                $this->_redirect($this->view->url(array('controller' => 'payment', 'action' => 'cps')));
+                $this->_redirect($this->view->url(array('controller' => 'article', 'action' => 'read', 'article_alias' => 'order_thank_you'), 'article-read'));
+                
+                // Redirect to payment page
+//                 $this->_redirect($this->view->url(array('controller' => 'payment', 'action' => 'cps')));
             }
         }
         

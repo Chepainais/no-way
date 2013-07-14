@@ -40,7 +40,7 @@ class OrderController extends Zend_Controller_Action
             
             $this->view->order = $order;
             $this->view->client = $client;
-            if($company){
+            if(isset($company)){
             	$this->view->company = $company;
             }
             $this->view->shipping = $shipping_address;
@@ -49,9 +49,4 @@ class OrderController extends Zend_Controller_Action
         
 
     }
-
-
 }
-
-
-

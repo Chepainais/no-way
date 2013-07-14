@@ -27,19 +27,20 @@ class Application_Model_OrderItemsMapper
 
     public function save (Application_Model_OrderItems $OrderItems)
     {
-        $data = array(
-                'order_item_id' => $OrderItems->getOrderItemId(),
-                'order_id' => $OrderItems->getOrderId(),
-                'td_id' => $OrderItems->getTdId(),
-                'amount' => $OrderItems->getAmount(),
-                'price' => $OrderItems->getPrice(),
-                'time_created' => $OrderItems->getTimeCreated(),
-                'created_by' => $OrderItems->getCreatedBy(),
-                'time_edited' => $OrderItems->getTimeEdited(),
-                'edited_by' => $OrderItems->getEditedBy()
-        );
-        
-        if (null === ($id = $OrderItems->getOrderItemId())) {
+		$data = array (
+				'order_item_id' => $OrderItems->getOrderItemId (),
+				'order_id' => $OrderItems->getOrderId (),
+				'td_id' => $OrderItems->getTdId (),
+				'name' => $OrderItems->getName(),
+				'amount' => $OrderItems->getAmount (),
+				'price' => $OrderItems->getPrice (),
+				'time_created' => $OrderItems->getTimeCreated (),
+				'created_by' => $OrderItems->getCreatedBy (),
+				'time_edited' => $OrderItems->getTimeEdited (),
+				'edited_by' => $OrderItems->getEditedBy () 
+		);
+		
+		if (null === ($id = $OrderItems->getOrderItemId())) {
             unset($data['order_item_id']);
             $this->getDbTable()->insert($data);
         } else {
@@ -60,6 +61,7 @@ class Application_Model_OrderItemsMapper
         $OrderItems->setOrderItemId($row['order_item_id'])
             ->setOrderId($row['order_id'])
             ->setTdId($row['td_id'])
+            ->setName($row['name'])
             ->setAmount($row['amount'])
             ->setPrice($row['price'])
             ->setTimeCreated($row['time_created'])
@@ -77,6 +79,7 @@ class Application_Model_OrderItemsMapper
             $entry->setOrderItemId($row['order_item_id'])
                 ->setOrderId($row['order_id'])
                 ->setTdId($row['td_id'])
+                ->setName($row['name'])
                 ->setAmount($row['amount'])
                 ->setPrice($row['price'])
                 ->setTimeCreated($row['time_created'])
@@ -103,6 +106,7 @@ class Application_Model_OrderItemsMapper
     		$entry->setOrderItemId($row['order_item_id'])
     		->setOrderId($row['order_id'])
     		->setTdId($row['td_id'])
+    		->setName($row['name'])
     		->setAmount($row['amount'])
     		->setPrice($row['price'])
     		->setTdInfo($parts->retrieveArticle($row['td_id']));

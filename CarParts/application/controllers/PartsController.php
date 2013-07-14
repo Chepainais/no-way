@@ -211,6 +211,8 @@ EOF;
 				return;
 			}
 			$this->_redirect('/parts/vendor/' . $this->getParam('vendor'));
+		} else {
+			$this->_redirect('/parts/vendors/');
 		}
     }
 
@@ -225,7 +227,7 @@ EOF;
         $code = $this->getRequest()->getParam('search-code');
         // Clean code from unwanted symbols
         $code = preg_replace('/[^a-zA-Z0-9]/', '', $code);
-        if (strlen($code) < 4) {
+        if (strlen($code) < 3) {
             echo $this->view->translate('Search string too short');
         } else {
             $parts = new Application_Model_Parts();
@@ -246,7 +248,7 @@ EOF;
 			
 		}
             
-            // Ievācam Ape Motors cenas. Vācam atsevišķi, lai var vienā
+        // Ievācam Ape Motors cenas. Vācam atsevišķi, lai var vienā
         // pieprasījumā visas pieprasīt.
         if(!empty($codes)){
             $ApePrices = $ApeMotors->getPrices($codes);
