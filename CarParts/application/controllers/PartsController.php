@@ -183,7 +183,10 @@ EOF;
 		$this->view->article = $article;
 		$this->view->article ['params'] = $parts->getArtAdditionalInfo ( $art_id );
 		
-		$price['ape'] = current($ApeMotors->getPrices(Array($article['ART_ID'] => array( 'code' => $article['ART_ARTICLE_NR'], 'vendor' => $article['SUP_BRAND']))));
+		$apePrice = current($ApeMotors->getPrices(Array($article['ART_ID'] => array( 'code' => $article['ART_ARTICLE_NR'], 'vendor' => $article['SUP_BRAND']))));
+		if(isset($apePrice['ProductDetails'])){
+			$price['ape'] = $apePrice['ProductDetails']['Price'];
+		}
 		$price['ic'] =  $Intercar->getItemPrice($article['ART_ARTICLE_NR'], $article['SUP_BRAND']);
 		
 		$this->view->article ['prices'] = $price;

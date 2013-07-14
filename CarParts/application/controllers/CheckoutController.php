@@ -179,7 +179,7 @@ class CheckoutController extends Zend_Controller_Action
 //                 $cart->unsetAll();
 
                 
-                // @todo Send email to client
+                // Send email to client
                 $email_transport = new Zend_Mail_Transport_Smtp($this->config->email->smtp);
                 $mail = new Zend_Mail('UTF-8');
                 $html = new Zend_View();
@@ -201,7 +201,7 @@ class CheckoutController extends Zend_Controller_Action
                 
                 $mail->send($email_transport);
                 
-                // @todo Send email to info email
+                // Send email to info email
                 $adminMail = new Zend_Mail('UTF-8');
                 $adminEmailBody = $html->render('_order_details_to_admin.phtml');
                 
