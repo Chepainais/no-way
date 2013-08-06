@@ -423,12 +423,12 @@ class Application_Model_Parts {
 		$result = $this->db->query ( $sql );
 		
 		$r = $result->fetchAll ();
-		if ($r) {
-			return $r [0];
-		} else {
-			return false;
-		}
-	}
+        if ($r) {
+            return $r[0];
+        } else {
+            return false;
+        }
+    }
 	public function getArtCriteria($ART_ID) {
 		$sql = "SELECT
 					des_texts.TEX_TEXT AS CRITERIA_DES_TEXT,
