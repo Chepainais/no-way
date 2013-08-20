@@ -42,7 +42,7 @@ class CartController extends Zend_Controller_Action
         if($priceType == 'ic'){
             $intercar = new Application_Model_Intercar();
             $ic_price = $intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
-            $price = $ic_price;
+            $price = $ic_price['CEN'];
         } elseif($priceType == 'ape') {
             $ape = new Application_Model_Apemotors();
             $ape_price = current($ape->getPrices(array($item_id => array('code' => $params['ART_ARTICLE_NR'], 'vendor' => $params['SUP_BRAND']))));

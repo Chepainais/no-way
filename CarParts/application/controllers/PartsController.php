@@ -133,8 +133,10 @@ EOF;
 			$articles_modified [$st ['LA_ART_ID']] ['params'] = $params;
 // 			$searchTree2 [$st ['LA_ART_ID']] ['image'] = $parts->getArtImageURL ( $st ['LA_ART_ID'] );
 			$codes[$st ['LA_ART_ID']] = Array ('code' => $params['ART_ARTICLE_NR'], 'vendor' => $params['SUP_BRAND']);
-			
-			$articles_modified [$st ['LA_ART_ID']]['prices']['ic'] = $Intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
+			$ic = $Intercar->getItemPrice($params['ART_ARTICLE_NR'], $params['SUP_BRAND']);
+			if($ic['ILE_D']) {
+			     $articles_modified [$st ['LA_ART_ID']]['prices']['ic'] = $ic['CEN'];
+			}
 		}
             
             // Ievācam Ape Motors cenas. Vācam atsevišķi, lai var vienā
@@ -187,7 +189,8 @@ EOF;
 		if(isset($apePrice['ProductDetails'])){
 			$price['ape'] = $apePrice['ProductDetails']['Price'];
 		}
-		$price['ic'] =  $Intercar->getItemPrice($article['ART_ARTICLE_NR'], $article['SUP_BRAND']);
+		$ic = $Intercar->getItemPrice($article['ART_ARTICLE_NR'], $article['SUP_BRAND']);
+		$price['ic'] =  $ic['CEN'];
 		
 		$this->view->article ['prices'] = $price;
 		$this->view->article ['image'] = $parts->getArtImageURL ( $art_id );
