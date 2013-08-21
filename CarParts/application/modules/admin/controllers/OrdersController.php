@@ -94,10 +94,10 @@ class Admin_OrdersController extends Zend_Controller_Action {
 	}
 	public function additemAction(){
 	    // @todo Add item to order
-		$tdId = $this->getParam('TecdocId');
-		$name = $this->getParam('Name');
-		$amount = $this->getParam('amount');
-		$price = $this->getParam('price');
+		$tdId = $this->_request->getParam('TecdocId');
+		$name = $this->_request->getParam('name');
+		$amount = $this->_request->getParam('amount');
+		$price = $this->_request->getParam('price');
 		if(!empty($tdId) || !empty($name)) {
 		    $orderItem = new Application_Model_OrderItems();
 		    $orderItemMapper = new Application_Model_OrderItemsMapper();
@@ -108,6 +108,8 @@ class Admin_OrdersController extends Zend_Controller_Action {
 		    		  ->setAmount($amount)
 		    		  ->setPrice($price);
 		    $orderItemMapper->save($orderItem);
+		} else {
+		    throw new Zend_Exception('Cannot add item');
 		}
 		
 		// redirect back to order

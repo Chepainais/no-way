@@ -30,7 +30,7 @@ class Application_Model_OrderItemsMapper
 		$data = array (
 				'order_item_id' => $OrderItems->getOrderItemId (),
 				'order_id' => $OrderItems->getOrderId (),
-				'td_id' => $OrderItems->getTdId (),
+				'td_id' => $OrderItems->getTdId () ? $OrderItems->getTdId () : new Zend_Db_Expr('NULL'),
 				'name' => $OrderItems->getName(),
 				'amount' => $OrderItems->getAmount (),
 				'price' => $OrderItems->getPrice (),
@@ -108,8 +108,10 @@ class Application_Model_OrderItemsMapper
     		->setTdId($row['td_id'])
     		->setName($row['name'])
     		->setAmount($row['amount'])
-    		->setPrice($row['price'])
-    		->setTdInfo($parts->retrieveArticle($row['td_id']));
+    		->setPrice($row['price']);
+    		if($row['td_id']){
+    		  $entry->setTdInfo($parts->retrieveArticle($row['td_id']));
+    		}
 
     		$entries[] = $entry;
     	}

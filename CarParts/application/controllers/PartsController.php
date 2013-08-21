@@ -146,6 +146,7 @@ EOF;
             foreach ($ApePrices as $itemId => $ApePrice) {
                 if (isset($ApePrice['ProductDetails'])) {
                     $articles_modified[$itemId]['prices']['ape'] = $ApePrice['ProductDetails']['Price'];
+                    $articles_modified[$itemId]['quantity']['ape'] = $ApePrice['ProductDetails']['AvailableQuantity'];
                 }
             }
             foreach ($articles_modified as $item_id => $st) {
@@ -259,15 +260,20 @@ EOF;
         if(!empty($codes)){
             $ApePrices = $ApeMotors->getPrices($codes);
             foreach ($ApePrices as $itemId => $ApePrice) {
+                var_dump($ApePrice['ProductDetails']);
                 if (isset($ApePrice['ProductDetails'])) {
+                    
+                    $articles_modified[$itemId]['qantity']['ape'] = $ApePrice['ProductDetails']['ApeQuantity'];
                     $articles_modified[$itemId]['prices']['ape'] = $ApePrice['ProductDetails']['Price'];
                 }
             }
             foreach ($articles_modified as $item_id => $st) {
-                // Ja precei nav cenas - izmetam to no saraksta
-                if (! isset($st['prices']['ape']) && ! isset($st['prices']['ic'])) {
-                    unset($articles_modified[$item_id]);
-                } else {
+                        // Ja precei nav cenas - izmetam to no saraksta
+                    if (! isset($st['prices']['ape']) &&
+                        ! isset($st['prices']['ic'])) 
+                    {
+                        unset($articles_modified[$item_id]);
+                    } else {
 
                     $articles_modified[$item_id]['image'] = $parts->getArtImageURL($item_id);
                     $articles_modified[$item_id]['criteria'] = array();
